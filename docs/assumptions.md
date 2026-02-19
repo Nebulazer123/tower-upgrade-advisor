@@ -99,6 +99,36 @@ These assumptions were made by the team when the user did not specify preference
 
 ---
 
+## Migration Assumptions (added Phase 3)
+
+28. **Cursor IDE can handle this project** without special configuration beyond opening the folder and installing deps.
+    - Cursor detects `pyproject.toml` and sets up Python automatically.
+
+29. **Windows and macOS are both viable** development environments.
+    - Makefile may require `choco install make` on Windows, or commands can be run directly.
+
+30. **The reference site bundle hash (`ef115c63`) may change** between visits.
+    - The extraction script hardcodes `BUNDLE_URL`. If the site redeploys, the hash changes and Tier 2 will 404. Update by inspecting the page source.
+
+31. **The reference site's DOM structure may change** without notice.
+    - CSS selectors in the extraction script are based on a snapshot from Phase 1 research. They are untested against the live DOM.
+
+---
+
+## Open Unknowns (to be resolved by extraction)
+
+32. **Exact list of workshop upgrades and their ordering** — unknown until extracted.
+
+33. **Per-level coin cost tables** — unknown until extracted.
+
+34. **Per-level effect tables and whether effects are absolute or delta** — unknown until extracted.
+
+35. **Whether the reference tool encodes additional logic** (category weights, special cases) — unknown.
+
+36. **Actual category names in the data** — the user says "attack, defense, utility" but the code currently uses "offense, defense, economy, utility". Must be reconciled after extraction.
+
+---
+
 ## Non-Assumptions (Things We Don't Assume)
 
 - We do NOT assume the reference site's scoring logic is correct or discoverable
@@ -106,3 +136,4 @@ These assumptions were made by the team when the user did not specify preference
 - We do NOT assume the user wants a hosted/published tool
 - We do NOT assume the user plays on any specific platform (iOS/Android)
 - We do NOT assume the user wants in-run cash upgrade recommendations (explicitly out of scope)
+- We do NOT assume the extraction script will work on first run — debugging is expected

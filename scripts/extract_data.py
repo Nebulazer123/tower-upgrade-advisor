@@ -199,7 +199,10 @@ async def extract_via_dom(page) -> dict | None:  # type: ignore[no-untyped-def]
             // Try alternative selectors
             const sections = document.querySelectorAll('.upgrade-section, [class*="category"]');
             if (sections.length === 0) {
-                return { error: "No category elements found", html_length: document.body.innerHTML.length };
+                return {
+                    error: "No category elements found",
+                    html_length: document.body.innerHTML.length,
+                };
             }
         }
 
@@ -234,8 +237,12 @@ async def extract_via_dom(page) -> dict | None:  # type: ignore[no-untyped-def]
                 // Get current/target values
                 const currentEl = u.querySelector('.current input, .current');
                 const targetEl = u.querySelector('.target input, .target');
-                if (currentEl) upgrade.values.current = currentEl.value || currentEl.textContent.trim();
-                if (targetEl) upgrade.values.target = targetEl.value || targetEl.textContent.trim();
+                if (currentEl) {
+                    upgrade.values.current = currentEl.value || currentEl.textContent.trim();
+                }
+                if (targetEl) {
+                    upgrade.values.target = targetEl.value || targetEl.textContent.trim();
+                }
 
                 // Get cost
                 const costEl = u.querySelector('.cost');
@@ -267,16 +274,14 @@ async def extract_via_dom(page) -> dict | None:  # type: ignore[no-untyped-def]
 
 def _looks_like_upgrade_data(data: object) -> bool:
     """Heuristic: does this data look like upgrade definitions?"""
-    if isinstance(data, list):
-        if len(data) > 5 and isinstance(data[0], dict):
-            keys = set(data[0].keys())
-            upgrade_keys = {"name", "cost", "level", "effect", "category", "type"}
-            if keys & upgrade_keys:
-                return True
-    if isinstance(data, dict):
-        if any(k in data for k in ("upgrades", "workshops", "permanent")):
+    if isinstance(data, list) and len(data) > 5 and isinstance(data[0], dict):
+        keys = set(data[0].keys())
+        upgrade_keys = {"name", "cost", "level", "effect", "category", "type"}
+        if keys & upgrade_keys:
             return True
-    return False
+    return isinstance(data, dict) and any(
+        k in data for k in ("upgrades", "workshops", "permanent")
+    )
 
 
 def normalize_to_schema(raw_data: dict) -> dict:
@@ -294,7 +299,6 @@ def normalize_to_schema(raw_data: dict) -> dict:
 
     # Handle Tier 3 DOM data
     if "categories" in raw_data:
-        category_map = {"attack": "offense", "defense": "defense", "utility": "economy"}
         display_order = 0
 
         for cat in raw_data["categories"]:
