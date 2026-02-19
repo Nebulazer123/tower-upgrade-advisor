@@ -213,3 +213,5 @@ data/logs/
 
 # Node modules (for Playwright)
 node_modules/
+
+.DS_Store
