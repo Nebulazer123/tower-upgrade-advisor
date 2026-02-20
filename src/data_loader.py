@@ -115,9 +115,7 @@ def validate_upgrade_data(db: UpgradeDatabase) -> ValidationResult:
         # Duplicate display_order within category
         cat_orders = order_seen.setdefault(upgrade.category, set())
         if upgrade.display_order in cat_orders:
-            result.warn(
-                f"Duplicate display_order {upgrade.display_order} in {upgrade.category}"
-            )
+            result.warn(f"Duplicate display_order {upgrade.display_order} in {upgrade.category}")
         cat_orders.add(upgrade.display_order)
 
         # --- Per-upgrade checks ---
@@ -129,7 +127,7 @@ def validate_upgrade_data(db: UpgradeDatabase) -> ValidationResult:
 
     # --- Category coverage ---
     categories = {u.category for u in db.upgrades}
-    for expected in ("offense", "defense", "economy"):
+    for expected in ("attack", "defense", "utility"):
         if expected not in categories:
             result.warn(f"Missing expected category: {expected}")
 
@@ -142,9 +140,7 @@ def _validate_upgrade(upgrade: UpgradeDefinition, result: ValidationResult) -> N
 
     # Level count
     if len(upgrade.levels) != upgrade.max_level:
-        result.error(
-            f"{uid}: level count {len(upgrade.levels)} != max_level {upgrade.max_level}"
-        )
+        result.error(f"{uid}: level count {len(upgrade.levels)} != max_level {upgrade.max_level}")
 
     if not upgrade.levels:
         result.error(f"{uid}: no levels defined")
@@ -253,8 +249,7 @@ def validate_raw_json(data: Any) -> ValidationResult:
                 val = lv.get(field)
                 if isinstance(val, str):
                     result.error(
-                        f"{name} levels[{j}].{field}: string value '{val}' — "
-                        "expected numeric"
+                        f"{name} levels[{j}].{field}: string value '{val}' — expected numeric"
                     )
 
     return result
