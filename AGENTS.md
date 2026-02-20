@@ -46,21 +46,29 @@ make check
 
 ### Scoring Engines (Protocol-based)
 All engines implement `ScoringEngine` protocol with `rank()` and `explain()` methods:
-- **PerCategoryEngine**: Best upgrade per category (offense/defense/economy), no cross-category comparison
+- **PerCategoryEngine**: Best upgrade per category (attack/defense/utility), no cross-category comparison
 - **BalancedEngine**: Global ranking with user-adjustable category weights (0.0-2.0 sliders)
-- **ReferenceEngine**: Stub for reverse-engineered reference tool logic (raises NotImplementedError)
+- **ReferenceEngine**: DPS-based efficiency scoring for attack upgrades, ported from jacoelt/tower-calculator. Uses `(DPS_after - DPS_before) / cost` for attack upgrades, falls back to `marginal_benefit / cost` for defense/utility.
 
-### Key Scoring Formula
+### Key Scoring Formulas
 ```
+# BalancedEngine
 score = marginal_benefit / coin_cost * category_weight
-marginal_benefit = next_level_effect - current_level_effect
+
+# ReferenceEngine (attack upgrades)
+DPS = damage * attack_speed_final * crit_mult * multishot_mult * bounce_mult
+crit_mult = 1 - (crit_chance/100) + (crit_chance/100) * crit_factor
+multishot_mult = 1 - (ms_chance/100) + (ms_chance/100) * ms_targets
+bounce_mult = 1 - (bounce_chance/100) + (bounce_chance/100) * bounce_targets
+efficiency = (new_DPS - current_DPS) / cost
 ```
 
 ### Data Models (`src/models.py`)
 - `UpgradeDatabase`: Container for all upgrade definitions (versioned, includes game version)
 - `UpgradeDefinition`: Single upgrade with levels array, category, effect_type (multiplicative/additive)
 - `UpgradeLevel`: Per-level data (cost, cumulative_effect, effect_delta)
-- `Profile`: User state (current levels, available coins, scoring weights)
+- `LabResearchDatabase` / `LabResearchDefinition`: Lab research boost data
+- `Profile`: User state (current levels, lab levels, available coins, scoring weights)
 - `RankedUpgrade`: Output of scoring engine with full transparency data
 
 ### Profile Storage
@@ -68,7 +76,7 @@ Profiles are stored as individual JSON files with atomic writes (write to `.tmp`
 
 ## Testing Patterns
 
-- Test fixtures in `tests/fixtures/` (test_upgrades.json with 6 sample upgrades)
+- Test fixtures in `tests/fixtures/` (test_upgrades.json with 8 sample upgrades)
 - Shared fixtures in `tests/conftest.py`: `test_upgrades`, `empty_profile`, `mid_profile`, `maxed_profile`
 - Tests are organized by class per module (e.g., `TestPerCategoryEngine`, `TestBalancedEngine`)
 - Markers: `@pytest.mark.slow`, `@pytest.mark.integration`
@@ -76,7 +84,7 @@ Profiles are stored as individual JSON files with atomic writes (write to `.tmp`
 ## Important Conventions
 
 - All Pydantic models use v2 API (`model_validate`, `model_dump_json`, `model_copy`)
-- Upgrade categories: `"offense"`, `"defense"`, `"economy"`, `"utility"` (lowercase, match exactly). User confirms game uses attack/defense/utility — Literal will be updated after real data extraction.
+- Upgrade categories: `"attack"`, `"defense"`, `"utility"` (lowercase, match the in-game workshop tabs)
 - Level 0 means "not purchased" — use `upgrade.base_value` for effect (1.0 for multiplicative, 0 for additive)
 - `levels` array is 0-indexed but `level` field is 1-indexed (index `i` holds data for level `i+1`)
 - Scores are rounded to 12 decimal places for deterministic comparison; tie-break: lower cost, then alphabetical name

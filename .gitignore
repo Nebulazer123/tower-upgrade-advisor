@@ -210,6 +210,7 @@ __marimo__/
 data/raw/
 data/profiles/
 data/logs/
+artifacts/
 
 # Node modules (for Playwright)
 node_modules/
