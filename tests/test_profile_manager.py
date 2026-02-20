@@ -96,10 +96,10 @@ class TestProfileUpdates:
     def test_update_weights(self, tmp_profiles_dir: Path) -> None:
         pm = ProfileManager(tmp_profiles_dir)
         p = pm.create_profile("Test")
-        new_weights = ScoringWeights(economy=0.5, offense=2.0, defense=1.5)
+        new_weights = ScoringWeights(attack=2.0, defense=1.5, utility=0.5)
         updated = pm.update_weights(p.id, new_weights)
         assert updated is not None
-        assert updated.weights.offense == 2.0
+        assert updated.weights.attack == 2.0
 
 
 class TestProfilePersistence:

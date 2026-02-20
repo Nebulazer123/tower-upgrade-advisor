@@ -8,6 +8,9 @@ import pytest
 from pydantic import ValidationError
 
 from src.models import (
+    LabResearchDatabase,
+    LabResearchDefinition,
+    LabResearchLevel,
     Profile,
     RankedUpgrade,
     ScoringWeights,
@@ -58,9 +61,14 @@ class TestUpgradeDefinition:
 
     def test_valid_upgrade(self) -> None:
         u = UpgradeDefinition(
-            id="test", name="Test", category="offense",
-            effect_unit="%", effect_type="multiplicative",
-            base_value=1.0, max_level=3, display_order=1,
+            id="test",
+            name="Test",
+            category="attack",
+            effect_unit="%",
+            effect_type="multiplicative",
+            base_value=1.0,
+            max_level=3,
+            display_order=1,
             levels=self._make_levels(3),
         )
         assert u.id == "test"
@@ -69,57 +77,83 @@ class TestUpgradeDefinition:
     def test_level_count_mismatch(self) -> None:
         with pytest.raises(ValidationError, match="max_level"):
             UpgradeDefinition(
-                id="test", name="Test", category="offense",
-                effect_unit="%", effect_type="multiplicative",
-                base_value=1.0, max_level=5, display_order=1,
+                id="test",
+                name="Test",
+                category="attack",
+                effect_unit="%",
+                effect_type="multiplicative",
+                base_value=1.0,
+                max_level=5,
+                display_order=1,
                 levels=self._make_levels(3),
             )
 
     def test_non_monotonic_cost_rejected(self) -> None:
         levels = self._make_levels(3)
-        levels[2]["coin_cost"] = 50  # lower than previous
+        levels[2]["coin_cost"] = 50
         with pytest.raises(ValidationError, match="monotonically increasing"):
             UpgradeDefinition(
-                id="test", name="Test", category="offense",
-                effect_unit="%", effect_type="multiplicative",
-                base_value=1.0, max_level=3, display_order=1,
+                id="test",
+                name="Test",
+                category="attack",
+                effect_unit="%",
+                effect_type="multiplicative",
+                base_value=1.0,
+                max_level=3,
+                display_order=1,
                 levels=levels,
             )
 
     def test_invalid_category_rejected(self) -> None:
         with pytest.raises(ValidationError):
             UpgradeDefinition(
-                id="test", name="Test", category="special",
-                effect_unit="%", effect_type="multiplicative",
-                base_value=1.0, max_level=3, display_order=1,
+                id="test",
+                name="Test",
+                category="special",
+                effect_unit="%",
+                effect_type="multiplicative",
+                base_value=1.0,
+                max_level=3,
+                display_order=1,
                 levels=self._make_levels(3),
             )
+
+    def test_game_categories_accepted(self) -> None:
+        for cat in ("attack", "defense", "utility"):
+            u = UpgradeDefinition(
+                id=f"test_{cat}",
+                name=f"Test {cat}",
+                category=cat,
+                effect_unit="%",
+                effect_type="additive",
+                base_value=0,
+                max_level=1,
+                display_order=0,
+                levels=[{"level": 1, "coin_cost": 10, "cumulative_effect": 1, "effect_delta": 1}],
+            )
+            assert u.category == cat
 
 
 class TestScoringWeights:
     def test_defaults(self) -> None:
         w = ScoringWeights()
-        assert w.economy == 1.0
-        assert w.offense == 1.0
+        assert w.attack == 1.0
         assert w.defense == 1.0
         assert w.utility == 1.0
 
     def test_for_category(self) -> None:
-        w = ScoringWeights(economy=0.5, offense=2.0, defense=1.5, utility=0.8)
-        assert w.for_category("economy") == 0.5
-        assert w.for_category("offense") == 2.0
+        w = ScoringWeights(attack=2.0, defense=1.5, utility=0.8)
+        assert w.for_category("attack") == 2.0
         assert w.for_category("defense") == 1.5
         assert w.for_category("utility") == 0.8
 
     def test_unknown_category_falls_back_to_one(self) -> None:
-        # Unknown categories (e.g. from a future game update) return 1.0
-        # rather than raising, so they are never silently zeroed out.
         w = ScoringWeights()
         assert w.for_category("future_category") == 1.0
 
     def test_out_of_range_rejected(self) -> None:
         with pytest.raises(ValidationError):
-            ScoringWeights(economy=3.0)
+            ScoringWeights(attack=3.0)
         with pytest.raises(ValidationError):
             ScoringWeights(defense=-0.1)
 
@@ -127,7 +161,8 @@ class TestScoringWeights:
 class TestProfile:
     def test_get_level_default(self) -> None:
         p = Profile(
-            id="t", name="t",
+            id="t",
+            name="t",
             created_at=datetime.now(UTC),
             updated_at=datetime.now(UTC),
         )
@@ -135,7 +170,8 @@ class TestProfile:
 
     def test_get_level_set(self) -> None:
         p = Profile(
-            id="t", name="t",
+            id="t",
+            name="t",
             created_at=datetime.now(UTC),
             updated_at=datetime.now(UTC),
             levels={"damage": 5},
@@ -145,20 +181,95 @@ class TestProfile:
     def test_negative_level_rejected(self) -> None:
         with pytest.raises(ValidationError, match=">= 0"):
             Profile(
-                id="t", name="t",
+                id="t",
+                name="t",
                 created_at=datetime.now(UTC),
                 updated_at=datetime.now(UTC),
                 levels={"damage": -1},
             )
 
+    def test_lab_levels(self) -> None:
+        p = Profile(
+            id="t",
+            name="t",
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
+            lab_levels={"lab_damage": 50},
+        )
+        assert p.lab_levels["lab_damage"] == 50
+
+
+class TestLabResearch:
+    def test_lab_level(self) -> None:
+        lv = LabResearchLevel(level=1, value=1.02)
+        assert lv.level == 1
+        assert lv.value == 1.02
+
+    def test_lab_definition(self) -> None:
+        defn = LabResearchDefinition(
+            id="lab_damage",
+            name="Lab Damage",
+            boost_type="multiplicative",
+            max_level=2,
+            levels=[
+                LabResearchLevel(level=1, value=1.02),
+                LabResearchLevel(level=2, value=1.04),
+            ],
+        )
+        assert defn.max_level == 2
+
+    def test_lab_definition_level_count_mismatch_rejected(self) -> None:
+        """len(levels) must equal max_level."""
+        with pytest.raises(ValidationError, match="levels list length.*max_level"):
+            LabResearchDefinition(
+                id="lab_damage",
+                name="Lab Damage",
+                boost_type="multiplicative",
+                max_level=5,
+                levels=[
+                    LabResearchLevel(level=1, value=1.02),
+                    LabResearchLevel(level=2, value=1.04),
+                    LabResearchLevel(level=3, value=1.06),
+                ],
+            )
+
+    def test_lab_database_get_value(self) -> None:
+        db = LabResearchDatabase(
+            researches=[
+                LabResearchDefinition(
+                    id="lab_damage",
+                    name="Lab Damage",
+                    boost_type="multiplicative",
+                    max_level=3,
+                    levels=[
+                        LabResearchLevel(level=1, value=1.02),
+                        LabResearchLevel(level=2, value=1.04),
+                        LabResearchLevel(level=3, value=1.06),
+                    ],
+                ),
+            ]
+        )
+        assert db.get_value("lab_damage", 0) == 1.0
+        assert db.get_value("lab_damage", 1) == 1.02
+        assert db.get_value("lab_damage", 2) == 1.04
+        assert db.get_value("lab_damage", 99) == 1.06
+
 
 class TestRankedUpgrade:
     def test_frozen(self) -> None:
         r = RankedUpgrade(
-            upgrade_id="test", upgrade_name="Test", category="offense",
-            current_level=0, next_level=1, coin_cost=100,
-            current_effect=0, next_effect=5, marginal_benefit=5,
-            score=0.05, affordable=True, scoring_method="test",
+            upgrade_id="test",
+            upgrade_name="Test",
+            category="attack",
+            current_level=0,
+            next_level=1,
+            coin_cost=100,
+            current_effect=0,
+            next_effect=5,
+            marginal_benefit=5,
+            score=0.05,
+            affordable=True,
+            scoring_method="test",
         )
         with pytest.raises(ValidationError):
             r.score = 1.0  # type: ignore[misc]

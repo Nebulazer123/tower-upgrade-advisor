@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from decimal import Decimal
+
 import pytest
 
 from src.models import Profile, ScoringWeights, UpgradeDatabase
@@ -9,6 +11,8 @@ from src.scoring import (
     BalancedEngine,
     PerCategoryEngine,
     ReferenceEngine,
+    _DPSState,
+    compute_dps,
     compute_marginal_score,
 )
 
@@ -18,9 +22,8 @@ class TestComputeMarginalScore:
         u = test_upgrades.get_upgrade("damage")
         assert u is not None
         score, cost, cur, nxt, mb = compute_marginal_score(u, 0)
-        # damage level 1: cost=50, effect goes 0->5, delta=5
         assert cost == 50
-        assert cur == 0  # base_value
+        assert cur == 0
         assert nxt == 5
         assert mb == 5
         assert score == pytest.approx(5 / 50)
@@ -29,7 +32,6 @@ class TestComputeMarginalScore:
         u = test_upgrades.get_upgrade("attack_speed")
         assert u is not None
         score, cost, cur, nxt, mb = compute_marginal_score(u, 2)
-        # level 2->3: cost=500, effect 1.2->1.3, delta=0.1
         assert cost == 500
         assert cur == pytest.approx(1.2)
         assert nxt == pytest.approx(1.3)
@@ -57,7 +59,7 @@ class TestPerCategoryEngine:
         engine = PerCategoryEngine()
         results = engine.rank(test_upgrades, empty_profile)
         categories = {r.category for r in results}
-        assert categories == {"offense", "defense", "economy"}
+        assert categories == {"attack", "defense", "utility"}
         assert len(results) == 3
 
     def test_picks_best_in_category(
@@ -65,12 +67,14 @@ class TestPerCategoryEngine:
     ) -> None:
         engine = PerCategoryEngine()
         results = engine.rank(test_upgrades, empty_profile)
-        # In offense at level 0:
+        # In attack at level 0:
         # attack_speed: 0.1/100 = 0.001
         # damage: 5/50 = 0.1
-        # damage has higher score
-        offense_pick = [r for r in results if r.category == "offense"][0]
-        assert offense_pick.upgrade_id == "damage"
+        # crit_chance: 5/80 = 0.0625
+        # crit_factor: 0.1/100 = 0.001
+        # damage has highest score
+        attack_pick = [r for r in results if r.category == "attack"][0]
+        assert attack_pick.upgrade_id == "damage"
 
     def test_maxed_category_omitted(
         self, test_upgrades: UpgradeDatabase, maxed_profile: Profile
@@ -84,14 +88,12 @@ class TestPerCategoryEngine:
         assert engine.name == "per_category_best"
         assert engine.version == "1.0"
 
-    def test_explain(
-        self, test_upgrades: UpgradeDatabase, empty_profile: Profile
-    ) -> None:
+    def test_explain(self, test_upgrades: UpgradeDatabase, empty_profile: Profile) -> None:
         engine = PerCategoryEngine()
         results = engine.rank(test_upgrades, empty_profile)
         assert len(results) > 0
         text = engine.explain(results[0])
-        assert "→" in text
+        assert "\u2192" in text
         assert "coins" in text
 
 
@@ -101,37 +103,32 @@ class TestBalancedEngine:
     ) -> None:
         engine = BalancedEngine()
         results = engine.rank(test_upgrades, empty_profile)
-        # All 6 upgrades available at level 0
-        assert len(results) == 6
+        assert len(results) == 8
 
     def test_equal_weights_matches_raw_score(
         self, test_upgrades: UpgradeDatabase, empty_profile: Profile
     ) -> None:
-        engine = BalancedEngine(ScoringWeights(economy=1.0, offense=1.0, defense=1.0))
+        engine = BalancedEngine(ScoringWeights(attack=1.0, defense=1.0, utility=1.0))
         results = engine.rank(test_upgrades, empty_profile)
-        # With equal weights, health (10/75=0.1333) has highest score
+        # health: 10/75=0.1333 is highest
         assert results[0].upgrade_id == "health"
 
     def test_zero_weight_excludes_category(
         self, test_upgrades: UpgradeDatabase, empty_profile: Profile
     ) -> None:
-        engine = BalancedEngine(ScoringWeights(economy=0.0, offense=1.0, defense=1.0))
+        engine = BalancedEngine(ScoringWeights(attack=1.0, defense=1.0, utility=0.0))
         results = engine.rank(test_upgrades, empty_profile)
-        economy_results = [r for r in results if r.category == "economy"]
-        # Economy upgrades should have zero score and be filtered
-        assert all(r.score == 0 for r in economy_results) or len(economy_results) == 0
+        utility_results = [r for r in results if r.category == "utility"]
+        assert all(r.score == 0 for r in utility_results) or len(utility_results) == 0
 
-    def test_high_offense_weight_promotes_offense(
+    def test_high_attack_weight_promotes_attack(
         self, test_upgrades: UpgradeDatabase, empty_profile: Profile
     ) -> None:
-        engine = BalancedEngine(ScoringWeights(economy=0.1, offense=2.0, defense=0.1))
+        engine = BalancedEngine(ScoringWeights(attack=2.0, defense=0.1, utility=0.1))
         results = engine.rank(test_upgrades, empty_profile)
-        # Top result should be offense
-        assert results[0].category == "offense"
+        assert results[0].category == "attack"
 
-    def test_deterministic(
-        self, test_upgrades: UpgradeDatabase, empty_profile: Profile
-    ) -> None:
+    def test_deterministic(self, test_upgrades: UpgradeDatabase, empty_profile: Profile) -> None:
         engine = BalancedEngine()
         r1 = engine.rank(test_upgrades, empty_profile)
         r2 = engine.rank(test_upgrades, empty_profile)
@@ -145,45 +142,168 @@ class TestBalancedEngine:
         results = engine.rank(test_upgrades, maxed_profile)
         assert len(results) == 0
 
-    def test_mid_profile(
-        self, test_upgrades: UpgradeDatabase, mid_profile: Profile
-    ) -> None:
+    def test_mid_profile(self, test_upgrades: UpgradeDatabase, mid_profile: Profile) -> None:
         engine = BalancedEngine()
         results = engine.rank(test_upgrades, mid_profile)
-        # All 6 upgrades, but some at mid level (none maxed)
-        assert len(results) == 6
+        assert len(results) == 8
 
-    def test_affordable_flag(
-        self, test_upgrades: UpgradeDatabase, empty_profile: Profile
-    ) -> None:
+    def test_affordable_flag(self, test_upgrades: UpgradeDatabase, empty_profile: Profile) -> None:
         engine = BalancedEngine()
-        # empty_profile has 10000 coins — all level 1 upgrades should be affordable
         results = engine.rank(test_upgrades, empty_profile)
         for r in results:
-            assert r.affordable  # All level-1 costs < 10000
+            assert r.affordable
 
-    def test_explain(
-        self, test_upgrades: UpgradeDatabase, empty_profile: Profile
-    ) -> None:
+    def test_explain(self, test_upgrades: UpgradeDatabase, empty_profile: Profile) -> None:
         engine = BalancedEngine()
         results = engine.rank(test_upgrades, empty_profile)
         text = engine.explain(results[0])
         assert "balanced" in text
-        assert "Economy=" in text
+        assert "Attack=" in text
+
+
+class TestComputeDPS:
+    """Test the DPS formula ported from the reference calculator."""
+
+    def test_base_dps_zero_damage(self) -> None:
+        state = _DPSState.__new__(_DPSState)
+        state.damage = 0.0
+        state.attack_speed = 1.0
+        state.crit_chance = 0.0
+        state.crit_factor = 1.2
+        state.multishot_chance = 0.0
+        state.multishot_targets = 2.0
+        state.rapid_fire_chance = 0.0
+        state.bounce_chance = 0.0
+        state.bounce_targets = 1.0
+        assert compute_dps(state) == Decimal(0)
+
+    def test_simple_dps(self) -> None:
+        state = _DPSState.__new__(_DPSState)
+        state.damage = 10.0
+        state.attack_speed = 1.0
+        state.crit_chance = 0.0
+        state.crit_factor = 1.2
+        state.multishot_chance = 0.0
+        state.multishot_targets = 2.0
+        state.rapid_fire_chance = 0.0
+        state.bounce_chance = 0.0
+        state.bounce_targets = 1.0
+        dps = compute_dps(state)
+        # All chance stats are 0 => mults = 1.0, no rapid fire
+        # DPS = 10 * 1.0 * 1.0 * 1.0 * 1.0 = 10
+        assert float(dps) == pytest.approx(10.0)
+
+    def test_crit_multiplier(self) -> None:
+        state = _DPSState.__new__(_DPSState)
+        state.damage = 10.0
+        state.attack_speed = 1.0
+        state.crit_chance = 50.0
+        state.crit_factor = 2.0
+        state.multishot_chance = 0.0
+        state.multishot_targets = 2.0
+        state.rapid_fire_chance = 0.0
+        state.bounce_chance = 0.0
+        state.bounce_targets = 1.0
+        dps = compute_dps(state)
+        # crit_mult = 1 - 0.5 + 0.5 * 2.0 = 1.5
+        # DPS = 10 * 1.0 * 1.5 * 1.0 * 1.0 = 15
+        assert float(dps) == pytest.approx(15.0)
+
+    def test_multishot_multiplier(self) -> None:
+        state = _DPSState.__new__(_DPSState)
+        state.damage = 10.0
+        state.attack_speed = 2.0
+        state.crit_chance = 0.0
+        state.crit_factor = 1.2
+        state.multishot_chance = 100.0
+        state.multishot_targets = 3.0
+        state.rapid_fire_chance = 0.0
+        state.bounce_chance = 0.0
+        state.bounce_targets = 1.0
+        dps = compute_dps(state)
+        # ms_mult = 1 - 1.0 + 1.0 * 3.0 = 3.0
+        # DPS = 10 * 2.0 * 1.0 * 3.0 * 1.0 = 60
+        assert float(dps) == pytest.approx(60.0)
+
+    def test_bounce_multiplier(self) -> None:
+        state = _DPSState.__new__(_DPSState)
+        state.damage = 10.0
+        state.attack_speed = 1.0
+        state.crit_chance = 0.0
+        state.crit_factor = 1.2
+        state.multishot_chance = 0.0
+        state.multishot_targets = 2.0
+        state.rapid_fire_chance = 0.0
+        state.bounce_chance = 50.0
+        state.bounce_targets = 4.0
+        dps = compute_dps(state)
+        # bounce_mult = 1 - 0.5 + 0.5 * 4.0 = 2.5
+        # DPS = 10 * 1.0 * 1.0 * 1.0 * 2.5 = 25
+        assert float(dps) == pytest.approx(25.0)
+
+    def test_rapid_fire(self) -> None:
+        state = _DPSState.__new__(_DPSState)
+        state.damage = 10.0
+        state.attack_speed = 2.0
+        state.crit_chance = 0.0
+        state.crit_factor = 1.2
+        state.multishot_chance = 0.0
+        state.multishot_targets = 2.0
+        state.rapid_fire_chance = 50.0
+        state.bounce_chance = 0.0
+        state.bounce_targets = 1.0
+        dps = compute_dps(state)
+        # avg_time_between_procs = (1/2) * (100/50) = 1.0
+        # avg_increase = (4 * 1) / (1 + 1) = 2.0
+        # attack_speed_final = 2.0 * (1 + 2.0/100) = 2.04
+        # DPS = 10 * 2.04 * 1.0 * 1.0 * 1.0 = 20.4
+        assert float(dps) == pytest.approx(20.4)
 
 
 class TestReferenceEngine:
-    def test_raises_not_implemented(
-        self, test_upgrades: UpgradeDatabase, empty_profile: Profile
-    ) -> None:
-        engine = ReferenceEngine()
-        with pytest.raises(NotImplementedError):
-            engine.rank(test_upgrades, empty_profile)
-
     def test_name_and_version(self) -> None:
         engine = ReferenceEngine()
         assert engine.name == "reference"
-        assert engine.version == "0.0"
+        assert engine.version == "1.0"
+
+    def test_ranks_attack_upgrades_by_dps(
+        self, test_upgrades: UpgradeDatabase, empty_profile: Profile
+    ) -> None:
+        engine = ReferenceEngine()
+        results = engine.rank(test_upgrades, empty_profile)
+        attack_results = [r for r in results if r.category == "attack"]
+        assert len(attack_results) > 0
+        for r in attack_results:
+            assert r.scoring_method == "reference"
+
+    def test_includes_defense_and_utility(
+        self, test_upgrades: UpgradeDatabase, empty_profile: Profile
+    ) -> None:
+        engine = ReferenceEngine()
+        results = engine.rank(test_upgrades, empty_profile)
+        categories = {r.category for r in results}
+        assert "defense" in categories
+        assert "utility" in categories
+
+    def test_maxed_excluded(self, test_upgrades: UpgradeDatabase, maxed_profile: Profile) -> None:
+        engine = ReferenceEngine()
+        results = engine.rank(test_upgrades, maxed_profile)
+        assert len(results) == 0
+
+    def test_explain(self, test_upgrades: UpgradeDatabase, empty_profile: Profile) -> None:
+        engine = ReferenceEngine()
+        results = engine.rank(test_upgrades, empty_profile)
+        assert len(results) > 0
+        text = engine.explain(results[0])
+        assert "reference" in text
+
+    def test_dps_efficiency_ordering(
+        self, test_upgrades: UpgradeDatabase, empty_profile: Profile
+    ) -> None:
+        engine = ReferenceEngine()
+        results = engine.rank(test_upgrades, empty_profile)
+        scores = [r.score for r in results]
+        assert scores == sorted(scores, reverse=True)
 
 
 class TestTieBreaking:
@@ -194,7 +314,6 @@ class TestTieBreaking:
     ) -> None:
         engine = BalancedEngine()
         results = engine.rank(test_upgrades, empty_profile)
-        # If two upgrades have equal scores, lower cost should come first
         for i in range(len(results) - 1):
             if results[i].score == results[i + 1].score:
                 assert results[i].coin_cost <= results[i + 1].coin_cost

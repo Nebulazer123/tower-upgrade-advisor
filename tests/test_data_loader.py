@@ -23,7 +23,7 @@ class TestLoadUpgrades:
     def test_load_valid_file(self, test_upgrades_path: Path) -> None:
         db = load_upgrades(test_upgrades_path)
         assert isinstance(db, UpgradeDatabase)
-        assert len(db.upgrades) == 6
+        assert len(db.upgrades) == 8
 
     def test_load_missing_file(self, tmp_path: Path) -> None:
         with pytest.raises(FileNotFoundError):
@@ -50,7 +50,6 @@ class TestValidateUpgradeData:
 
     def test_all_categories_present(self, test_upgrades: UpgradeDatabase) -> None:
         result = validate_upgrade_data(test_upgrades)
-        # No warnings about missing categories
         cat_warnings = [w for w in result.warnings if "Missing expected category" in w]
         assert len(cat_warnings) == 0
 
@@ -63,7 +62,7 @@ class TestValidateUpgradeData:
             upgrades=[],
         )
         result = validate_upgrade_data(db)
-        assert not result.ok  # "No upgrades" is an error
+        assert not result.ok
 
 
 class TestValidateRawJson:
@@ -77,9 +76,7 @@ class TestValidateRawJson:
             "upgrades": [
                 {
                     "name": "Test",
-                    "levels": [
-                        {"coin_cost": "1.2M", "cumulative_effect": 1, "effect_delta": 1}
-                    ],
+                    "levels": [{"coin_cost": "1.2M", "cumulative_effect": 1, "effect_delta": 1}],
                 }
             ]
         }

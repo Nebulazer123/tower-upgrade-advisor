@@ -72,6 +72,8 @@ def maxed_profile() -> Profile:
         levels={
             "attack_speed": 5,
             "damage": 5,
+            "crit_chance": 3,
+            "crit_factor": 3,
             "health": 5,
             "health_regen": 5,
             "coins_per_kill": 5,
@@ -82,17 +84,17 @@ def maxed_profile() -> Profile:
 
 
 @pytest.fixture
-def offense_weighted_profile() -> Profile:
-    """Profile with heavy offense weights."""
+def attack_weighted_profile() -> Profile:
+    """Profile with heavy attack weights."""
     now = datetime.now(UTC)
     return Profile(
-        id="test-offense",
-        name="Test Offense",
+        id="test-attack",
+        name="Test Attack",
         created_at=now,
         updated_at=now,
         available_coins=10000,
         levels={},
-        weights=ScoringWeights(economy=0.5, offense=2.0, defense=0.5),
+        weights=ScoringWeights(attack=2.0, defense=0.5, utility=0.5),
     )
 
 
