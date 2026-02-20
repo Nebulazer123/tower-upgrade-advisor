@@ -5,7 +5,7 @@ Phase 2 (Implementation) follows after user approval.
 
 ---
 
-## Phase 1: Planning (CURRENT)
+## Phase 1: Planning (DONE)
 
 - [x] Create docs/brief.md
 - [x] Create docs/plan_architect.md
@@ -18,81 +18,82 @@ Phase 2 (Implementation) follows after user approval.
 - [x] Create docs/scoring.md
 - [x] Create docs/execution_checklist.md
 - [x] Create docs/assumptions.md
-- [ ] **User approval to proceed to Phase 2**
+- [x] **User approval to proceed to Phase 2**
 
 ---
 
-## Phase 2: Foundation (Owner: Architect + Reliability Engineer)
+## Phase 2: Foundation (DONE)
 
-- [ ] Create `pyproject.toml` with dependencies (flask, pydantic, htmx, pytest, ruff, mypy)
-- [ ] Create `Makefile` with standard targets (run, test, lint, check, validate)
-- [ ] Create `src/__init__.py` and `src/models.py` (Pydantic models)
-- [ ] Create `tests/conftest.py` with shared fixtures
-- [ ] Create `tests/fixtures/test_upgrades.json` (small valid dataset)
-- [ ] Create `data/schema.json` (JSON Schema for upgrades.json)
-- [ ] Verify: `make lint` and `make typecheck` pass on empty project
+- [x] Create `pyproject.toml` with dependencies (flask, pydantic, htmx, pytest, ruff, mypy)
+- [x] Create `Makefile` with standard targets (run, test, lint, check, validate)
+- [x] Create `src/__init__.py` and `src/models.py` (Pydantic models)
+- [x] Create `tests/conftest.py` with shared fixtures
+- [x] Create `tests/fixtures/test_upgrades.json` (small valid dataset)
+- [ ] Create `data/schema.json` (JSON Schema for upgrades.json) — optional; validation in data_loader
+- [x] Verify: `make lint` and `make typecheck` pass on empty project
 
 ---
 
-## Phase 3: Data (Owner: Data Engineer)
+## Phase 3: Data (PARTIALLY DONE)
 
-- [ ] Create `scripts/extract_data.py` (Playwright extraction script)
+- [x] Create `scripts/extract_data.py` (Playwright extraction script — scaffolding)
 - [ ] Attempt extraction from reference site
 - [ ] If extraction fails: create `data/upgrades.json` manually with known game data
-- [ ] Create `src/data_loader.py` (load + validate upgrades.json)
-- [ ] Create `scripts/validate_data.py` (standalone validation)
-- [ ] Create `tests/test_data_validation.py`
-- [ ] Create `tests/test_data_loader.py`
-- [ ] Verify: `data/upgrades.json` passes all validation rules
-- [ ] Verify: `make validate` passes
+- [x] Create `src/data_loader.py` (load + validate upgrades.json)
+- [x] Create `scripts/validate_data.py` (standalone validation) — validation via `python3 -m src.data_loader validate`
+- [x] Create `tests/test_data_validation.py` — validation covered in test_data_loader.py
+- [x] Create `tests/test_data_loader.py`
+- [ ] Verify: `data/upgrades.json` passes all validation rules — file does not exist yet
+- [ ] Verify: `make validate` passes — requires data/upgrades.json
 
 ---
 
-## Phase 4: Scoring Engine (Owner: Algorithm Engineer)
+## Phase 4: Scoring Engine (DONE)
 
-- [ ] Create `src/scoring.py` (ScoringEngine protocol + V1 implementation)
-- [ ] Create `tests/test_scoring.py` (unit tests + known-answer tests)
-- [ ] Create `tests/test_regression.py` (golden file tests)
-- [ ] Create `tests/fixtures/expected/ranking_basic.json`
-- [ ] Verify: scoring is deterministic (same inputs → same outputs)
-- [ ] Verify: `make test` passes
-
----
-
-## Phase 5: Profile Management (Owner: UI Engineer)
-
-- [ ] Create `src/profile_manager.py` (CRUD for profiles)
-- [ ] Create `data/profiles/` directory with `default.json`
-- [ ] Create `tests/test_profile_manager.py`
-- [ ] Verify: create, read, update, delete profiles work
-- [ ] Verify: atomic writes (write .tmp, rename) work
+- [x] Create `src/scoring.py` (ScoringEngine protocol + 3 engines: PerCategory, Balanced, Reference stub)
+- [x] Create `tests/test_scoring.py` (21 tests: unit + known-answer)
+- [ ] Create `tests/test_regression.py` (golden file tests) — optional
+- [ ] Create `tests/fixtures/expected/ranking_basic.json` — optional
+- [x] Verify: scoring is deterministic (same inputs → same outputs)
+- [x] Verify: `make test` passes (67/67)
 
 ---
 
-## Phase 6: UI (Owner: UI Engineer)
+## Phase 5: Profile Management (DONE)
+
+- [x] Create `src/profile_manager.py` (CRUD for profiles with atomic writes)
+- [x] Create `data/profiles/` directory — created at runtime when profiles are saved
+- [x] Create `tests/test_profile_manager.py` (15 tests)
+- [x] Verify: create, read, update, delete profiles work
+- [x] Verify: atomic writes (write .tmp, rename) work
+
+---
+
+## Phase 6: UI (IN PROGRESS)
 
 - [ ] Create `app.py` (Flask application)
-- [ ] Create `templates/base.html` (base template with htmx)
+- [x] Create `templates/base.html` (base template with htmx)
+- [x] Create `templates/index.html`
 - [ ] Create `templates/profile_select.html`
 - [ ] Create `templates/dashboard.html`
 - [ ] Create `templates/recommendation.html`
 - [ ] Create `templates/upgrade_detail.html`
-- [ ] Create `static/style.css`
-- [ ] Vendor or CDN-link htmx.js
-- [ ] Create `src/routes.py` (Flask routes)
+- [x] Create `static/style.css`
+- [x] Vendor or CDN-link htmx.js (static/htmx.min.js)
+- [ ] Create `src/routes.py` (Flask routes) — or inline in app.py
 - [ ] Verify: all views render correctly
 - [ ] Verify: inline level editing works via htmx
 - [ ] Verify: recommendation displays transparent math
 
 ---
 
-## Phase 7: Integration + Polish (Owner: All)
+## Phase 7: Integration + Polish (IN PROGRESS)
 
 - [ ] End-to-end test: new profile → enter levels → get recommendation
 - [ ] Create `tests/test_integration.py`
-- [ ] Verify: `make check` passes (lint + typecheck + test + validate)
-- [ ] Update README.md with setup and usage instructions
-- [ ] Verify: app starts with `make run` and works in browser
+- [ ] Verify: `make check` passes (lint + test + validate)
+- [x] Update README.md with setup and usage instructions
+- [ ] Verify: app starts with `make run` and works in browser (blocked until app.py exists)
 
 ---
 

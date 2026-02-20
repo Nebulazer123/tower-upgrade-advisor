@@ -1,6 +1,6 @@
 # AGENTS.md
 
-This file provides guidance to WARP (warp.dev) when working with code in this repository.
+This file provides guidance to AI agents (Cursor, WARP, etc.) when working with code in this repository.
 
 ## Project Overview
 
@@ -8,29 +8,31 @@ Tower Upgrade Advisor is a Flask web application that recommends the best next p
 
 ## Build & Development Commands
 
+Use `python3` on macOS (not `python`).
+
 ```bash
 # Install dependencies
 pip install -e ".[dev]"          # Development (includes pytest, ruff, mypy)
 pip install -e ".[extract]"      # Data extraction tools (playwright, httpx)
 
-# Run the app
-python app.py
+# Run the app (requires app.py and data/upgrades.json; app.py in progress)
+python3 app.py
 
-# Testing
-pytest                           # Run tests (fast, stops on first failure)
-pytest -x -q -m ""               # Run all tests including slow/integration
+# Testing (67 tests)
+pytest -x -q                    # Run tests (fast, stops on first failure)
+pytest -x -q -m ""              # Run all tests including slow/integration
 pytest --cov=src --cov-report=term-missing  # With coverage
 pytest tests/test_scoring.py::TestBalancedEngine::test_ranks_all_upgrades  # Single test
 
 # Linting & Type Checking
-ruff check src/ tests/           # Lint
-ruff format --check src/ tests/  # Format check
-ruff check --fix src/ tests/     # Auto-fix lint issues
-ruff format src/ tests/          # Auto-format
-mypy src/                        # Type check (strict mode)
+ruff check src/ tests/ scripts/ # Lint
+ruff format --check src/ tests/ scripts/ # Format check
+ruff check --fix src/ tests/ scripts/ # Auto-fix lint issues
+ruff format src/ tests/ scripts/ # Auto-format
+mypy src/                      # Type check (strict mode)
 
 # Data validation
-python -m src.data_loader validate  # Validate upgrade data JSON
+python3 -m src.data_loader validate  # Validate upgrade data JSON
 
 # All checks (lint + test + validate)
 make check
@@ -42,11 +44,11 @@ make check
 1. `data_loader.py` loads `data/upgrades.json` → `UpgradeDatabase` (Pydantic model)
 2. `profile_manager.py` manages user profiles in `data/profiles/{id}.json`
 3. Scoring engines (`scoring.py`) rank upgrades by `marginal_benefit / cost * weight`
-4. Flask app (not yet implemented) serves recommendations
+4. Flask app (`app.py`, templates/, static/) — UI being built (templates/base.html, index.html, static/style.css, htmx.min.js exist; app.py in progress)
 
 ### Scoring Engines (Protocol-based)
 All engines implement `ScoringEngine` protocol with `rank()` and `explain()` methods:
-- **PerCategoryEngine**: Best upgrade per category (offense/defense/economy), no cross-category comparison
+- **PerCategoryEngine**: Best upgrade per category (offense/defense/economy/utility), no cross-category comparison
 - **BalancedEngine**: Global ranking with user-adjustable category weights (0.0-2.0 sliders)
 - **ReferenceEngine**: Stub for reverse-engineered reference tool logic (raises NotImplementedError)
 
@@ -68,6 +70,7 @@ Profiles are stored as individual JSON files with atomic writes (write to `.tmp`
 
 ## Testing Patterns
 
+- 67 passing tests across test_models (18), test_scoring (21), test_data_loader (13), test_profile_manager (15)
 - Test fixtures in `tests/fixtures/` (test_upgrades.json with 6 sample upgrades)
 - Shared fixtures in `tests/conftest.py`: `test_upgrades`, `empty_profile`, `mid_profile`, `maxed_profile`
 - Tests are organized by class per module (e.g., `TestPerCategoryEngine`, `TestBalancedEngine`)
@@ -76,7 +79,7 @@ Profiles are stored as individual JSON files with atomic writes (write to `.tmp`
 ## Important Conventions
 
 - All Pydantic models use v2 API (`model_validate`, `model_dump_json`, `model_copy`)
-- Upgrade categories: `"offense"`, `"defense"`, `"economy"`, `"utility"` (lowercase, match exactly). User confirms game uses attack/defense/utility — Literal will be updated after real data extraction.
+- Upgrade categories: `"offense"`, `"defense"`, `"economy"`, `"utility"` in code (lowercase). User says game uses attack/defense/utility — Literal will be updated after extraction.
 - Level 0 means "not purchased" — use `upgrade.base_value` for effect (1.0 for multiplicative, 0 for additive)
 - `levels` array is 0-indexed but `level` field is 1-indexed (index `i` holds data for level `i+1`)
 - Scores are rounded to 12 decimal places for deterministic comparison; tie-break: lower cost, then alphabetical name

@@ -1,0 +1,124 @@
+<div id="recommendation-results">
+
+{% if not rankings %}
+  <div class="card empty-state">
+    <h2>All upgrades are maxed</h2>
+    <p>Nothing left to recommend — every upgrade is at max level.</p>
+  </div>
+{% else %}
+
+  {# ── #1 Hero Pick ── #}
+  {% set top = rankings[0] %}
+  <div class="hero-pick">
+    <span class="rank-badge">#1 BEST UPGRADE</span>
+    <h2>
+      <a href="{{ url_for('upgrade_detail', upgrade_id=top.upgrade_id, profile=profile.id) }}">
+        {{ top.upgrade_name }}
+      </a>
+      <small style="color:var(--text-muted);font-weight:400">
+        (level {{ top.current_level }} → {{ top.next_level }})
+      </small>
+    </h2>
+    <div class="hero-stats">
+      <div class="stat-box">
+        <div class="stat-label">Cost</div>
+        <div class="stat-value">{{ top.coin_cost | fmt }} coins</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Affordable</div>
+        <div class="stat-value {% if top.affordable %}affordable-yes{% else %}affordable-no{% endif %}">
+          {% if top.affordable %}Yes ({{ profile.available_coins | fmt }} coins){% else %}No (need {{ (top.coin_cost - profile.available_coins) | fmt }} more){% endif %}
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Effect</div>
+        <div class="stat-value">{{ top.current_effect | fmt_effect }} → {{ top.next_effect | fmt_effect }}</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Marginal Benefit</div>
+        <div class="stat-value">+{{ top.marginal_benefit | fmt_effect }}</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Score</div>
+        <div class="stat-value">{{ top.score | fmt_score }}</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Formula</div>
+        <div class="stat-value formula">{{ top.marginal_benefit | fmt_effect }} / {{ top.coin_cost | fmt }} × {{ engine.weights.for_category(top.category) }}</div>
+      </div>
+    </div>
+  </div>
+
+  {# ── Per-Category Best ── #}
+  {% if per_cat %}
+  <div class="card">
+    <h2>Best per Category</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Upgrade</th>
+          <th class="text-right">Level</th>
+          <th class="text-right">Cost</th>
+          <th class="text-right">Benefit</th>
+          <th class="text-right">Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in per_cat %}
+        <tr>
+          <td style="text-transform:capitalize">{{ r.category }}</td>
+          <td><a href="{{ url_for('upgrade_detail', upgrade_id=r.upgrade_id, profile=profile.id) }}">{{ r.upgrade_name }}</a></td>
+          <td class="text-right">{{ r.current_level }} → {{ r.next_level }}</td>
+          <td class="text-right">{{ r.coin_cost | fmt }}</td>
+          <td class="text-right">+{{ r.marginal_benefit | fmt_effect }}</td>
+          <td class="text-right">{{ r.score | fmt_score }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  {# ── Full Ranking Table ── #}
+  <div class="card">
+    <h2>All Upgrades Ranked (Balanced)</h2>
+    <table class="alt-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Upgrade</th>
+          <th>Category</th>
+          <th class="text-right">Level</th>
+          <th class="text-right">Cost</th>
+          <th class="text-right">Benefit</th>
+          <th class="text-right">Score</th>
+          <th class="text-center">Affordable</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in rankings %}
+        <tr class="{% if not r.affordable %}not-affordable{% endif %}">
+          <td class="rank-num">{{ loop.index }}</td>
+          <td><a href="{{ url_for('upgrade_detail', upgrade_id=r.upgrade_id, profile=profile.id) }}">{{ r.upgrade_name }}</a></td>
+          <td style="text-transform:capitalize">{{ r.category }}</td>
+          <td class="text-right">{{ r.current_level }} → {{ r.next_level }}</td>
+          <td class="text-right">{{ r.coin_cost | fmt }}</td>
+          <td class="text-right">+{{ r.marginal_benefit | fmt_effect }}</td>
+          <td class="text-right">{{ r.score | fmt_score }}</td>
+          <td class="text-center">
+            {% if r.affordable %}
+              <span class="affordable-yes">✓</span>
+            {% else %}
+              <span class="affordable-no">✗</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+{% endif %}
+
+</div>

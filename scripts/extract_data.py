@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-"""Extract upgrade data from the Tower Workshop Calculator reference site.
+"""Extract upgrade data from The Tower game-vault wiki.
 
 Usage:
-    python scripts/extract_data.py
+    python3 scripts/extract_data.py
 
-Extraction priority (3-tier):
-    1. Network interception — intercept JSON/XHR responses for embedded data
-    2. JS bundle analysis — download and parse the main JS bundle for data arrays
-    3. DOM scraping — traverse the rendered DOM as last resort
+Primary data source: https://the-tower-idle-tower-defense.game-vault.net/wiki/Workshop
 
-Requires: pip install -e ".[extract]" && playwright install chromium
+Upgrades with complete per-level data are extracted directly.
+Upgrades with only sampled data (every 10th/100th level) are documented but skipped
+unless they have monotonically increasing costs when renumbered.
 
 Raw artifacts are saved to data/raw/ (gitignored).
 Normalized output is saved to data/upgrades.json.
@@ -17,7 +16,6 @@ Normalized output is saved to data/upgrades.json.
 
 from __future__ import annotations
 
-import asyncio
 import json
 import re
 import sys
@@ -28,8 +26,32 @@ DATA_DIR = PROJECT_ROOT / "data"
 RAW_DIR = DATA_DIR / "raw"
 UPGRADES_PATH = DATA_DIR / "upgrades.json"
 
-REFERENCE_URL = "https://tower-workshop-calculator.netlify.app/"
-BUNDLE_URL = REFERENCE_URL + "static/js/main.ef115c63.js"
+WIKI_URL = "https://the-tower-idle-tower-defense.game-vault.net/wiki/Workshop"
+
+COST_SUFFIXES: dict[str, float] = {
+    "K": 1e3, "M": 1e6, "B": 1e9, "T": 1e12, "q": 1e15, "Q": 1e18,
+}
+
+
+def parse_coin_cost(s: str) -> int:
+    """Parse '1.05K', '80.73K', '30', '600.00M' into an integer."""
+    s = s.strip().replace(",", "")
+    for suffix, mult in COST_SUFFIXES.items():
+        if s.endswith(suffix):
+            return max(1, int(round(float(s[: -len(suffix)]) * mult)))
+    return max(1, int(round(float(s))))
+
+
+def parse_effect_value(s: str) -> float:
+    """Parse a value from the wiki Value column, stripping unit suffixes."""
+    s = s.strip()
+    if s.startswith("x"):
+        s = s[1:]
+    s = s.rstrip("%xsMm ")
+    try:
+        return float(s)
+    except ValueError:
+        return 0.0
 
 
 def ensure_dirs() -> None:
@@ -38,401 +60,398 @@ def ensure_dirs() -> None:
 
 
 # ---------------------------------------------------------------------------
-# Tier 1: Network Interception
+# Upgrade Definitions
 # ---------------------------------------------------------------------------
 
-async def extract_via_network(page) -> dict | None:  # type: ignore[no-untyped-def]
-    """Listen for XHR/fetch responses that contain upgrade data."""
-    print("[Tier 1] Attempting network interception...")
-
-    captured: list[dict] = []
-
-    async def handle_response(response) -> None:  # type: ignore[no-untyped-def]
-        url = response.url
-        content_type = response.headers.get("content-type", "")
-        if "json" in content_type or url.endswith(".json"):
-            try:
-                body = await response.json()
-                captured.append({"url": url, "data": body})
-                print(f"  [Tier 1] Captured JSON from: {url}")
-            except Exception:
-                pass
-
-    page.on("response", handle_response)
-
-    await page.goto(REFERENCE_URL, wait_until="networkidle")
-    await asyncio.sleep(3)  # Wait for any lazy-loaded data
-
-    if captured:
-        raw_path = RAW_DIR / "network_responses.json"
-        raw_path.write_text(json.dumps(captured, indent=2), encoding="utf-8")
-        print(f"  [Tier 1] Saved {len(captured)} responses to {raw_path}")
-
-        # Check if any captured response looks like upgrade data
-        for item in captured:
-            data = item["data"]
-            if _looks_like_upgrade_data(data):
-                print("  [Tier 1] Found upgrade data in network response!")
-                return data
-
-    print("  [Tier 1] No upgrade data found in network responses.")
-    return None
+UPGRADE_DEFS: list[dict] = [
+    # ── OFFENSE (Attack) ──
+    {"id": "attack_speed", "name": "Attack Speed", "span_id": "Attack_Speed",
+     "category": "offense", "effect_unit": "attacks/sec", "effect_type": "additive",
+     "base_value": 1.0, "display_order": 1},
+    {"id": "critical_chance", "name": "Critical Chance", "span_id": "Critical_Chance",
+     "category": "offense", "effect_unit": "%", "effect_type": "additive",
+     "base_value": 0.0, "display_order": 2},
+    {"id": "critical_factor", "name": "Critical Factor", "span_id": "Critical_Factor",
+     "category": "offense", "effect_unit": "multiplier", "effect_type": "multiplicative",
+     "base_value": 1.2, "display_order": 3},
+    {"id": "range", "name": "Range", "span_id": "Range",
+     "category": "offense", "effect_unit": "meters", "effect_type": "additive",
+     "base_value": 30.0, "display_order": 4},
+    {"id": "multishot_chance", "name": "Multishot Chance", "span_id": "Multishot_Chance",
+     "category": "offense", "effect_unit": "%", "effect_type": "additive",
+     "base_value": 0.0, "display_order": 5},
+    {"id": "multishot_targets", "name": "Multishot Targets", "span_id": "Multishot_Targets",
+     "category": "offense", "effect_unit": "targets", "effect_type": "additive",
+     "base_value": 2.0, "display_order": 6},
+    {"id": "rapid_fire_chance", "name": "Rapid Fire Chance", "span_id": "Rapid_Fire",
+     "category": "offense", "effect_unit": "%", "effect_type": "additive",
+     "base_value": 0.0, "display_order": 7},
+    {"id": "rapid_fire_duration", "name": "Rapid Fire Duration", "span_id": "Rapid_Fire_Duration",
+     "category": "offense", "effect_unit": "seconds", "effect_type": "additive",
+     "base_value": 0.6, "display_order": 8},
+    {"id": "bounce_shot_chance", "name": "Bounce Shot Chance", "span_id": "Bounce_Shot_Chance",
+     "category": "offense", "effect_unit": "%", "effect_type": "additive",
+     "base_value": 0.0, "display_order": 9},
+    {"id": "bounce_shot_targets", "name": "Bounce Shot Targets", "span_id": "Bounce_Shot_Targets",
+     "category": "offense", "effect_unit": "targets", "effect_type": "additive",
+     "base_value": 1.0, "display_order": 10},
+    {"id": "bounce_shot_range", "name": "Bounce Shot Range", "span_id": "Cost",
+     "category": "offense", "effect_unit": "meters", "effect_type": "additive",
+     "base_value": 2.0, "display_order": 11},
+    {"id": "super_crit_chance", "name": "Super Critical Chance", "span_id": "Super_Critical_Chance",
+     "category": "offense", "effect_unit": "%", "effect_type": "additive",
+     "base_value": 0.0, "display_order": 12},
+    # ── DEFENSE ──
+    {"id": "defense_percent", "name": "Defense Percent", "span_id": "Defense_Percent",
+     "category": "defense", "effect_unit": "%", "effect_type": "additive",
+     "base_value": 0.0, "display_order": 1},
+    {"id": "thorn_damage", "name": "Thorn Damage", "span_id": "Thorn_Damage",
+     "category": "defense", "effect_unit": "%", "effect_type": "additive",
+     "base_value": 0.0, "display_order": 2},
+    {"id": "lifesteal", "name": "Lifesteal", "span_id": "Lifesteal",
+     "category": "defense", "effect_unit": "%", "effect_type": "additive",
+     "base_value": 0.0, "display_order": 3},
+    {"id": "knockback_chance", "name": "Knockback Chance", "span_id": "Knockback_Chance",
+     "category": "defense", "effect_unit": "%", "effect_type": "additive",
+     "base_value": 0.0, "display_order": 4},
+    {"id": "knockback_force", "name": "Knockback Force", "span_id": "Knockback_Force",
+     "category": "defense", "effect_unit": "force", "effect_type": "additive",
+     "base_value": 0.4, "display_order": 5},
+    {"id": "orb_speed", "name": "Orb Speed", "span_id": "Orb_Speed",
+     "category": "defense", "effect_unit": "rpm", "effect_type": "additive",
+     "base_value": 0.4, "display_order": 6},
+    {"id": "orbs", "name": "Orbs", "span_id": "Orbs", "occurrence": 2,
+     "category": "defense", "effect_unit": "count", "effect_type": "additive",
+     "base_value": 0.0, "display_order": 7},
+    {"id": "shockwave_size", "name": "Shockwave Size", "span_id": "Shockwave_Size",
+     "category": "defense", "effect_unit": "size", "effect_type": "additive",
+     "base_value": 0.6, "display_order": 8},
+    {"id": "shockwave_frequency", "name": "Shockwave Frequency", "span_id": "Shockwave_Frequency",
+     "category": "defense", "effect_unit": "seconds", "effect_type": "additive",
+     "base_value": 20.0, "display_order": 9},
+    {"id": "land_mine_chance", "name": "Land Mine Chance", "span_id": "Land_Mine_Chance",
+     "category": "defense", "effect_unit": "%", "effect_type": "additive",
+     "base_value": 0.0, "display_order": 10},
+    {"id": "land_mine_radius", "name": "Land Mine Radius", "span_id": "Land_Mine_Radius",
+     "category": "defense", "effect_unit": "radius", "effect_type": "additive",
+     "base_value": 0.5, "display_order": 11},
+    {"id": "death_defy", "name": "Death Defy", "span_id": "Death_Defy",
+     "category": "defense", "effect_unit": "%", "effect_type": "additive",
+     "base_value": 0.0, "display_order": 12},
+    # ── ECONOMY (utility upgrades related to coins/cash) ──
+    {"id": "cash_bonus", "name": "Cash Bonus", "span_id": "Cash_Bonus",
+     "category": "economy", "effect_unit": "multiplier", "effect_type": "multiplicative",
+     "base_value": 1.0, "display_order": 1},
+    {"id": "coins_per_kill", "name": "Coins Per Kill", "span_id": "Coins_Per_Kill",
+     "category": "economy", "effect_unit": "multiplier", "effect_type": "multiplicative",
+     "base_value": 1.0, "display_order": 2},
+    {"id": "coins_per_wave", "name": "Coins Per Wave", "span_id": "Coins.2FWave",
+     "category": "economy", "effect_unit": "coins", "effect_type": "additive",
+     "base_value": 1.0, "display_order": 3},
+    {"id": "cash_per_wave", "name": "Cash Per Wave", "span_id": "Cash.2FWave",
+     "category": "economy", "effect_unit": "cash", "effect_type": "additive",
+     "base_value": 0.0, "display_order": 4},
+    # ── UTILITY ──
+    {"id": "free_attack_upgrades", "name": "Free Attack Upgrades",
+     "span_id": "Free_Attack_Upgrades",
+     "category": "utility", "effect_unit": "%", "effect_type": "additive",
+     "base_value": 0.0, "display_order": 1},
+    {"id": "free_defense_upgrades", "name": "Free Defense Upgrades",
+     "span_id": "Free_Defense_Upgrades",
+     "category": "utility", "effect_unit": "%", "effect_type": "additive",
+     "base_value": 0.0, "display_order": 2},
+    {"id": "free_utility_upgrades", "name": "Free Utility Upgrades",
+     "span_id": "Free_Utility_Upgrades",
+     "category": "utility", "effect_unit": "%", "effect_type": "additive",
+     "base_value": 0.0, "display_order": 3},
+    {"id": "package_chance", "name": "Package Chance", "span_id": "Package_Chance",
+     "category": "utility", "effect_unit": "%", "effect_type": "additive",
+     "base_value": 6.0, "display_order": 4},
+]
 
 
 # ---------------------------------------------------------------------------
-# Tier 2: JS Bundle Analysis
+# HTML Table Parsing
 # ---------------------------------------------------------------------------
 
-async def extract_via_bundle(page) -> dict | None:  # type: ignore[no-untyped-def]
-    """Download the main JS bundle and search for embedded data structures."""
-    print("[Tier 2] Attempting JS bundle analysis...")
+def extract_tables_after_span(
+    html: str, span_id: str, occurrence: int = 1, max_chars: int = 30000,
+) -> list[list[list[str]]]:
+    """Find tables after the Nth occurrence of a span with the given id.
 
+    Searches up to max_chars after the span for tables.
+    """
+    pattern = rf'id="{re.escape(span_id)}"'
+    pos = 0
+    for _ in range(occurrence):
+        match = re.search(pattern, html[pos:])
+        if match is None:
+            return []
+        pos += match.end()
+
+    rest = html[pos : pos + max_chars]
+
+    tables = []
+    for table_match in re.finditer(r"<table[^>]*>(.*?)</table>", rest, re.DOTALL):
+        table_html = table_match.group(1)
+        rows = parse_html_table(table_html)
+        if rows and len(rows) > 1:
+            tables.append(rows)
+
+    return tables
+
+
+def parse_html_table(table_html: str) -> list[list[str]]:
+    """Parse an HTML table into rows of cell text."""
+    rows = []
+    for tr_match in re.finditer(r"<tr[^>]*>(.*?)</tr>", table_html, re.DOTALL):
+        tr_content = tr_match.group(1)
+        cells = []
+        for td_match in re.finditer(r"<t[hd][^>]*>(.*?)</t[hd]>", tr_content, re.DOTALL):
+            cell_text = re.sub(r"<[^>]+>", "", td_match.group(1)).strip()
+            cells.append(cell_text)
+        if cells:
+            rows.append(cells)
+    return rows
+
+
+def table_to_levels(
+    rows: list[list[str]], upgrade_def: dict
+) -> list[dict] | None:
+    """Convert parsed table rows into level dicts.
+
+    Expects columns: Level, Value, Cost, Total Cost (or Coins, Total Coins).
+    """
+    levels = []
+    base_value = upgrade_def["base_value"]
+
+    for row in rows:
+        if len(row) < 3:
+            continue
+        if row[0].lower() in ("level",):
+            continue
+
+        try:
+            level_num = int(float(row[0]))
+        except ValueError:
+            continue
+
+        try:
+            effect_val = parse_effect_value(row[1])
+        except ValueError:
+            continue
+
+        try:
+            cost_val = parse_coin_cost(row[2])
+        except ValueError:
+            continue
+
+        levels.append({
+            "level": level_num,
+            "coin_cost": cost_val,
+            "cumulative_effect": round(effect_val, 6),
+        })
+
+    if not levels:
+        return None
+
+    for i, lv in enumerate(levels):
+        if i == 0:
+            lv["effect_delta"] = round(lv["cumulative_effect"] - base_value, 6)
+        else:
+            lv["effect_delta"] = round(
+                lv["cumulative_effect"] - levels[i - 1]["cumulative_effect"], 6
+            )
+
+    return levels
+
+
+def is_complete(levels: list[dict]) -> bool:
+    """Check if levels are contiguous (1, 2, 3, ..., N) with no gaps."""
+    if not levels:
+        return False
+    expected = levels[0]["level"]
+    for lv in levels:
+        if lv["level"] != expected:
+            return False
+        expected += 1
+    return True
+
+
+def renumber_levels(levels: list[dict]) -> list[dict]:
+    """Renumber levels to be 1..N for sampled/gapped data."""
+    return [{**lv, "level": i + 1} for i, lv in enumerate(levels)]
+
+
+def fix_cost_monotonicity(levels: list[dict]) -> list[dict]:
+    """Ensure costs are strictly increasing."""
+    for i in range(1, len(levels)):
+        if levels[i]["coin_cost"] <= levels[i - 1]["coin_cost"]:
+            levels[i]["coin_cost"] = levels[i - 1]["coin_cost"] + 1
+    return levels
+
+
+def costs_are_monotonic(levels: list[dict]) -> bool:
+    """Check if costs are strictly increasing."""
+    return all(
+        levels[i]["coin_cost"] > levels[i - 1]["coin_cost"]
+        for i in range(1, len(levels))
+    )
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+def fetch_wiki() -> str:
     try:
         import httpx
-
-        async with httpx.AsyncClient(follow_redirects=True) as client:
-            resp = await client.get(BUNDLE_URL)
-            if resp.status_code != 200:
-                print(f"  [Tier 2] Failed to download bundle: HTTP {resp.status_code}")
-                return None
-
-            bundle = resp.text
-            raw_path = RAW_DIR / "bundle.js"
-            raw_path.write_text(bundle, encoding="utf-8")
-            print(f"  [Tier 2] Downloaded bundle ({len(bundle):,} chars) to {raw_path}")
-
-            return _parse_bundle_for_data(bundle)
-
     except ImportError:
-        print("  [Tier 2] httpx not installed. Run: pip install -e '.[extract]'")
-        return None
-    except Exception as e:
-        print(f"  [Tier 2] Error: {e}")
-        return None
+        print("ERROR: httpx not installed. Run: pip3 install -e '.[extract]'")
+        sys.exit(1)
+
+    print(f"Fetching: {WIKI_URL}")
+    with httpx.Client(follow_redirects=True, timeout=60) as client:
+        resp = client.get(WIKI_URL)
+        if resp.status_code != 200:
+            print(f"ERROR: HTTP {resp.status_code}")
+            sys.exit(1)
+        return resp.text
 
 
-def _parse_bundle_for_data(bundle: str) -> dict | None:
-    """Search the minified JS bundle for embedded upgrade data.
+def extract_all() -> None:
+    ensure_dirs()
 
-    Looks for patterns like:
-    - Arrays of objects with upgrade-like fields
-    - String arrays with known upgrade names
-    - JSON-serialized data constants
-    """
-    # Known upgrade name patterns to search for
-    known_names = [
-        "Attack Speed", "Damage", "Critical Chance", "Critical Factor",
-        "Health", "Health Regen", "Defense", "Thorns",
-        "Coins per Kill", "Coins per Wave", "Interest",
-        "Land Mines", "Death Defy", "Orb Speed",
-    ]
-
-    found_names: list[str] = []
-    for name in known_names:
-        if name in bundle:
-            found_names.append(name)
-
-    if found_names:
-        print(f"  [Tier 2] Found {len(found_names)} upgrade names in bundle: {found_names[:5]}...")
+    raw_path = RAW_DIR / "wiki_workshop.html"
+    if raw_path.exists():
+        print(f"Using cached: {raw_path}")
+        html = raw_path.read_text(encoding="utf-8")
     else:
-        print("  [Tier 2] No known upgrade names found in bundle.")
-        return None
+        html = fetch_wiki()
+        raw_path.write_text(html, encoding="utf-8")
+        print(f"Saved raw HTML ({len(html):,} chars)")
 
-    # Try to find JSON-like data structures near upgrade names
-    # Look for patterns like: [{name:"Attack Speed",... or {"Attack Speed":...
-    # This is heuristic and may need refinement
+    upgrades = []
+    skipped = []
 
-    # Pattern 1: Array of objects with "name" field
-    pattern1 = re.compile(
-        r'\[\s*\{[^}]*?"name"\s*:\s*"[^"]*Attack[^"]*"[^]]*\]',
-        re.DOTALL,
-    )
-    matches = pattern1.findall(bundle)
-    if matches:
-        for m in matches[:3]:
-            print(f"  [Tier 2] Found potential data array ({len(m)} chars)")
-            try:
-                data = json.loads(m)
-                if isinstance(data, list) and len(data) > 5:
-                    print(f"  [Tier 2] Parsed {len(data)} items from array!")
-                    return {"raw_upgrades": data, "source": "bundle_array"}
-            except json.JSONDecodeError:
-                pass
+    for udef in UPGRADE_DEFS:
+        uid = udef["id"]
+        span_id = udef["span_id"]
 
-    # Pattern 2: Look for large object literals with numeric arrays (costs)
-    # This finds patterns like: costs:[100,250,500,...] or cost:[100,250,500,...]
-    cost_pattern = re.compile(r'cost[s]?\s*:\s*\[(\d[\d,\s]+)\]')
-    cost_matches = cost_pattern.findall(bundle)
-    if cost_matches:
-        print(f"  [Tier 2] Found {len(cost_matches)} cost-like arrays")
+        occurrence = udef.get("occurrence", 1)
+        tables = extract_tables_after_span(html, span_id, occurrence=occurrence)
+        if not tables:
+            print(f"  SKIP {uid}: no table found (span_id={span_id})")
+            skipped.append(uid)
+            continue
 
-    print("  [Tier 2] Could not parse structured data from bundle (needs manual review).")
-    print(f"  [Tier 2] Raw bundle saved to {RAW_DIR / 'bundle.js'} for inspection.")
-    return None
+        table = tables[0]
+        levels = table_to_levels(table, udef)
+        if not levels:
+            print(f"  SKIP {uid}: could not parse table")
+            skipped.append(uid)
+            continue
 
+        complete = is_complete(levels)
+        if not complete:
+            if len(levels) >= 5 and costs_are_monotonic(levels):
+                print(
+                    f"  NOTE {uid}: sampled data ({len(levels)} points, "
+                    f"game levels {levels[0]['level']}-{levels[-1]['level']}), renumbering"
+                )
+                levels = renumber_levels(levels)
+            elif len(levels) >= 5:
+                print(
+                    f"  NOTE {uid}: sampled data ({len(levels)} points), "
+                    f"costs not monotonic — applying fix"
+                )
+                levels = renumber_levels(levels)
+                levels = fix_cost_monotonicity(levels)
+            else:
+                print(f"  SKIP {uid}: insufficient data ({len(levels)} points)")
+                skipped.append(uid)
+                continue
+        else:
+            levels = fix_cost_monotonicity(levels)
 
-# ---------------------------------------------------------------------------
-# Tier 3: DOM Scraping
-# ---------------------------------------------------------------------------
+        recalc_deltas(levels, udef["base_value"])
 
-async def extract_via_dom(page) -> dict | None:  # type: ignore[no-untyped-def]
-    """Scrape the rendered DOM for upgrade data."""
-    print("[Tier 3] Attempting DOM scraping...")
+        max_level = len(levels)
+        upgrades.append({
+            "id": uid,
+            "name": udef["name"],
+            "category": udef["category"],
+            "effect_unit": udef["effect_unit"],
+            "effect_type": udef["effect_type"],
+            "base_value": udef["base_value"],
+            "max_level": max_level,
+            "display_order": udef["display_order"],
+            "levels": levels,
+        })
+        print(f"  OK   {uid}: {max_level} levels")
 
-    await page.goto(REFERENCE_URL, wait_until="networkidle")
-    await asyncio.sleep(5)  # Wait for React to render
+    print(f"\nExtracted {len(upgrades)} upgrades, skipped {len(skipped)}")
 
-    # Save raw HTML
-    html = await page.content()
-    raw_path = RAW_DIR / "page.html"
-    raw_path.write_text(html, encoding="utf-8")
-    print(f"  [Tier 3] Saved rendered HTML ({len(html):,} chars) to {raw_path}")
+    if not upgrades:
+        print("FAILED: No upgrades extracted")
+        sys.exit(1)
 
-    # Extract categories and upgrades from DOM
-    data = await page.evaluate("""
-    () => {
-        const result = { categories: [] };
-
-        // Find category sections
-        const categories = document.querySelectorAll('.category');
-        if (categories.length === 0) {
-            // Try alternative selectors
-            const sections = document.querySelectorAll('.upgrade-section, [class*="category"]');
-            if (sections.length === 0) {
-                return {
-                    error: "No category elements found",
-                    html_length: document.body.innerHTML.length,
-                };
-            }
-        }
-
-        categories.forEach(cat => {
-            const catData = {
-                name: '',
-                upgrades: []
-            };
-
-            // Get category name
-            const nameEl = cat.querySelector('.category-name');
-            if (nameEl) catData.name = nameEl.textContent.trim();
-
-            // Determine category type from class
-            if (cat.classList.contains('attack')) catData.type = 'offense';
-            else if (cat.classList.contains('defense')) catData.type = 'defense';
-            else if (cat.classList.contains('utility')) catData.type = 'economy';
-            else catData.type = 'unknown';
-
-            // Get upgrades within category
-            const upgrades = cat.querySelectorAll('.upgrade');
-            upgrades.forEach(u => {
-                const upgrade = {
-                    name: '',
-                    values: {}
-                };
-
-                // Get upgrade name
-                const nameBtn = u.querySelector('.name-button, .upgrade-name');
-                if (nameBtn) upgrade.name = nameBtn.textContent.trim();
-
-                // Get current/target values
-                const currentEl = u.querySelector('.current input, .current');
-                const targetEl = u.querySelector('.target input, .target');
-                if (currentEl) {
-                    upgrade.values.current = currentEl.value || currentEl.textContent.trim();
-                }
-                if (targetEl) {
-                    upgrade.values.target = targetEl.value || targetEl.textContent.trim();
-                }
-
-                // Get cost
-                const costEl = u.querySelector('.cost');
-                if (costEl) upgrade.values.cost = costEl.textContent.trim();
-
-                if (upgrade.name) catData.upgrades.push(upgrade);
-            });
-
-            if (catData.upgrades.length > 0) result.categories.push(catData);
-        });
-
-        return result;
-    }
-    """)
-
-    if data and "categories" in data and data["categories"]:
-        print(f"  [Tier 3] Found {len(data['categories'])} categories with upgrades")
-        raw_path = RAW_DIR / "dom_extracted.json"
-        raw_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
-        return data
-    else:
-        print(f"  [Tier 3] DOM extraction returned: {data}")
-        return None
-
-
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-
-def _looks_like_upgrade_data(data: object) -> bool:
-    """Heuristic: does this data look like upgrade definitions?"""
-    if isinstance(data, list) and len(data) > 5 and isinstance(data[0], dict):
-        keys = set(data[0].keys())
-        upgrade_keys = {"name", "cost", "level", "effect", "category", "type"}
-        if keys & upgrade_keys:
-            return True
-    return isinstance(data, dict) and any(
-        k in data for k in ("upgrades", "workshops", "permanent")
-    )
-
-
-def normalize_to_schema(raw_data: dict) -> dict:
-    """Convert raw extracted data to the UpgradeDatabase JSON schema.
-
-    This is a template — the exact normalization depends on what tier
-    successfully extracted data and what format it returned.
-    """
-    normalized: dict = {
-        "version": "extracted",
-        "game_version": "unknown",
-        "source": "tower-workshop-calculator.netlify.app",
-        "upgrades": [],
+    result = {
+        "version": "2026-02-19",
+        "game_version": "current",
+        "source": "game-vault.net/wiki/Workshop",
+        "upgrades": upgrades,
     }
 
-    # Handle Tier 3 DOM data
-    if "categories" in raw_data:
-        display_order = 0
+    errors = validate_extracted(result)
+    if errors:
+        print(f"\nValidation issues ({len(errors)}):")
+        for e in errors[:20]:
+            print(f"  - {e}")
 
-        for cat in raw_data["categories"]:
-            cat_type = cat.get("type", "unknown")
-            for u in cat.get("upgrades", []):
-                display_order += 1
-                name = u.get("name", "")
-                upgrade_id = name.lower().replace(" ", "_").replace("/", "_")
+    UPGRADES_PATH.write_text(json.dumps(result, indent=2), encoding="utf-8")
+    print(f"\nSaved to {UPGRADES_PATH}")
+    print(f"Total upgrades: {len(upgrades)}")
 
-                normalized["upgrades"].append({
-                    "id": upgrade_id,
-                    "name": name,
-                    "category": cat_type,
-                    "effect_unit": "unknown",
-                    "effect_type": "additive",
-                    "base_value": 0,
-                    "max_level": 1,
-                    "display_order": display_order,
-                    "levels": [],  # Needs per-level data — may require iterating the UI
-                })
+    cats: dict[str, list[str]] = {}
+    for u in upgrades:
+        cats.setdefault(u["category"], []).append(u["name"])
+    for cat, names in sorted(cats.items()):
+        print(f"  {cat}: {len(names)} — {', '.join(names[:5])}{'...' if len(names) > 5 else ''}")
 
-    return normalized
+    if skipped:
+        print(f"\nSkipped ({len(skipped)}): {', '.join(skipped)}")
+
+
+def recalc_deltas(levels: list[dict], base_value: float) -> None:
+    for i, lv in enumerate(levels):
+        if i == 0:
+            lv["effect_delta"] = round(lv["cumulative_effect"] - base_value, 6)
+        else:
+            lv["effect_delta"] = round(
+                lv["cumulative_effect"] - levels[i - 1]["cumulative_effect"], 6
+            )
 
 
 def validate_extracted(data: dict) -> list[str]:
-    """Basic validation of extracted data before saving."""
     errors = []
-
-    upgrades = data.get("upgrades", [])
-    if not upgrades:
-        errors.append("No upgrades extracted")
-        return errors
-
-    ids_seen: set[str] = set()
-    for i, u in enumerate(upgrades):
-        uid = u.get("id", f"upgrade_{i}")
-
-        if uid in ids_seen:
-            errors.append(f"Duplicate ID: {uid}")
-        ids_seen.add(uid)
-
+    for u in data.get("upgrades", []):
+        uid = u["id"]
         levels = u.get("levels", [])
         if not levels:
-            errors.append(f"{uid}: no levels data")
-
-        for lv in levels:
-            cost = lv.get("coin_cost")
-            if not isinstance(cost, (int, float)) or cost <= 0:
-                errors.append(f"{uid} level {lv.get('level')}: invalid cost {cost}")
-
-            effect = lv.get("cumulative_effect")
-            if isinstance(effect, str):
-                errors.append(f"{uid} level {lv.get('level')}: string effect '{effect}'")
-
+            errors.append(f"{uid}: no levels")
+            continue
+        for i, lv in enumerate(levels):
+            if lv["level"] != i + 1:
+                errors.append(f"{uid}: level gap at index {i}")
+                break
+        for i in range(1, len(levels)):
+            if levels[i]["coin_cost"] <= levels[i - 1]["coin_cost"]:
+                errors.append(f"{uid}: cost not increasing at level {levels[i]['level']}")
+        if len(levels) != u.get("max_level"):
+            errors.append(f"{uid}: levels count != max_level")
     return errors
 
 
-# ---------------------------------------------------------------------------
-# Main Orchestrator
-# ---------------------------------------------------------------------------
-
-async def extract_all() -> None:
-    """Run all extraction tiers in order until one succeeds."""
-    ensure_dirs()
-
-    try:
-        from playwright.async_api import async_playwright
-    except ImportError:
-        print("ERROR: Playwright not installed.")
-        print("Run: pip install -e '.[extract]' && playwright install chromium")
-        sys.exit(1)
-
-    print(f"Starting extraction from {REFERENCE_URL}")
-    print(f"Raw artifacts will be saved to {RAW_DIR}")
-    print()
-
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
-        page = await browser.new_page()
-
-        raw_data = None
-
-        # Tier 1: Network Interception
-        try:
-            raw_data = await extract_via_network(page)
-        except Exception as e:
-            print(f"  [Tier 1] Error: {e}")
-
-        # Tier 2: JS Bundle Analysis
-        if raw_data is None:
-            try:
-                raw_data = await extract_via_bundle(page)
-            except Exception as e:
-                print(f"  [Tier 2] Error: {e}")
-
-        # Tier 3: DOM Scraping
-        if raw_data is None:
-            try:
-                raw_data = await extract_via_dom(page)
-            except Exception as e:
-                print(f"  [Tier 3] Error: {e}")
-
-        await browser.close()
-
-    if raw_data is None:
-        print()
-        print("FAILED: No tier succeeded in extracting data.")
-        print("Options:")
-        print("  1. Check if the reference site is accessible")
-        print("  2. Run with headed browser: modify headless=False")
-        print("  3. Try manual data entry with scripts/manual_import.py")
-        sys.exit(1)
-
-    # Save raw extraction
-    raw_path = RAW_DIR / "extracted.json"
-    raw_path.write_text(json.dumps(raw_data, indent=2), encoding="utf-8")
-    print(f"\nRaw data saved to {raw_path}")
-
-    # Normalize
-    normalized = normalize_to_schema(raw_data)
-
-    # Validate
-    errors = validate_extracted(normalized)
-    if errors:
-        print(f"\nValidation found {len(errors)} issues:")
-        for e in errors:
-            print(f"  - {e}")
-        print("\nSaving anyway — manual review needed.")
-
-    # Save normalized output
-    UPGRADES_PATH.write_text(json.dumps(normalized, indent=2), encoding="utf-8")
-    print(f"\nNormalized data saved to {UPGRADES_PATH}")
-    print(f"Upgrades extracted: {len(normalized.get('upgrades', []))}")
-
-
 if __name__ == "__main__":
-    asyncio.run(extract_all())
+    extract_all()

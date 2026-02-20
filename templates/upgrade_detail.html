@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{{ upgrade.name }} — Tower Upgrade Advisor{% endblock %}
+
+{% block nav %}
+  {% if profile %}
+    <a href="{{ url_for('dashboard', profile_id=profile.id) }}" class="btn btn-sm">← Dashboard</a>
+    <a href="{{ url_for('recommend', profile_id=profile.id) }}" class="btn btn-sm">Recommend</a>
+  {% endif %}
+  <a href="{{ url_for('index') }}" class="btn btn-sm">Profiles</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2>{{ upgrade.name }}</h2>
+  <div class="detail-meta">
+    <span class="meta-item"><span class="meta-label">Category:</span> <span style="text-transform:capitalize">{{ upgrade.category }}</span></span>
+    <span class="meta-item"><span class="meta-label">Type:</span> {{ upgrade.effect_type }}</span>
+    <span class="meta-item"><span class="meta-label">Unit:</span> {{ upgrade.effect_unit }}</span>
+    <span class="meta-item"><span class="meta-label">Base Value:</span> {{ upgrade.base_value | fmt_effect }}</span>
+    <span class="meta-item"><span class="meta-label">Max Level:</span> {{ upgrade.max_level }}</span>
+  </div>
+
+  {% if profile %}
+    <p style="margin-bottom:1rem">
+      <strong>Your level:</strong> {{ current_level }} / {{ upgrade.max_level }}
+      {% if current_level >= upgrade.max_level %}
+        <span class="badge-maxed">MAX</span>
+      {% endif %}
+    </p>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>Level Table</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Level</th>
+        <th class="text-right">Cost</th>
+        <th class="text-right">Effect Delta</th>
+        <th class="text-right">Cumulative Effect</th>
+        <th class="text-right">Cumulative Cost</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr {% if current_level == 0 %}class="current-level"{% endif %}>
+        <td>0 (base)</td>
+        <td class="text-right">—</td>
+        <td class="text-right">—</td>
+        <td class="text-right">{{ upgrade.base_value | fmt_effect }} {{ upgrade.effect_unit }}</td>
+        <td class="text-right">0</td>
+      </tr>
+      {% for lv in upgrade.levels %}
+      <tr {% if lv.level == current_level %}class="current-level"{% endif %}>
+        <td>{% if lv.level == current_level %}→ {% endif %}{{ lv.level }}</td>
+        <td class="text-right">{{ lv.coin_cost | fmt }}</td>
+        <td class="text-right">+{{ lv.effect_delta | fmt_effect }} {{ upgrade.effect_unit }}</td>
+        <td class="text-right">{{ lv.cumulative_effect | fmt_effect }} {{ upgrade.effect_unit }}</td>
+        <td class="text-right">{{ cum_costs[loop.index0] | fmt }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

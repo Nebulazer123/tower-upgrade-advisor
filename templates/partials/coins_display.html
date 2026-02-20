@@ -1,0 +1,10 @@
+<div id="coins-section" class="coins-section">
+  <label class="coins-label" for="coins-input">Available Coins:</label>
+  <input id="coins-input" type="number" name="coins" class="coins-input"
+         value="{{ profile.available_coins }}" min="0"
+         hx-post="{{ url_for('update_coins', profile_id=profile.id) }}"
+         hx-trigger="change"
+         hx-target="#coins-section"
+         hx-swap="outerHTML">
+  <span class="save-indicator" id="coins-saved"></span>
+</div>

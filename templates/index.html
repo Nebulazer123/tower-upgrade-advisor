@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Profiles — Tower Upgrade Advisor{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2>Your Profiles</h2>
+
+  {% if profiles %}
+    <ul class="profile-list">
+      {% for p in profiles %}
+        <li class="profile-item">
+          <div>
+            <a href="{{ url_for('dashboard', profile_id=p.id) }}" class="profile-name">{{ p.name }}</a>
+            <div class="profile-meta">
+              {{ p.available_coins | fmt }} coins
+              &middot; {{ p.levels | length }} upgrades set
+              &middot; updated {{ p.updated_at.strftime('%b %d, %Y %H:%M') }}
+            </div>
+          </div>
+          <div class="profile-actions">
+            <a href="{{ url_for('dashboard', profile_id=p.id) }}" class="btn btn-sm btn-primary">Open</a>
+            <form method="POST" action="{{ url_for('delete_profile', profile_id=p.id) }}"
+                  onsubmit="return confirm('Delete profile \'{{ p.name }}\'?')">
+              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="empty-state">
+      <h2>No profiles yet</h2>
+      <p>Create your first profile to start tracking upgrades.</p>
+    </div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>Create New Profile</h2>
+  <form method="POST" action="{{ url_for('create_profile') }}" class="new-profile-form">
+    <input type="text" name="name" placeholder="Profile name…" required minlength="1" maxlength="64">
+    <button type="submit" class="btn btn-primary">Create</button>
+  </form>
+</div>
+{% endblock %}

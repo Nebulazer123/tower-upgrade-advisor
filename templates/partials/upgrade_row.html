@@ -1,0 +1,38 @@
+{% set cl = profile.get_level(upgrade.id) %}
+{% set maxed = cl >= upgrade.max_level %}
+<tr id="row-{{ upgrade.id }}">
+  <td>
+    <a href="{{ url_for('upgrade_detail', upgrade_id=upgrade.id, profile=profile.id) }}">{{ upgrade.name }}</a>
+  </td>
+  <td class="text-right">
+    <input type="number" name="level"
+           value="{{ cl }}" min="0" max="{{ upgrade.max_level }}"
+           hx-post="{{ url_for('update_level', profile_id=profile.id) }}"
+           hx-trigger="change"
+           hx-target="#row-{{ upgrade.id }}"
+           hx-swap="outerHTML"
+           hx-vals='{"upgrade_id": "{{ upgrade.id }}"}'>
+  </td>
+  <td class="text-center" style="color:var(--text-muted)">/ {{ upgrade.max_level }}</td>
+  <td class="text-right">
+    {% if maxed %}
+      <span class="badge-maxed">MAX</span>
+    {% else %}
+      {{ upgrade.levels[cl].coin_cost | fmt }}
+    {% endif %}
+  </td>
+  <td class="text-right">
+    {% if maxed %}
+      —
+    {% else %}
+      +{{ upgrade.levels[cl].effect_delta | fmt_effect }} {{ upgrade.effect_unit }}
+    {% endif %}
+  </td>
+  <td class="text-right">
+    {% if cl > 0 %}
+      {{ upgrade.levels[cl - 1].cumulative_effect | fmt_effect }} {{ upgrade.effect_unit }}
+    {% else %}
+      {{ upgrade.base_value | fmt_effect }} {{ upgrade.effect_unit }}
+    {% endif %}
+  </td>
+</tr>

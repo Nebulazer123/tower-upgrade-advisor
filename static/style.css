@@ -1,0 +1,371 @@
+/* ── Tower Upgrade Advisor — Design Tokens ── */
+:root {
+  --bg:         #0f1117;
+  --bg-card:    #181b24;
+  --bg-input:   #22262f;
+  --bg-hover:   #262a35;
+  --border:     #2d3140;
+  --text:       #e2e4e9;
+  --text-muted: #8b8fa3;
+  --accent:     #6c8cff;
+  --accent-dim: #4a64c4;
+  --green:      #3dd68c;
+  --green-dim:  #1d6b47;
+  --red:        #f06060;
+  --red-dim:    #7a3030;
+  --yellow:     #f0c040;
+  --yellow-dim: #705820;
+  --radius:     8px;
+  --radius-lg:  12px;
+  --shadow:     0 2px 8px rgba(0,0,0,.3);
+  --font:       'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --mono:       'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --cat-offense:  #f06060;
+  --cat-defense:  #6c8cff;
+  --cat-economy:  #3dd68c;
+  --cat-utility:  #f0c040;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Layout ── */
+.container { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+.page-header h1 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.page-header .nav-links { display: flex; gap: .75rem; align-items: center; }
+
+/* ── Banner ── */
+.banner {
+  padding: .6rem 1rem;
+  border-radius: var(--radius);
+  font-size: .85rem;
+  margin-bottom: 1rem;
+}
+.banner.warning { background: var(--yellow-dim); color: var(--yellow); border: 1px solid var(--yellow); }
+.banner.info    { background: rgba(108,140,255,.12); color: var(--accent); border: 1px solid var(--accent-dim); }
+.banner.success { background: var(--green-dim); color: var(--green); border: 1px solid var(--green); }
+.banner.error   { background: var(--red-dim); color: var(--red); border: 1px solid var(--red); }
+
+/* ── Cards ── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+}
+.card h2 { font-size: 1.05rem; font-weight: 600; margin-bottom: .75rem; }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .45rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-input);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: .85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+  text-decoration: none;
+}
+.btn:hover { background: var(--bg-hover); border-color: var(--accent-dim); text-decoration: none; }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-dim); }
+.btn-danger  { border-color: var(--red-dim); color: var(--red); }
+.btn-danger:hover  { background: var(--red-dim); }
+.btn-sm { padding: .3rem .6rem; font-size: .78rem; }
+
+/* ── Forms / Inputs ── */
+input[type="text"],
+input[type="number"],
+select {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: .85rem;
+  padding: .4rem .6rem;
+  transition: border-color .15s;
+}
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(108,140,255,.2);
+}
+input[type="number"] { width: 5.5rem; text-align: right; font-family: var(--mono); }
+input.coins-input { width: 10rem; font-size: 1rem; font-weight: 600; }
+
+label { font-size: .8rem; color: var(--text-muted); font-weight: 500; }
+
+/* ── Range sliders ── */
+.slider-group { display: flex; flex-direction: column; gap: .2rem; }
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+.slider-row label { width: 5rem; text-align: right; }
+.slider-row input[type="range"] { flex: 1; accent-color: var(--accent); }
+.slider-row .slider-val {
+  width: 2.5rem;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: .85rem;
+  color: var(--accent);
+}
+
+/* ── Tables ── */
+table { width: 100%; border-collapse: collapse; }
+th, td {
+  padding: .5rem .75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-size: .85rem;
+}
+th {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+td { font-family: var(--mono); }
+tr:hover td { background: var(--bg-hover); }
+.text-right { text-align: right; }
+.text-center { text-align: center; }
+
+/* ── Category sections ── */
+.category-section { margin-bottom: 1.25rem; }
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem .75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius) var(--radius) 0 0;
+  cursor: pointer;
+  user-select: none;
+}
+.category-header .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.category-header h3 {
+  font-size: .9rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  flex: 1;
+}
+.category-header .count { font-size: .75rem; color: var(--text-muted); }
+.category-header .chevron {
+  font-size: .7rem;
+  color: var(--text-muted);
+  transition: transform .2s;
+}
+.category-body {
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  overflow: hidden;
+}
+.category-body.collapsed { display: none; }
+
+.cat-offense  .dot { background: var(--cat-offense); }
+.cat-defense  .dot { background: var(--cat-defense); }
+.cat-economy  .dot { background: var(--cat-economy); }
+.cat-utility  .dot { background: var(--cat-utility); }
+
+/* ── Profile list ── */
+.profile-list { list-style: none; }
+.profile-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  transition: background .1s;
+}
+.profile-item:last-child { border-bottom: none; }
+.profile-item:hover { background: var(--bg-hover); }
+.profile-item .profile-name { font-weight: 600; }
+.profile-item .profile-meta { font-size: .78rem; color: var(--text-muted); }
+.profile-item .profile-actions { display: flex; gap: .4rem; }
+
+/* ── Recommendation hero ── */
+.hero-pick {
+  background: linear-gradient(135deg, rgba(108,140,255,.12), rgba(61,214,140,.08));
+  border: 2px solid var(--accent);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.hero-pick .rank-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  padding: .15rem .6rem;
+  border-radius: 4px;
+  font-size: .75rem;
+  font-weight: 700;
+  margin-bottom: .5rem;
+}
+.hero-pick h2 { font-size: 1.2rem; margin-bottom: .5rem; }
+.hero-pick .hero-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: .75rem;
+  margin-top: .75rem;
+}
+.hero-pick .stat-box {
+  background: rgba(0,0,0,.2);
+  border-radius: var(--radius);
+  padding: .5rem .75rem;
+}
+.hero-pick .stat-label { font-size: .7rem; color: var(--text-muted); text-transform: uppercase; }
+.hero-pick .stat-value { font-size: 1rem; font-weight: 600; font-family: var(--mono); }
+.affordable-yes { color: var(--green); }
+.affordable-no  { color: var(--red); }
+
+/* ── Upgrade detail ── */
+.detail-meta {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.detail-meta .meta-item { font-size: .85rem; }
+.detail-meta .meta-label { color: var(--text-muted); }
+tr.current-level { background: rgba(108,140,255,.1); }
+tr.current-level td { font-weight: 700; border-left: 3px solid var(--accent); }
+
+/* ── Status indicator (htmx feedback) ── */
+.save-indicator {
+  font-size: .75rem;
+  padding: .15rem .5rem;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.save-indicator.show { opacity: 1; }
+.save-indicator.ok   { color: var(--green); background: var(--green-dim); }
+.save-indicator.err  { color: var(--red); background: var(--red-dim); }
+
+/* htmx loading states */
+.htmx-request { opacity: .6; }
+.htmx-settling { transition: opacity .3s; }
+
+/* ── Top bar / coins section ── */
+.dashboard-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.coins-section {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.coins-label { font-size: .85rem; font-weight: 600; }
+
+/* ── Weights panel ── */
+.weights-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.weights-panel h3 { font-size: .9rem; font-weight: 600; margin-bottom: .75rem; }
+.weights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: .5rem .75rem;
+}
+
+/* ── Empty state ── */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+}
+.empty-state h2 { font-size: 1.1rem; margin-bottom: .5rem; color: var(--text); }
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .hero-pick .hero-stats { grid-template-columns: 1fr 1fr; }
+  .dashboard-top { flex-direction: column; align-items: flex-start; }
+}
+
+/* ── New profile form ── */
+.new-profile-form {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  margin-top: .75rem;
+}
+.new-profile-form input[type="text"] { flex: 1; }
+
+/* ── Score formula display ── */
+.formula {
+  font-family: var(--mono);
+  font-size: .8rem;
+  color: var(--text-muted);
+  background: var(--bg-input);
+  padding: .3rem .6rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+/* ── Maxed badge ── */
+.badge-maxed {
+  font-size: .7rem;
+  font-weight: 600;
+  color: var(--yellow);
+  background: var(--yellow-dim);
+  padding: .1rem .4rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+/* ── Alt table (recommendations) ── */
+.alt-table tr.not-affordable td { opacity: .55; }
+.alt-table .rank-num {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: .9rem;
+}

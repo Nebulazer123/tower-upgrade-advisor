@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Recommendations — {{ profile.name }}{% endblock %}
+
+{% block nav %}
+  <a href="{{ url_for('dashboard', profile_id=profile.id) }}" class="btn btn-sm">← Dashboard</a>
+  <a href="{{ url_for('index') }}" class="btn btn-sm">Profiles</a>
+{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom:1rem">Recommendations for {{ profile.name }}</h2>
+
+<div class="weights-panel">
+  <h3>Category Weights</h3>
+  <form id="weights-form"
+        hx-post="{{ url_for('update_weights', profile_id=profile.id) }}"
+        hx-trigger="change from:input[type=range]"
+        hx-target="#recommendation-results"
+        hx-swap="outerHTML">
+    <div class="weights-grid">
+      {% for cat in ["offense", "defense", "economy", "utility"] %}
+        {% set w = profile.weights.for_category(cat) %}
+        <div class="slider-row">
+          <label>{{ cat | capitalize }}</label>
+          <input type="range" name="{{ cat }}" min="0" max="2" step="0.1"
+                 value="{{ w }}"
+                 oninput="this.nextElementSibling.textContent = parseFloat(this.value).toFixed(1)">
+          <span class="slider-val">{{ "%.1f" | format(w) }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  </form>
+</div>
+
+{% include "partials/recommendation_results.html" %}
+{% endblock %}

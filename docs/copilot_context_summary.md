@@ -93,14 +93,14 @@
 
 ---
 
-## What Was NOT Built
+## What Was NOT Built (or In Progress)
 
-These items are explicitly deferred:
-- **Real data extraction** — `scripts/extract_data.py` exists but has never been run against the live site.
-- **Flask UI** — no routes, templates, or static files yet.
-- **`app.py`** — referenced in Makefile but does not exist yet.
+These items are explicitly deferred or in progress:
+- **Real data extraction** — `scripts/extract_data.py` exists but has never been run against the live site. Phase 4 extraction in progress.
+- **Flask UI** — `app.py`, templates/, static/ being built. Phase 6 UI in progress.
+- **`app.py`** — referenced in Makefile; in progress.
 - **ReferenceEngine** — stub only; raises `NotImplementedError`.
-- **Manual import script** — `scripts/manual_import.py` referenced but not created.
+- **Manual import script** — `scripts/manual_import.py` created by Wave 1 import tool agent.
 - **Data file** — `data/upgrades.json` does not exist (no real data extracted yet).
 
 ---
@@ -114,3 +114,19 @@ category: Literal["offense", "defense", "economy", "utility"]
 ```
 
 This needs to be reconciled after real data extraction. The reference site may use different internal names than the display names. The extraction playbook should capture whatever names the reference site uses, and the Literal should be updated to match.
+
+---
+
+## Session 5: Migration to Cursor + Parallel Agent Execution
+
+### What happened:
+- Project was migrated from VS Code Copilot to Cursor.
+- Wave 1 dispatched 4 parallel agents for simultaneous work:
+  1. **Extraction agent** — Phase 4 (data extraction) research and execution
+  2. **UI agent** — Phase 6 (Flask + htmx) implementation
+  3. **Import tool agent** — Manual import fallback script (`scripts/manual_import.py`)
+  4. **Docs agent** — README rewrite, execution checklist, AGENTS.md, copilot context
+
+### Current state:
+- Phase 4 (extraction) and Phase 6 (UI) now in progress simultaneously.
+- 67 tests passing; Flask UI scaffolding (templates/, static/) in place; app.py in progress.

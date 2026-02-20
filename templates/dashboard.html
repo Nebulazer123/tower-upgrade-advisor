@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ profile.name }} — Tower Upgrade Advisor{% endblock %}
+
+{% block nav %}
+  <a href="{{ url_for('index') }}" class="btn btn-sm">← Profiles</a>
+  <a href="{{ url_for('recommend', profile_id=profile.id) }}" class="btn btn-sm btn-primary">Recommend</a>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-top">
+  <h2>{{ profile.name }}</h2>
+  {% include "partials/coins_display.html" %}
+</div>
+
+{% for cat in categories %}
+  {% set upgrades = upgrades_by_cat[cat] %}
+  <div class="category-section">
+    <div class="category-header cat-{{ cat }}" onclick="this.nextElementSibling.classList.toggle('collapsed'); this.querySelector('.chevron').classList.toggle('open')">
+      <span class="dot"></span>
+      <h3>{{ cat }}</h3>
+      <span class="count">{{ upgrades | length }} upgrades</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="category-body">
+      <table>
+        <thead>
+          <tr>
+            <th>Upgrade</th>
+            <th class="text-right">Level</th>
+            <th class="text-center">Max</th>
+            <th class="text-right">Next Cost</th>
+            <th class="text-right">Next Gain</th>
+            <th class="text-right">Current Effect</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for upgrade in upgrades %}
+            {% include "partials/upgrade_row.html" %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endfor %}
+{% endblock %}
+
+{% block scripts %}
+<style>
+  .chevron { transition: transform .2s; display: inline-block; }
+  .chevron.open { transform: rotate(180deg); }
+</style>
+{% endblock %}
