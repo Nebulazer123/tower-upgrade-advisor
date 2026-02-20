@@ -129,7 +129,7 @@ def validate_upgrade_data(db: UpgradeDatabase) -> ValidationResult:
 
     # --- Category coverage ---
     categories = {u.category for u in db.upgrades}
-    for expected in ("offense", "defense", "economy"):
+    for expected in ("offense", "defense", "economy", "utility"):
         if expected not in categories:
             result.warn(f"Missing expected category: {expected}")
 

@@ -102,6 +102,54 @@ class TestProfileUpdates:
         assert updated.weights.offense == 2.0
 
 
+class TestProfileEdgeCases:
+    """Cover nonexistent-profile returns and dotfile skipping."""
+
+    def test_update_level_nonexistent_profile(self, tmp_profiles_dir: Path) -> None:
+        pm = ProfileManager(tmp_profiles_dir)
+        assert pm.update_level("no-such-id", "damage", 1) is None
+
+    def test_update_coins_nonexistent_profile(self, tmp_profiles_dir: Path) -> None:
+        pm = ProfileManager(tmp_profiles_dir)
+        assert pm.update_coins("no-such-id", 100) is None
+
+    def test_update_weights_nonexistent_profile(self, tmp_profiles_dir: Path) -> None:
+        pm = ProfileManager(tmp_profiles_dir)
+        assert pm.update_weights("no-such-id", ScoringWeights()) is None
+
+    def test_duplicate_nonexistent_profile(self, tmp_profiles_dir: Path) -> None:
+        pm = ProfileManager(tmp_profiles_dir)
+        assert pm.duplicate_profile("no-such-id", "Copy") is None
+
+    def test_backup_nonexistent_profile(self, tmp_profiles_dir: Path) -> None:
+        pm = ProfileManager(tmp_profiles_dir)
+        assert pm.backup_profile("no-such-id") is None
+
+    def test_list_profiles_skips_dotfiles(self, tmp_profiles_dir: Path) -> None:
+        pm = ProfileManager(tmp_profiles_dir)
+        pm.create_profile("Visible")
+        dotfile = tmp_profiles_dir / ".hidden.json"
+        dotfile.write_text('{"bad": true}', encoding="utf-8")
+        profiles = pm.list_profiles()
+        assert len(profiles) == 1
+        assert profiles[0].name == "Visible"
+
+    def test_get_profile_corrupt_returns_none(self, tmp_profiles_dir: Path) -> None:
+        pm = ProfileManager(tmp_profiles_dir)
+        corrupt_path = tmp_profiles_dir / "corrupt-id.json"
+        corrupt_path.write_text("{invalid json", encoding="utf-8")
+        assert pm.get_profile("corrupt-id") is None
+
+    def test_save_profile(self, tmp_profiles_dir: Path) -> None:
+        pm = ProfileManager(tmp_profiles_dir)
+        p = pm.create_profile("SaveMe")
+        saved = pm.save_profile(p)
+        assert saved.updated_at >= p.updated_at
+        reloaded = pm.get_profile(p.id)
+        assert reloaded is not None
+        assert reloaded.name == "SaveMe"
+
+
 class TestProfilePersistence:
     def test_save_and_reload(self, tmp_profiles_dir: Path) -> None:
         pm = ProfileManager(tmp_profiles_dir)

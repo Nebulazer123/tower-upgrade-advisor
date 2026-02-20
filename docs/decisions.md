@@ -152,3 +152,22 @@ Replicate the reference tool's scoring logic as a separate ScoringEngine.
 - `docs/game_and_project_context.md` §11 specifies optional tags (farm build, push build, balanced build)
 - Free-form strings let the user define their own vocabulary without a schema update
 - Tags are for the user's own organisation; they do not affect scoring logic
+
+---
+
+## Decision 10: Category Names Confirmed by Extraction
+
+**Decision:** The four category names `offense`, `defense`, `economy`, `utility` are confirmed correct and require no renaming.
+
+**Evidence:**
+- Extracted data from game-vault.net wiki contains 32 upgrades across exactly these four categories
+- The category names in the extracted JSON match the code's `Literal["offense", "defense", "economy", "utility"]` exactly
+- The user's original description of categories as "attack, defense, utility" was a simplification — the actual data uses "offense" (not "attack") and includes "economy" as a fourth category
+
+**Impact:**
+- No model changes needed — `UpgradeDefinition.category` Literal is already correct
+- No data migration needed — extracted data loads cleanly through Pydantic validation
+- `ScoringWeights` already has all four sliders (economy, offense, defense, utility)
+- `data_loader.validate_upgrade_data()` updated to check for all four expected categories
+
+**Data source:** game-vault.net/wiki/Workshop, 32 upgrades extracted on 2026-02-19

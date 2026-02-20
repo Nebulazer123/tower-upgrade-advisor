@@ -11,6 +11,7 @@ from src.models import (
     Profile,
     RankedUpgrade,
     ScoringWeights,
+    UpgradeDatabase,
     UpgradeDefinition,
     UpgradeLevel,
 )
@@ -150,6 +151,93 @@ class TestProfile:
                 updated_at=datetime.now(UTC),
                 levels={"damage": -1},
             )
+
+
+class TestUpgradeDefinitionEdgeCases:
+    """Cover model_validator branches for levels sorting and base_value."""
+
+    def _make_levels(self, n: int) -> list[dict]:
+        return [
+            {
+                "level": i + 1,
+                "coin_cost": (i + 1) * 100,
+                "cumulative_effect": (i + 1) * 10,
+                "effect_delta": 10,
+            }
+            for i in range(n)
+        ]
+
+    def test_unsorted_levels_rejected(self) -> None:
+        levels = self._make_levels(3)
+        levels[0], levels[1] = levels[1], levels[0]
+        with pytest.raises(ValidationError, match="sorted by level"):
+            UpgradeDefinition(
+                id="test", name="Test", category="offense",
+                effect_unit="%", effect_type="multiplicative",
+                base_value=1.0, max_level=3, display_order=1,
+                levels=levels,
+            )
+
+    def test_nan_base_value_rejected(self) -> None:
+        levels = self._make_levels(2)
+        with pytest.raises(ValidationError, match="finite"):
+            UpgradeDefinition(
+                id="test", name="Test", category="offense",
+                effect_unit="%", effect_type="multiplicative",
+                base_value=float("nan"), max_level=2, display_order=1,
+                levels=levels,
+            )
+
+    def test_inf_base_value_rejected(self) -> None:
+        levels = self._make_levels(2)
+        with pytest.raises(ValidationError, match="finite"):
+            UpgradeDefinition(
+                id="test", name="Test", category="offense",
+                effect_unit="%", effect_type="multiplicative",
+                base_value=float("inf"), max_level=2, display_order=1,
+                levels=levels,
+            )
+
+    def test_nan_effect_delta_rejected(self) -> None:
+        with pytest.raises(ValidationError, match="finite"):
+            UpgradeLevel(
+                level=1, coin_cost=100,
+                cumulative_effect=1.0, effect_delta=float("nan"),
+            )
+
+    def test_inf_effect_delta_rejected(self) -> None:
+        with pytest.raises(ValidationError, match="finite"):
+            UpgradeLevel(
+                level=1, coin_cost=100,
+                cumulative_effect=1.0, effect_delta=float("inf"),
+            )
+
+
+class TestUpgradeDatabaseMethods:
+    """Cover UpgradeDatabase.get_upgrade(None), get_by_category, upgrade_ids."""
+
+    def test_get_upgrade_not_found(self, test_upgrades: UpgradeDatabase) -> None:
+        assert test_upgrades.get_upgrade("nonexistent") is None
+
+    def test_get_upgrade_found(self, test_upgrades: UpgradeDatabase) -> None:
+        u = test_upgrades.get_upgrade("damage")
+        assert u is not None
+        assert u.id == "damage"
+
+    def test_get_by_category(self, test_upgrades: UpgradeDatabase) -> None:
+        offense = test_upgrades.get_by_category("offense")
+        assert len(offense) == 2
+        assert all(u.category == "offense" for u in offense)
+
+    def test_get_by_category_empty(self, test_upgrades: UpgradeDatabase) -> None:
+        result = test_upgrades.get_by_category("nonexistent")
+        assert result == []
+
+    def test_upgrade_ids(self, test_upgrades: UpgradeDatabase) -> None:
+        ids = test_upgrades.upgrade_ids()
+        assert len(ids) == 6
+        assert "damage" in ids
+        assert "health" in ids
 
 
 class TestRankedUpgrade:

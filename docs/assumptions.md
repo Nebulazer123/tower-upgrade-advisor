@@ -28,8 +28,8 @@ These assumptions were made by the team when the user did not specify preference
 6. **The Tower game has approximately 25-35 permanent (coin-based) workshop upgrades.**
    - Exact count to be verified during data extraction.
 
-7. **Upgrades are grouped into 3-4 categories: Attack, Defense, Utility, and possibly Special.**
-   - Verified by reference site CSS: `.attack`, `.defense`, `.utility` classes found.
+7. **Upgrades are grouped into 4 categories: Offense, Defense, Economy, Utility (32 upgrades total).**
+   - **Confirmed by extraction:** game-vault.net wiki data contains exactly 4 categories matching the code's `Literal["offense", "defense", "economy", "utility"]`.
 
 8. **Each upgrade has a maximum level that varies by upgrade** (some max at 50, others at 100+).
    - To be verified.
@@ -125,7 +125,7 @@ These assumptions were made by the team when the user did not specify preference
 
 35. **Whether the reference tool encodes additional logic** (category weights, special cases) — unknown.
 
-36. **Actual category names in the data** — the user says "attack, defense, utility" but the code currently uses "offense, defense, economy, utility". Must be reconciled after extraction.
+36. **Actual category names in the data** — **RESOLVED.** Extraction from game-vault.net wiki confirmed the categories are `offense`, `defense`, `economy`, `utility` — matching the code's Literal exactly. The user's original description of "attack, defense, utility" was a simplification; no rename needed.
 
 ---
 
