@@ -1,0 +1,1834 @@
+[
+  {
+    "id": "lab_damage",
+    "name": "Lab Damage",
+    "boost_type": "multiplicative",
+    "max_level": 100,
+    "levels": [
+      {
+        "level": 1,
+        "value": 1.02
+      },
+      {
+        "level": 2,
+        "value": 1.04
+      },
+      {
+        "level": 3,
+        "value": 1.06
+      },
+      {
+        "level": 4,
+        "value": 1.08
+      },
+      {
+        "level": 5,
+        "value": 1.1
+      },
+      {
+        "level": 6,
+        "value": 1.12
+      },
+      {
+        "level": 7,
+        "value": 1.14
+      },
+      {
+        "level": 8,
+        "value": 1.16
+      },
+      {
+        "level": 9,
+        "value": 1.18
+      },
+      {
+        "level": 10,
+        "value": 1.2
+      },
+      {
+        "level": 11,
+        "value": 1.22
+      },
+      {
+        "level": 12,
+        "value": 1.24
+      },
+      {
+        "level": 13,
+        "value": 1.26
+      },
+      {
+        "level": 14,
+        "value": 1.28
+      },
+      {
+        "level": 15,
+        "value": 1.3
+      },
+      {
+        "level": 16,
+        "value": 1.32
+      },
+      {
+        "level": 17,
+        "value": 1.34
+      },
+      {
+        "level": 18,
+        "value": 1.36
+      },
+      {
+        "level": 19,
+        "value": 1.38
+      },
+      {
+        "level": 20,
+        "value": 1.4
+      },
+      {
+        "level": 21,
+        "value": 1.42
+      },
+      {
+        "level": 22,
+        "value": 1.44
+      },
+      {
+        "level": 23,
+        "value": 1.46
+      },
+      {
+        "level": 24,
+        "value": 1.48
+      },
+      {
+        "level": 25,
+        "value": 1.5
+      },
+      {
+        "level": 26,
+        "value": 1.52
+      },
+      {
+        "level": 27,
+        "value": 1.54
+      },
+      {
+        "level": 28,
+        "value": 1.56
+      },
+      {
+        "level": 29,
+        "value": 1.58
+      },
+      {
+        "level": 30,
+        "value": 1.6
+      },
+      {
+        "level": 31,
+        "value": 1.62
+      },
+      {
+        "level": 32,
+        "value": 1.64
+      },
+      {
+        "level": 33,
+        "value": 1.66
+      },
+      {
+        "level": 34,
+        "value": 1.68
+      },
+      {
+        "level": 35,
+        "value": 1.7
+      },
+      {
+        "level": 36,
+        "value": 1.72
+      },
+      {
+        "level": 37,
+        "value": 1.74
+      },
+      {
+        "level": 38,
+        "value": 1.76
+      },
+      {
+        "level": 39,
+        "value": 1.78
+      },
+      {
+        "level": 40,
+        "value": 1.8
+      },
+      {
+        "level": 41,
+        "value": 1.82
+      },
+      {
+        "level": 42,
+        "value": 1.84
+      },
+      {
+        "level": 43,
+        "value": 1.86
+      },
+      {
+        "level": 44,
+        "value": 1.88
+      },
+      {
+        "level": 45,
+        "value": 1.9
+      },
+      {
+        "level": 46,
+        "value": 1.92
+      },
+      {
+        "level": 47,
+        "value": 1.94
+      },
+      {
+        "level": 48,
+        "value": 1.96
+      },
+      {
+        "level": 49,
+        "value": 1.98
+      },
+      {
+        "level": 50,
+        "value": 2.0
+      },
+      {
+        "level": 51,
+        "value": 2.02
+      },
+      {
+        "level": 52,
+        "value": 2.04
+      },
+      {
+        "level": 53,
+        "value": 2.06
+      },
+      {
+        "level": 54,
+        "value": 2.08
+      },
+      {
+        "level": 55,
+        "value": 2.1
+      },
+      {
+        "level": 56,
+        "value": 2.12
+      },
+      {
+        "level": 57,
+        "value": 2.14
+      },
+      {
+        "level": 58,
+        "value": 2.16
+      },
+      {
+        "level": 59,
+        "value": 2.18
+      },
+      {
+        "level": 60,
+        "value": 2.2
+      },
+      {
+        "level": 61,
+        "value": 2.22
+      },
+      {
+        "level": 62,
+        "value": 2.24
+      },
+      {
+        "level": 63,
+        "value": 2.26
+      },
+      {
+        "level": 64,
+        "value": 2.28
+      },
+      {
+        "level": 65,
+        "value": 2.3
+      },
+      {
+        "level": 66,
+        "value": 2.32
+      },
+      {
+        "level": 67,
+        "value": 2.34
+      },
+      {
+        "level": 68,
+        "value": 2.36
+      },
+      {
+        "level": 69,
+        "value": 2.38
+      },
+      {
+        "level": 70,
+        "value": 2.4
+      },
+      {
+        "level": 71,
+        "value": 2.42
+      },
+      {
+        "level": 72,
+        "value": 2.44
+      },
+      {
+        "level": 73,
+        "value": 2.46
+      },
+      {
+        "level": 74,
+        "value": 2.48
+      },
+      {
+        "level": 75,
+        "value": 2.5
+      },
+      {
+        "level": 76,
+        "value": 2.52
+      },
+      {
+        "level": 77,
+        "value": 2.54
+      },
+      {
+        "level": 78,
+        "value": 2.56
+      },
+      {
+        "level": 79,
+        "value": 2.58
+      },
+      {
+        "level": 80,
+        "value": 2.6
+      },
+      {
+        "level": 81,
+        "value": 2.62
+      },
+      {
+        "level": 82,
+        "value": 2.64
+      },
+      {
+        "level": 83,
+        "value": 2.66
+      },
+      {
+        "level": 84,
+        "value": 2.68
+      },
+      {
+        "level": 85,
+        "value": 2.7
+      },
+      {
+        "level": 86,
+        "value": 2.72
+      },
+      {
+        "level": 87,
+        "value": 2.74
+      },
+      {
+        "level": 88,
+        "value": 2.76
+      },
+      {
+        "level": 89,
+        "value": 2.78
+      },
+      {
+        "level": 90,
+        "value": 2.8
+      },
+      {
+        "level": 91,
+        "value": 2.82
+      },
+      {
+        "level": 92,
+        "value": 2.84
+      },
+      {
+        "level": 93,
+        "value": 2.86
+      },
+      {
+        "level": 94,
+        "value": 2.88
+      },
+      {
+        "level": 95,
+        "value": 2.9
+      },
+      {
+        "level": 96,
+        "value": 2.92
+      },
+      {
+        "level": 97,
+        "value": 2.94
+      },
+      {
+        "level": 98,
+        "value": 2.96
+      },
+      {
+        "level": 99,
+        "value": 2.98
+      },
+      {
+        "level": 100,
+        "value": 3.0
+      }
+    ]
+  },
+  {
+    "id": "lab_crit_factor",
+    "name": "Lab Crit Factor",
+    "boost_type": "multiplicative",
+    "max_level": 99,
+    "levels": [
+      {
+        "level": 1,
+        "value": 1.03
+      },
+      {
+        "level": 2,
+        "value": 1.06
+      },
+      {
+        "level": 3,
+        "value": 1.09
+      },
+      {
+        "level": 4,
+        "value": 1.12
+      },
+      {
+        "level": 5,
+        "value": 1.15
+      },
+      {
+        "level": 6,
+        "value": 1.18
+      },
+      {
+        "level": 7,
+        "value": 1.21
+      },
+      {
+        "level": 8,
+        "value": 1.24
+      },
+      {
+        "level": 9,
+        "value": 1.27
+      },
+      {
+        "level": 10,
+        "value": 1.3
+      },
+      {
+        "level": 11,
+        "value": 1.33
+      },
+      {
+        "level": 12,
+        "value": 1.36
+      },
+      {
+        "level": 13,
+        "value": 1.39
+      },
+      {
+        "level": 14,
+        "value": 1.42
+      },
+      {
+        "level": 15,
+        "value": 1.45
+      },
+      {
+        "level": 16,
+        "value": 1.48
+      },
+      {
+        "level": 17,
+        "value": 1.51
+      },
+      {
+        "level": 18,
+        "value": 1.54
+      },
+      {
+        "level": 19,
+        "value": 1.57
+      },
+      {
+        "level": 20,
+        "value": 1.6
+      },
+      {
+        "level": 21,
+        "value": 1.63
+      },
+      {
+        "level": 22,
+        "value": 1.66
+      },
+      {
+        "level": 23,
+        "value": 1.69
+      },
+      {
+        "level": 24,
+        "value": 1.72
+      },
+      {
+        "level": 25,
+        "value": 1.75
+      },
+      {
+        "level": 26,
+        "value": 1.78
+      },
+      {
+        "level": 27,
+        "value": 1.81
+      },
+      {
+        "level": 28,
+        "value": 1.84
+      },
+      {
+        "level": 29,
+        "value": 1.87
+      },
+      {
+        "level": 30,
+        "value": 1.9
+      },
+      {
+        "level": 31,
+        "value": 1.93
+      },
+      {
+        "level": 32,
+        "value": 1.96
+      },
+      {
+        "level": 33,
+        "value": 1.99
+      },
+      {
+        "level": 34,
+        "value": 2.02
+      },
+      {
+        "level": 35,
+        "value": 2.05
+      },
+      {
+        "level": 36,
+        "value": 2.08
+      },
+      {
+        "level": 37,
+        "value": 2.11
+      },
+      {
+        "level": 38,
+        "value": 2.14
+      },
+      {
+        "level": 39,
+        "value": 2.17
+      },
+      {
+        "level": 40,
+        "value": 2.2
+      },
+      {
+        "level": 41,
+        "value": 2.23
+      },
+      {
+        "level": 42,
+        "value": 2.26
+      },
+      {
+        "level": 43,
+        "value": 2.29
+      },
+      {
+        "level": 44,
+        "value": 2.32
+      },
+      {
+        "level": 45,
+        "value": 2.35
+      },
+      {
+        "level": 46,
+        "value": 2.38
+      },
+      {
+        "level": 47,
+        "value": 2.41
+      },
+      {
+        "level": 48,
+        "value": 2.44
+      },
+      {
+        "level": 49,
+        "value": 2.47
+      },
+      {
+        "level": 50,
+        "value": 2.5
+      },
+      {
+        "level": 51,
+        "value": 2.53
+      },
+      {
+        "level": 52,
+        "value": 2.56
+      },
+      {
+        "level": 53,
+        "value": 2.59
+      },
+      {
+        "level": 54,
+        "value": 2.62
+      },
+      {
+        "level": 55,
+        "value": 2.65
+      },
+      {
+        "level": 56,
+        "value": 2.68
+      },
+      {
+        "level": 57,
+        "value": 2.71
+      },
+      {
+        "level": 58,
+        "value": 2.74
+      },
+      {
+        "level": 59,
+        "value": 2.77
+      },
+      {
+        "level": 60,
+        "value": 2.8
+      },
+      {
+        "level": 61,
+        "value": 2.83
+      },
+      {
+        "level": 62,
+        "value": 2.86
+      },
+      {
+        "level": 63,
+        "value": 2.89
+      },
+      {
+        "level": 64,
+        "value": 2.92
+      },
+      {
+        "level": 65,
+        "value": 2.95
+      },
+      {
+        "level": 66,
+        "value": 2.98
+      },
+      {
+        "level": 67,
+        "value": 3.01
+      },
+      {
+        "level": 68,
+        "value": 3.04
+      },
+      {
+        "level": 69,
+        "value": 3.07
+      },
+      {
+        "level": 70,
+        "value": 3.1
+      },
+      {
+        "level": 71,
+        "value": 3.13
+      },
+      {
+        "level": 72,
+        "value": 3.16
+      },
+      {
+        "level": 73,
+        "value": 3.19
+      },
+      {
+        "level": 74,
+        "value": 3.22
+      },
+      {
+        "level": 75,
+        "value": 3.25
+      },
+      {
+        "level": 76,
+        "value": 3.28
+      },
+      {
+        "level": 77,
+        "value": 3.31
+      },
+      {
+        "level": 78,
+        "value": 3.34
+      },
+      {
+        "level": 79,
+        "value": 3.37
+      },
+      {
+        "level": 80,
+        "value": 3.4
+      },
+      {
+        "level": 81,
+        "value": 3.43
+      },
+      {
+        "level": 82,
+        "value": 3.46
+      },
+      {
+        "level": 83,
+        "value": 3.49
+      },
+      {
+        "level": 84,
+        "value": 3.52
+      },
+      {
+        "level": 85,
+        "value": 3.55
+      },
+      {
+        "level": 86,
+        "value": 3.58
+      },
+      {
+        "level": 87,
+        "value": 3.61
+      },
+      {
+        "level": 88,
+        "value": 3.64
+      },
+      {
+        "level": 89,
+        "value": 3.67
+      },
+      {
+        "level": 90,
+        "value": 3.7
+      },
+      {
+        "level": 91,
+        "value": 3.73
+      },
+      {
+        "level": 92,
+        "value": 3.76
+      },
+      {
+        "level": 93,
+        "value": 3.79
+      },
+      {
+        "level": 94,
+        "value": 3.82
+      },
+      {
+        "level": 95,
+        "value": 3.85
+      },
+      {
+        "level": 96,
+        "value": 3.88
+      },
+      {
+        "level": 97,
+        "value": 3.91
+      },
+      {
+        "level": 98,
+        "value": 3.94
+      },
+      {
+        "level": 99,
+        "value": 3.97
+      }
+    ]
+  },
+  {
+    "id": "lab_attack_speed",
+    "name": "Lab Attack Speed",
+    "boost_type": "multiplicative",
+    "max_level": 99,
+    "levels": [
+      {
+        "level": 1,
+        "value": 1.02
+      },
+      {
+        "level": 2,
+        "value": 1.04
+      },
+      {
+        "level": 3,
+        "value": 1.06
+      },
+      {
+        "level": 4,
+        "value": 1.08
+      },
+      {
+        "level": 5,
+        "value": 1.1
+      },
+      {
+        "level": 6,
+        "value": 1.12
+      },
+      {
+        "level": 7,
+        "value": 1.14
+      },
+      {
+        "level": 8,
+        "value": 1.16
+      },
+      {
+        "level": 9,
+        "value": 1.18
+      },
+      {
+        "level": 10,
+        "value": 1.2
+      },
+      {
+        "level": 11,
+        "value": 1.22
+      },
+      {
+        "level": 12,
+        "value": 1.24
+      },
+      {
+        "level": 13,
+        "value": 1.26
+      },
+      {
+        "level": 14,
+        "value": 1.28
+      },
+      {
+        "level": 15,
+        "value": 1.3
+      },
+      {
+        "level": 16,
+        "value": 1.32
+      },
+      {
+        "level": 17,
+        "value": 1.34
+      },
+      {
+        "level": 18,
+        "value": 1.36
+      },
+      {
+        "level": 19,
+        "value": 1.38
+      },
+      {
+        "level": 20,
+        "value": 1.4
+      },
+      {
+        "level": 21,
+        "value": 1.42
+      },
+      {
+        "level": 22,
+        "value": 1.44
+      },
+      {
+        "level": 23,
+        "value": 1.46
+      },
+      {
+        "level": 24,
+        "value": 1.48
+      },
+      {
+        "level": 25,
+        "value": 1.5
+      },
+      {
+        "level": 26,
+        "value": 1.52
+      },
+      {
+        "level": 27,
+        "value": 1.54
+      },
+      {
+        "level": 28,
+        "value": 1.56
+      },
+      {
+        "level": 29,
+        "value": 1.58
+      },
+      {
+        "level": 30,
+        "value": 1.6
+      },
+      {
+        "level": 31,
+        "value": 1.62
+      },
+      {
+        "level": 32,
+        "value": 1.64
+      },
+      {
+        "level": 33,
+        "value": 1.66
+      },
+      {
+        "level": 34,
+        "value": 1.68
+      },
+      {
+        "level": 35,
+        "value": 1.7
+      },
+      {
+        "level": 36,
+        "value": 1.72
+      },
+      {
+        "level": 37,
+        "value": 1.74
+      },
+      {
+        "level": 38,
+        "value": 1.76
+      },
+      {
+        "level": 39,
+        "value": 1.78
+      },
+      {
+        "level": 40,
+        "value": 1.8
+      },
+      {
+        "level": 41,
+        "value": 1.82
+      },
+      {
+        "level": 42,
+        "value": 1.84
+      },
+      {
+        "level": 43,
+        "value": 1.86
+      },
+      {
+        "level": 44,
+        "value": 1.88
+      },
+      {
+        "level": 45,
+        "value": 1.9
+      },
+      {
+        "level": 46,
+        "value": 1.92
+      },
+      {
+        "level": 47,
+        "value": 1.94
+      },
+      {
+        "level": 48,
+        "value": 1.96
+      },
+      {
+        "level": 49,
+        "value": 1.98
+      },
+      {
+        "level": 50,
+        "value": 2.0
+      },
+      {
+        "level": 51,
+        "value": 2.02
+      },
+      {
+        "level": 52,
+        "value": 2.04
+      },
+      {
+        "level": 53,
+        "value": 2.06
+      },
+      {
+        "level": 54,
+        "value": 2.08
+      },
+      {
+        "level": 55,
+        "value": 2.1
+      },
+      {
+        "level": 56,
+        "value": 2.12
+      },
+      {
+        "level": 57,
+        "value": 2.14
+      },
+      {
+        "level": 58,
+        "value": 2.16
+      },
+      {
+        "level": 59,
+        "value": 2.18
+      },
+      {
+        "level": 60,
+        "value": 2.2
+      },
+      {
+        "level": 61,
+        "value": 2.22
+      },
+      {
+        "level": 62,
+        "value": 2.24
+      },
+      {
+        "level": 63,
+        "value": 2.26
+      },
+      {
+        "level": 64,
+        "value": 2.28
+      },
+      {
+        "level": 65,
+        "value": 2.3
+      },
+      {
+        "level": 66,
+        "value": 2.32
+      },
+      {
+        "level": 67,
+        "value": 2.34
+      },
+      {
+        "level": 68,
+        "value": 2.36
+      },
+      {
+        "level": 69,
+        "value": 2.38
+      },
+      {
+        "level": 70,
+        "value": 2.4
+      },
+      {
+        "level": 71,
+        "value": 2.42
+      },
+      {
+        "level": 72,
+        "value": 2.44
+      },
+      {
+        "level": 73,
+        "value": 2.46
+      },
+      {
+        "level": 74,
+        "value": 2.48
+      },
+      {
+        "level": 75,
+        "value": 2.5
+      },
+      {
+        "level": 76,
+        "value": 2.52
+      },
+      {
+        "level": 77,
+        "value": 2.54
+      },
+      {
+        "level": 78,
+        "value": 2.56
+      },
+      {
+        "level": 79,
+        "value": 2.58
+      },
+      {
+        "level": 80,
+        "value": 2.6
+      },
+      {
+        "level": 81,
+        "value": 2.62
+      },
+      {
+        "level": 82,
+        "value": 2.64
+      },
+      {
+        "level": 83,
+        "value": 2.66
+      },
+      {
+        "level": 84,
+        "value": 2.68
+      },
+      {
+        "level": 85,
+        "value": 2.7
+      },
+      {
+        "level": 86,
+        "value": 2.72
+      },
+      {
+        "level": 87,
+        "value": 2.74
+      },
+      {
+        "level": 88,
+        "value": 2.76
+      },
+      {
+        "level": 89,
+        "value": 2.78
+      },
+      {
+        "level": 90,
+        "value": 2.8
+      },
+      {
+        "level": 91,
+        "value": 2.82
+      },
+      {
+        "level": 92,
+        "value": 2.84
+      },
+      {
+        "level": 93,
+        "value": 2.86
+      },
+      {
+        "level": 94,
+        "value": 2.88
+      },
+      {
+        "level": 95,
+        "value": 2.9
+      },
+      {
+        "level": 96,
+        "value": 2.92
+      },
+      {
+        "level": 97,
+        "value": 2.94
+      },
+      {
+        "level": 98,
+        "value": 2.96
+      },
+      {
+        "level": 99,
+        "value": 2.98
+      }
+    ]
+  },
+  {
+    "id": "lab_defense_flat",
+    "name": "Lab Defense Flat",
+    "boost_type": "multiplicative",
+    "max_level": 100,
+    "levels": [
+      {
+        "level": 1,
+        "value": 1.03
+      },
+      {
+        "level": 2,
+        "value": 1.06
+      },
+      {
+        "level": 3,
+        "value": 1.09
+      },
+      {
+        "level": 4,
+        "value": 1.12
+      },
+      {
+        "level": 5,
+        "value": 1.15
+      },
+      {
+        "level": 6,
+        "value": 1.18
+      },
+      {
+        "level": 7,
+        "value": 1.21
+      },
+      {
+        "level": 8,
+        "value": 1.24
+      },
+      {
+        "level": 9,
+        "value": 1.27
+      },
+      {
+        "level": 10,
+        "value": 1.3
+      },
+      {
+        "level": 11,
+        "value": 1.33
+      },
+      {
+        "level": 12,
+        "value": 1.36
+      },
+      {
+        "level": 13,
+        "value": 1.39
+      },
+      {
+        "level": 14,
+        "value": 1.42
+      },
+      {
+        "level": 15,
+        "value": 1.45
+      },
+      {
+        "level": 16,
+        "value": 1.48
+      },
+      {
+        "level": 17,
+        "value": 1.51
+      },
+      {
+        "level": 18,
+        "value": 1.54
+      },
+      {
+        "level": 19,
+        "value": 1.57
+      },
+      {
+        "level": 20,
+        "value": 1.6
+      },
+      {
+        "level": 21,
+        "value": 1.63
+      },
+      {
+        "level": 22,
+        "value": 1.66
+      },
+      {
+        "level": 23,
+        "value": 1.69
+      },
+      {
+        "level": 24,
+        "value": 1.72
+      },
+      {
+        "level": 25,
+        "value": 1.75
+      },
+      {
+        "level": 26,
+        "value": 1.78
+      },
+      {
+        "level": 27,
+        "value": 1.81
+      },
+      {
+        "level": 28,
+        "value": 1.84
+      },
+      {
+        "level": 29,
+        "value": 1.87
+      },
+      {
+        "level": 30,
+        "value": 1.9
+      },
+      {
+        "level": 31,
+        "value": 1.93
+      },
+      {
+        "level": 32,
+        "value": 1.96
+      },
+      {
+        "level": 33,
+        "value": 1.99
+      },
+      {
+        "level": 34,
+        "value": 2.02
+      },
+      {
+        "level": 35,
+        "value": 2.05
+      },
+      {
+        "level": 36,
+        "value": 2.08
+      },
+      {
+        "level": 37,
+        "value": 2.11
+      },
+      {
+        "level": 38,
+        "value": 2.14
+      },
+      {
+        "level": 39,
+        "value": 2.17
+      },
+      {
+        "level": 40,
+        "value": 2.2
+      },
+      {
+        "level": 41,
+        "value": 2.23
+      },
+      {
+        "level": 42,
+        "value": 2.26
+      },
+      {
+        "level": 43,
+        "value": 2.29
+      },
+      {
+        "level": 44,
+        "value": 2.32
+      },
+      {
+        "level": 45,
+        "value": 2.35
+      },
+      {
+        "level": 46,
+        "value": 2.38
+      },
+      {
+        "level": 47,
+        "value": 2.41
+      },
+      {
+        "level": 48,
+        "value": 2.44
+      },
+      {
+        "level": 49,
+        "value": 2.47
+      },
+      {
+        "level": 50,
+        "value": 2.5
+      },
+      {
+        "level": 51,
+        "value": 2.53
+      },
+      {
+        "level": 52,
+        "value": 2.56
+      },
+      {
+        "level": 53,
+        "value": 2.59
+      },
+      {
+        "level": 54,
+        "value": 2.62
+      },
+      {
+        "level": 55,
+        "value": 2.65
+      },
+      {
+        "level": 56,
+        "value": 2.68
+      },
+      {
+        "level": 57,
+        "value": 2.71
+      },
+      {
+        "level": 58,
+        "value": 2.74
+      },
+      {
+        "level": 59,
+        "value": 2.77
+      },
+      {
+        "level": 60,
+        "value": 2.8
+      },
+      {
+        "level": 61,
+        "value": 2.83
+      },
+      {
+        "level": 62,
+        "value": 2.86
+      },
+      {
+        "level": 63,
+        "value": 2.89
+      },
+      {
+        "level": 64,
+        "value": 2.92
+      },
+      {
+        "level": 65,
+        "value": 2.95
+      },
+      {
+        "level": 66,
+        "value": 2.98
+      },
+      {
+        "level": 67,
+        "value": 3.01
+      },
+      {
+        "level": 68,
+        "value": 3.04
+      },
+      {
+        "level": 69,
+        "value": 3.07
+      },
+      {
+        "level": 70,
+        "value": 3.1
+      },
+      {
+        "level": 71,
+        "value": 3.13
+      },
+      {
+        "level": 72,
+        "value": 3.16
+      },
+      {
+        "level": 73,
+        "value": 3.19
+      },
+      {
+        "level": 74,
+        "value": 3.22
+      },
+      {
+        "level": 75,
+        "value": 3.25
+      },
+      {
+        "level": 76,
+        "value": 3.28
+      },
+      {
+        "level": 77,
+        "value": 3.31
+      },
+      {
+        "level": 78,
+        "value": 3.34
+      },
+      {
+        "level": 79,
+        "value": 3.37
+      },
+      {
+        "level": 80,
+        "value": 3.4
+      },
+      {
+        "level": 81,
+        "value": 3.43
+      },
+      {
+        "level": 82,
+        "value": 3.46
+      },
+      {
+        "level": 83,
+        "value": 3.49
+      },
+      {
+        "level": 84,
+        "value": 3.52
+      },
+      {
+        "level": 85,
+        "value": 3.55
+      },
+      {
+        "level": 86,
+        "value": 3.58
+      },
+      {
+        "level": 87,
+        "value": 3.61
+      },
+      {
+        "level": 88,
+        "value": 3.64
+      },
+      {
+        "level": 89,
+        "value": 3.67
+      },
+      {
+        "level": 90,
+        "value": 3.7
+      },
+      {
+        "level": 91,
+        "value": 3.73
+      },
+      {
+        "level": 92,
+        "value": 3.76
+      },
+      {
+        "level": 93,
+        "value": 3.79
+      },
+      {
+        "level": 94,
+        "value": 3.82
+      },
+      {
+        "level": 95,
+        "value": 3.85
+      },
+      {
+        "level": 96,
+        "value": 3.88
+      },
+      {
+        "level": 97,
+        "value": 3.91
+      },
+      {
+        "level": 98,
+        "value": 3.94
+      },
+      {
+        "level": 99,
+        "value": 3.97
+      },
+      {
+        "level": 100,
+        "value": 4.0
+      }
+    ]
+  },
+  {
+    "id": "lab_defense_percent",
+    "name": "Lab Defense Percent",
+    "boost_type": "additive",
+    "max_level": 50,
+    "levels": [
+      {
+        "level": 1,
+        "value": 0.2
+      },
+      {
+        "level": 2,
+        "value": 0.4
+      },
+      {
+        "level": 3,
+        "value": 0.6
+      },
+      {
+        "level": 4,
+        "value": 0.8
+      },
+      {
+        "level": 5,
+        "value": 1.0
+      },
+      {
+        "level": 6,
+        "value": 1.2
+      },
+      {
+        "level": 7,
+        "value": 1.4
+      },
+      {
+        "level": 8,
+        "value": 1.6
+      },
+      {
+        "level": 9,
+        "value": 1.8
+      },
+      {
+        "level": 10,
+        "value": 2.0
+      },
+      {
+        "level": 11,
+        "value": 2.2
+      },
+      {
+        "level": 12,
+        "value": 2.4
+      },
+      {
+        "level": 13,
+        "value": 2.6
+      },
+      {
+        "level": 14,
+        "value": 2.8
+      },
+      {
+        "level": 15,
+        "value": 3.0
+      },
+      {
+        "level": 16,
+        "value": 3.2
+      },
+      {
+        "level": 17,
+        "value": 3.4
+      },
+      {
+        "level": 18,
+        "value": 3.6
+      },
+      {
+        "level": 19,
+        "value": 3.8
+      },
+      {
+        "level": 20,
+        "value": 4.0
+      },
+      {
+        "level": 21,
+        "value": 4.2
+      },
+      {
+        "level": 22,
+        "value": 4.4
+      },
+      {
+        "level": 23,
+        "value": 4.6
+      },
+      {
+        "level": 24,
+        "value": 4.8
+      },
+      {
+        "level": 25,
+        "value": 5.0
+      },
+      {
+        "level": 26,
+        "value": 5.2
+      },
+      {
+        "level": 27,
+        "value": 5.4
+      },
+      {
+        "level": 28,
+        "value": 5.6
+      },
+      {
+        "level": 29,
+        "value": 5.8
+      },
+      {
+        "level": 30,
+        "value": 6.0
+      },
+      {
+        "level": 31,
+        "value": 6.2
+      },
+      {
+        "level": 32,
+        "value": 6.4
+      },
+      {
+        "level": 33,
+        "value": 6.6
+      },
+      {
+        "level": 34,
+        "value": 6.8
+      },
+      {
+        "level": 35,
+        "value": 7.0
+      },
+      {
+        "level": 36,
+        "value": 7.2
+      },
+      {
+        "level": 37,
+        "value": 7.4
+      },
+      {
+        "level": 38,
+        "value": 7.6
+      },
+      {
+        "level": 39,
+        "value": 7.8
+      },
+      {
+        "level": 40,
+        "value": 8.0
+      },
+      {
+        "level": 41,
+        "value": 8.2
+      },
+      {
+        "level": 42,
+        "value": 8.4
+      },
+      {
+        "level": 43,
+        "value": 8.6
+      },
+      {
+        "level": 44,
+        "value": 8.8
+      },
+      {
+        "level": 45,
+        "value": 9.0
+      },
+      {
+        "level": 46,
+        "value": 9.2
+      },
+      {
+        "level": 47,
+        "value": 9.4
+      },
+      {
+        "level": 48,
+        "value": 9.6
+      },
+      {
+        "level": 49,
+        "value": 9.8
+      },
+      {
+        "level": 50,
+        "value": 10.0
+      }
+    ]
+  }
+]

@@ -77,9 +77,7 @@ class ProfileManager:
 
     def save_profile(self, profile: Profile) -> Profile:
         """Save an existing profile, updating the timestamp."""
-        updated = profile.model_copy(
-            update={"updated_at": datetime.now(UTC)}
-        )
+        updated = profile.model_copy(update={"updated_at": datetime.now(UTC)})
         self._save(updated)
         return updated
 
@@ -109,9 +107,7 @@ class ProfileManager:
         self._save(copy)
         return copy
 
-    def update_level(
-        self, profile_id: str, upgrade_id: str, level: int
-    ) -> Profile | None:
+    def update_level(self, profile_id: str, upgrade_id: str, level: int) -> Profile | None:
         """Update a single upgrade level in a profile."""
         profile = self.get_profile(profile_id)
         if profile is None:
@@ -153,9 +149,7 @@ class ProfileManager:
         self._save(updated)
         return updated
 
-    def update_weights(
-        self, profile_id: str, weights: ScoringWeights
-    ) -> Profile | None:
+    def update_weights(self, profile_id: str, weights: ScoringWeights) -> Profile | None:
         """Update scoring weights for a profile."""
         profile = self.get_profile(profile_id)
         if profile is None:
