@@ -10,7 +10,25 @@
   <div class="best-pick-details">
     <div class="detail-row">
       <span class="detail-label">Level</span>
-      <span class="detail-value">{{ top.current_level }} &rarr; {{ top.next_level }}</span>
+      <span class="detail-value">
+        {{ top.current_level }} &rarr; {{ top.next_level }}
+        <span class="level-buttons">
+          <form class="level-form" hx-post="{{ url_for('update_level_recommend', profile_id=profile.id) }}"
+                hx-target="#recommendation-results"
+                hx-swap="innerHTML"
+                hx-vals='{"upgrade_id": "{{ top.upgrade_id }}"}'>
+            <input type="hidden" name="level" value="{{ top.current_level - 1 }}">
+            <button type="submit" class="btn btn-sm level-btn" {% if top.current_level <= 0 %}disabled{% endif %} aria-label="Decrease level">&minus;</button>
+          </form>
+          <form class="level-form" hx-post="{{ url_for('update_level_recommend', profile_id=profile.id) }}"
+                hx-target="#recommendation-results"
+                hx-swap="innerHTML"
+                hx-vals='{"upgrade_id": "{{ top.upgrade_id }}"}'>
+            <input type="hidden" name="level" value="{{ top.current_level + 1 }}">
+            <button type="submit" class="btn btn-sm level-btn" aria-label="Increase level">+</button>
+          </form>
+        </span>
+      </span>
     </div>
     <div class="detail-row">
       <span class="detail-label">Cost</span>
@@ -24,7 +42,7 @@
     </div>
     <div class="detail-row">
       <span class="detail-label">Benefit</span>
-      <span class="detail-value">{{ top.current_effect }} &rarr; {{ top.next_effect }} (+{{ top.marginal_benefit }})</span>
+      <span class="detail-value">{{ top.current_effect }} &rarr; {{ top.next_effect }} (+{{ top.marginal_benefit | round(2) }})</span>
     </div>
     <div class="detail-row">
       <span class="detail-label">Score</span>
@@ -60,7 +78,25 @@
           <td class="col-rank">{{ loop.index + 1 }}</td>
           <td class="col-name">{{ r.upgrade_name }}</td>
           <td class="col-cat"><span class="category-tag category-{{ r.category }}">{{ r.category | capitalize }}</span></td>
-          <td class="col-level">{{ r.current_level }} &rarr; {{ r.next_level }}</td>
+          <td class="col-level">
+            {{ r.current_level }} &rarr; {{ r.next_level }}
+            <span class="level-buttons">
+              <form class="level-form" hx-post="{{ url_for('update_level_recommend', profile_id=profile.id) }}"
+                    hx-target="#recommendation-results"
+                    hx-swap="innerHTML"
+                    hx-vals='{"upgrade_id": "{{ r.upgrade_id }}"}'>
+                <input type="hidden" name="level" value="{{ r.current_level - 1 }}">
+                <button type="submit" class="btn btn-sm level-btn" {% if r.current_level <= 0 %}disabled{% endif %} aria-label="Decrease level">&minus;</button>
+              </form>
+              <form class="level-form" hx-post="{{ url_for('update_level_recommend', profile_id=profile.id) }}"
+                    hx-target="#recommendation-results"
+                    hx-swap="innerHTML"
+                    hx-vals='{"upgrade_id": "{{ r.upgrade_id }}"}'>
+                <input type="hidden" name="level" value="{{ r.current_level + 1 }}">
+                <button type="submit" class="btn btn-sm level-btn" aria-label="Increase level">+</button>
+              </form>
+            </span>
+          </td>
           <td class="col-cost">{{ r.coin_cost | commas }}</td>
           <td class="col-score mono">{{ r.score | score_fmt }}</td>
           <td class="col-afford">

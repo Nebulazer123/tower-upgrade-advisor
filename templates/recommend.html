@@ -11,7 +11,16 @@
 {% block content %}
 <header class="page-header">
   <h1>Recommendations for {{ profile.name }}</h1>
-  <p class="subtitle">{{ profile.available_coins | commas }} coins available</p>
+  <div class="coins-editor">
+    <label for="coins-input-recommend">Available Coins:</label>
+    <input type="number" id="coins-input-recommend" name="coins" min="0"
+           value="{{ profile.available_coins }}"
+           hx-post="{{ url_for('update_coins_and_recommend', profile_id=profile.id) }}"
+           hx-trigger="change, keyup[key=='Enter']"
+           hx-target="#recommendation-results"
+           hx-swap="innerHTML">
+    <span id="coins-display" class="coins-value">{{ profile.available_coins | commas }}</span>
+  </div>
 </header>
 
 <section class="card weight-controls">

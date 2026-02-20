@@ -1,20 +1,20 @@
 <tr id="row-{{ row.upgrade.id }}" class="{% if row.maxed %}row-maxed{% endif %}">
   <td class="col-name" title="{{ row.upgrade.effect_unit }}">{{ row.upgrade.name }}</td>
   <td class="col-level">
-    {% if row.maxed %}
-    <span class="badge badge-max">MAX</span>
-    {% else %}
-    <input type="number" min="0" max="{{ row.upgrade.max_level }}"
-           value="{{ row.current_level }}" class="level-input"
-           name="level"
-           hx-post="{{ url_for('update_level', profile_id=profile.id) }}"
-           hx-vals='{"upgrade_id": "{{ row.upgrade.id }}"}'
-           hx-trigger="change, keyup[key=='Enter']"
-           hx-target="#row-{{ row.upgrade.id }}"
-           hx-swap="outerHTML">
-    {% endif %}
+    <div class="level-control">
+      <input type="number" min="0" max="{{ row.upgrade.max_level }}"
+             value="{{ row.current_level }}" class="level-input"
+             name="level"
+             hx-post="{{ url_for('update_level', profile_id=profile.id) }}"
+             hx-vals='{"upgrade_id": "{{ row.upgrade.id }}"}'
+             hx-trigger="change, keyup[key=='Enter']"
+             hx-target="#row-{{ row.upgrade.id }}"
+             hx-swap="outerHTML">
+      {% if row.maxed %}<span class="badge badge-max">MAX</span>{% endif %}
+    </div>
   </td>
   <td class="col-max">{{ row.upgrade.max_level }}</td>
+  <td class="col-current-effect">{{ row.current_effect }}</td>
   <td class="col-cost">
     {% if row.next_cost is not none %}{{ row.next_cost | commas }}{% else %}&mdash;{% endif %}
   </td>

@@ -46,7 +46,7 @@ def _commas_filter(value: int | float) -> str:
 
 @app.template_filter("score_fmt")
 def _score_filter(value: float) -> str:
-    return f"{value:.6f}"
+    return f"{value * 100:.1f}%"
 
 
 # ---------------------------------------------------------------------------
@@ -94,6 +94,7 @@ def dashboard(profile_id: str):
         for u in cat_upgrades:
             cur = profile.get_level(u.id)
             maxed = cur >= u.max_level
+            current_effect = u.base_value if cur == 0 else u.levels[cur - 1].cumulative_effect
             next_cost = None
             next_delta = None
             if not maxed:
@@ -104,6 +105,7 @@ def dashboard(profile_id: str):
                 {
                     "upgrade": u,
                     "current_level": cur,
+                    "current_effect": current_effect,
                     "maxed": maxed,
                     "next_cost": next_cost,
                     "next_delta": next_delta,
@@ -138,6 +140,7 @@ def update_level(profile_id: str):
         abort(404)
 
     maxed = level >= upgrade.max_level
+    current_effect = upgrade.base_value if level == 0 else upgrade.levels[level - 1].cumulative_effect
     next_cost = None
     next_delta = None
     if not maxed:
@@ -151,6 +154,7 @@ def update_level(profile_id: str):
         row={
             "upgrade": upgrade,
             "current_level": level,
+            "current_effect": current_effect,
             "maxed": maxed,
             "next_cost": next_cost,
             "next_delta": next_delta,
@@ -171,6 +175,33 @@ def update_coins(profile_id: str):
     if profile is None:
         abort(404)
     return render_template("partials/coins_display.html", profile=profile)
+
+
+@app.post("/profile/<profile_id>/coins-and-recommend")
+def update_coins_and_recommend(profile_id: str):
+    """htmx endpoint: update coins, re-rank, return updated coins + recommendation table (OOB)."""
+    try:
+        coins = int(request.form.get("coins", 0))
+    except (ValueError, TypeError):
+        coins = 0
+    coins = max(0, coins)
+
+    profile = _profiles.update_coins(profile_id, coins)
+    if profile is None:
+        abort(404)
+
+    engine = BalancedEngine(profile.weights)
+    ranked = engine.rank(_upgrades, profile)
+    top = ranked[0] if ranked else None
+    alternatives = ranked[1:11] if len(ranked) > 1 else []
+
+    return render_template(
+        "partials/coins_and_recommend.html",
+        profile=profile,
+        engine=engine,
+        top=top,
+        alternatives=alternatives,
+    )
 
 
 @app.get("/profile/<profile_id>/recommend")
@@ -218,6 +249,39 @@ def update_weights(profile_id: str):
     engine = BalancedEngine(weights)
     ranked = engine.rank(_upgrades, profile)
 
+    top = ranked[0] if ranked else None
+    alternatives = ranked[1:11] if len(ranked) > 1 else []
+
+    return render_template(
+        "partials/recommendation_table.html",
+        profile=profile,
+        engine=engine,
+        top=top,
+        alternatives=alternatives,
+        all_ranked=ranked[:20],
+    )
+
+
+@app.post("/profile/<profile_id>/level-recommend")
+def update_level_recommend(profile_id: str):
+    """htmx endpoint: update level and return updated recommendation table."""
+    upgrade_id = request.form.get("upgrade_id", "")
+    try:
+        level = int(request.form.get("level", 0))
+    except (ValueError, TypeError):
+        level = 0
+
+    upgrade = _upgrades.get_upgrade(upgrade_id)
+    if upgrade is None:
+        abort(400)
+
+    level = max(0, min(level, upgrade.max_level))
+    profile = _profiles.update_level(profile_id, upgrade_id, level)
+    if profile is None:
+        abort(404)
+
+    engine = BalancedEngine(profile.weights)
+    ranked = engine.rank(_upgrades, profile)
     top = ranked[0] if ranked else None
     alternatives = ranked[1:11] if len(ranked) > 1 else []
 
