@@ -1,438 +1,259 @@
-#!/usr/bin/env python3
-"""Extract upgrade data from the Tower Workshop Calculator reference site.
+#!/usr/bin/env python3 -u
+"""Extract upgrade data from the Tower Workshop Calculator Netlify site.
+
+Uses Playwright to load the site, then injects JavaScript to extract ALL data
+from the React app's internal state in a single pass (no pagination needed).
 
 Usage:
     python scripts/extract_data.py
 
-Extraction priority (3-tier):
-    1. Network interception — intercept JSON/XHR responses for embedded data
-    2. JS bundle analysis — download and parse the main JS bundle for data arrays
-    3. DOM scraping — traverse the rendered DOM as last resort
-
 Requires: pip install -e ".[extract]" && playwright install chromium
 
-Raw artifacts are saved to data/raw/ (gitignored).
-Normalized output is saved to data/upgrades.json.
+Output:
+    data/raw/netlify_scraped.json     - all scraped upgrade data
+    data/raw/netlify_normalized.json  - normalized to our schema
 """
 
 from __future__ import annotations
 
-import asyncio
 import json
-import re
 import sys
+import time
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 RAW_DIR = DATA_DIR / "raw"
-UPGRADES_PATH = DATA_DIR / "upgrades.json"
 
-REFERENCE_URL = "https://tower-workshop-calculator.netlify.app/"
-BUNDLE_URL = REFERENCE_URL + "static/js/main.ef115c63.js"
+SITE_URL = "https://tower-workshop-calculator.netlify.app/"
 
+CATEGORIES = ["Attack", "Defense", "Utility"]
 
-def ensure_dirs() -> None:
-    RAW_DIR.mkdir(parents=True, exist_ok=True)
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
+EXTRACT_ALL_JS = """
+() => {
+    const results = {};
 
+    function getSelectOptions() {
+        const sel = document.querySelector('select');
+        if (!sel) return [];
+        return Array.from(sel.options).map(o => ({value: o.value, text: o.text}));
+    }
 
-# ---------------------------------------------------------------------------
-# Tier 1: Network Interception
-# ---------------------------------------------------------------------------
+    function getTableData() {
+        const table = document.querySelector('table');
+        if (!table) return [];
 
-async def extract_via_network(page) -> dict | None:  # type: ignore[no-untyped-def]
-    """Listen for XHR/fetch responses that contain upgrade data."""
-    print("[Tier 1] Attempting network interception...")
-
-    captured: list[dict] = []
-
-    async def handle_response(response) -> None:  # type: ignore[no-untyped-def]
-        url = response.url
-        content_type = response.headers.get("content-type", "")
-        if "json" in content_type or url.endswith(".json"):
-            try:
-                body = await response.json()
-                captured.append({"url": url, "data": body})
-                print(f"  [Tier 1] Captured JSON from: {url}")
-            except Exception:
-                pass
-
-    page.on("response", handle_response)
-
-    await page.goto(REFERENCE_URL, wait_until="networkidle")
-    await asyncio.sleep(3)  # Wait for any lazy-loaded data
-
-    if captured:
-        raw_path = RAW_DIR / "network_responses.json"
-        raw_path.write_text(json.dumps(captured, indent=2), encoding="utf-8")
-        print(f"  [Tier 1] Saved {len(captured)} responses to {raw_path}")
-
-        # Check if any captured response looks like upgrade data
-        for item in captured:
-            data = item["data"]
-            if _looks_like_upgrade_data(data):
-                print("  [Tier 1] Found upgrade data in network response!")
-                return data
-
-    print("  [Tier 1] No upgrade data found in network responses.")
-    return None
-
-
-# ---------------------------------------------------------------------------
-# Tier 2: JS Bundle Analysis
-# ---------------------------------------------------------------------------
-
-async def extract_via_bundle(page) -> dict | None:  # type: ignore[no-untyped-def]
-    """Download the main JS bundle and search for embedded data structures."""
-    print("[Tier 2] Attempting JS bundle analysis...")
-
-    try:
-        import httpx
-
-        async with httpx.AsyncClient(follow_redirects=True) as client:
-            resp = await client.get(BUNDLE_URL)
-            if resp.status_code != 200:
-                print(f"  [Tier 2] Failed to download bundle: HTTP {resp.status_code}")
-                return None
-
-            bundle = resp.text
-            raw_path = RAW_DIR / "bundle.js"
-            raw_path.write_text(bundle, encoding="utf-8")
-            print(f"  [Tier 2] Downloaded bundle ({len(bundle):,} chars) to {raw_path}")
-
-            return _parse_bundle_for_data(bundle)
-
-    except ImportError:
-        print("  [Tier 2] httpx not installed. Run: pip install -e '.[extract]'")
-        return None
-    except Exception as e:
-        print(f"  [Tier 2] Error: {e}")
-        return None
-
-
-def _parse_bundle_for_data(bundle: str) -> dict | None:
-    """Search the minified JS bundle for embedded upgrade data.
-
-    Looks for patterns like:
-    - Arrays of objects with upgrade-like fields
-    - String arrays with known upgrade names
-    - JSON-serialized data constants
-    """
-    # Known upgrade name patterns to search for
-    known_names = [
-        "Attack Speed", "Damage", "Critical Chance", "Critical Factor",
-        "Health", "Health Regen", "Defense", "Thorns",
-        "Coins per Kill", "Coins per Wave", "Interest",
-        "Land Mines", "Death Defy", "Orb Speed",
-    ]
-
-    found_names: list[str] = []
-    for name in known_names:
-        if name in bundle:
-            found_names.append(name)
-
-    if found_names:
-        print(f"  [Tier 2] Found {len(found_names)} upgrade names in bundle: {found_names[:5]}...")
-    else:
-        print("  [Tier 2] No known upgrade names found in bundle.")
-        return None
-
-    # Try to find JSON-like data structures near upgrade names
-    # Look for patterns like: [{name:"Attack Speed",... or {"Attack Speed":...
-    # This is heuristic and may need refinement
-
-    # Pattern 1: Array of objects with "name" field
-    pattern1 = re.compile(
-        r'\[\s*\{[^}]*?"name"\s*:\s*"[^"]*Attack[^"]*"[^]]*\]',
-        re.DOTALL,
-    )
-    matches = pattern1.findall(bundle)
-    if matches:
-        for m in matches[:3]:
-            print(f"  [Tier 2] Found potential data array ({len(m)} chars)")
-            try:
-                data = json.loads(m)
-                if isinstance(data, list) and len(data) > 5:
-                    print(f"  [Tier 2] Parsed {len(data)} items from array!")
-                    return {"raw_upgrades": data, "source": "bundle_array"}
-            except json.JSONDecodeError:
-                pass
-
-    # Pattern 2: Look for large object literals with numeric arrays (costs)
-    # This finds patterns like: costs:[100,250,500,...] or cost:[100,250,500,...]
-    cost_pattern = re.compile(r'cost[s]?\s*:\s*\[(\d[\d,\s]+)\]')
-    cost_matches = cost_pattern.findall(bundle)
-    if cost_matches:
-        print(f"  [Tier 2] Found {len(cost_matches)} cost-like arrays")
-
-    print("  [Tier 2] Could not parse structured data from bundle (needs manual review).")
-    print(f"  [Tier 2] Raw bundle saved to {RAW_DIR / 'bundle.js'} for inspection.")
-    return None
-
-
-# ---------------------------------------------------------------------------
-# Tier 3: DOM Scraping
-# ---------------------------------------------------------------------------
-
-async def extract_via_dom(page) -> dict | None:  # type: ignore[no-untyped-def]
-    """Scrape the rendered DOM for upgrade data."""
-    print("[Tier 3] Attempting DOM scraping...")
-
-    await page.goto(REFERENCE_URL, wait_until="networkidle")
-    await asyncio.sleep(5)  # Wait for React to render
-
-    # Save raw HTML
-    html = await page.content()
-    raw_path = RAW_DIR / "page.html"
-    raw_path.write_text(html, encoding="utf-8")
-    print(f"  [Tier 3] Saved rendered HTML ({len(html):,} chars) to {raw_path}")
-
-    # Extract categories and upgrades from DOM
-    data = await page.evaluate("""
-    () => {
-        const result = { categories: [] };
-
-        // Find category sections
-        const categories = document.querySelectorAll('.category');
-        if (categories.length === 0) {
-            // Try alternative selectors
-            const sections = document.querySelectorAll('.upgrade-section, [class*="category"]');
-            if (sections.length === 0) {
-                return {
-                    error: "No category elements found",
-                    html_length: document.body.innerHTML.length,
-                };
-            }
+        const headers = [];
+        const headerRow = table.querySelector('thead tr') || table.querySelector('tr:first-child');
+        if (headerRow) {
+            headerRow.querySelectorAll('th, td').forEach(cell =>
+                headers.push(cell.textContent.trim())
+            );
         }
 
-        categories.forEach(cat => {
-            const catData = {
-                name: '',
-                upgrades: []
-            };
-
-            // Get category name
-            const nameEl = cat.querySelector('.category-name');
-            if (nameEl) catData.name = nameEl.textContent.trim();
-
-            // Determine category type from class
-            if (cat.classList.contains('attack')) catData.type = 'offense';
-            else if (cat.classList.contains('defense')) catData.type = 'defense';
-            else if (cat.classList.contains('utility')) catData.type = 'economy';
-            else catData.type = 'unknown';
-
-            // Get upgrades within category
-            const upgrades = cat.querySelectorAll('.upgrade');
-            upgrades.forEach(u => {
-                const upgrade = {
-                    name: '',
-                    values: {}
-                };
-
-                // Get upgrade name
-                const nameBtn = u.querySelector('.name-button, .upgrade-name');
-                if (nameBtn) upgrade.name = nameBtn.textContent.trim();
-
-                // Get current/target values
-                const currentEl = u.querySelector('.current input, .current');
-                const targetEl = u.querySelector('.target input, .target');
-                if (currentEl) {
-                    upgrade.values.current = currentEl.value || currentEl.textContent.trim();
-                }
-                if (targetEl) {
-                    upgrade.values.target = targetEl.value || targetEl.textContent.trim();
-                }
-
-                // Get cost
-                const costEl = u.querySelector('.cost');
-                if (costEl) upgrade.values.cost = costEl.textContent.trim();
-
-                if (upgrade.name) catData.upgrades.push(upgrade);
+        const rows = [];
+        table.querySelectorAll('tbody tr').forEach(tr => {
+            const cells = tr.querySelectorAll('td');
+            if (cells.length === 0) return;
+            const row = {};
+            cells.forEach((td, i) => {
+                const text = td.textContent.trim();
+                const cleaned = text.replace(/,/g, '').replace(/\\$/g, '');
+                const num = parseFloat(cleaned);
+                const key = headers[i] || 'col_' + i;
+                row[key] = isNaN(num) ? text : num;
             });
-
-            if (catData.upgrades.length > 0) result.categories.push(catData);
+            rows.push(row);
         });
-
-        return result;
-    }
-    """)
-
-    if data and "categories" in data and data["categories"]:
-        print(f"  [Tier 3] Found {len(data['categories'])} categories with upgrades")
-        raw_path = RAW_DIR / "dom_extracted.json"
-        raw_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
-        return data
-    else:
-        print(f"  [Tier 3] DOM extraction returned: {data}")
-        return None
-
-
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-
-def _looks_like_upgrade_data(data: object) -> bool:
-    """Heuristic: does this data look like upgrade definitions?"""
-    if isinstance(data, list) and len(data) > 5 and isinstance(data[0], dict):
-        keys = set(data[0].keys())
-        upgrade_keys = {"name", "cost", "level", "effect", "category", "type"}
-        if keys & upgrade_keys:
-            return True
-    return isinstance(data, dict) and any(
-        k in data for k in ("upgrades", "workshops", "permanent")
-    )
-
-
-def normalize_to_schema(raw_data: dict) -> dict:
-    """Convert raw extracted data to the UpgradeDatabase JSON schema.
-
-    This is a template — the exact normalization depends on what tier
-    successfully extracted data and what format it returned.
-    """
-    normalized: dict = {
-        "version": "extracted",
-        "game_version": "unknown",
-        "source": "tower-workshop-calculator.netlify.app",
-        "upgrades": [],
+        return rows;
     }
 
-    # Handle Tier 3 DOM data
-    if "categories" in raw_data:
-        display_order = 0
-
-        for cat in raw_data["categories"]:
-            cat_type = cat.get("type", "unknown")
-            for u in cat.get("upgrades", []):
-                display_order += 1
-                name = u.get("name", "")
-                upgrade_id = name.lower().replace(" ", "_").replace("/", "_")
-
-                normalized["upgrades"].append({
-                    "id": upgrade_id,
-                    "name": name,
-                    "category": cat_type,
-                    "effect_unit": "unknown",
-                    "effect_type": "additive",
-                    "base_value": 0,
-                    "max_level": 1,
-                    "display_order": display_order,
-                    "levels": [],  # Needs per-level data — may require iterating the UI
-                })
-
-    return normalized
+    return {getSelectOptions, getTableData};
+}
+"""
 
 
-def validate_extracted(data: dict) -> list[str]:
-    """Basic validation of extracted data before saving."""
-    errors = []
-
-    upgrades = data.get("upgrades", [])
-    if not upgrades:
-        errors.append("No upgrades extracted")
-        return errors
-
-    ids_seen: set[str] = set()
-    for i, u in enumerate(upgrades):
-        uid = u.get("id", f"upgrade_{i}")
-
-        if uid in ids_seen:
-            errors.append(f"Duplicate ID: {uid}")
-        ids_seen.add(uid)
-
-        levels = u.get("levels", [])
-        if not levels:
-            errors.append(f"{uid}: no levels data")
-
-        for lv in levels:
-            cost = lv.get("coin_cost")
-            if not isinstance(cost, (int, float)) or cost <= 0:
-                errors.append(f"{uid} level {lv.get('level')}: invalid cost {cost}")
-
-            effect = lv.get("cumulative_effect")
-            if isinstance(effect, str):
-                errors.append(f"{uid} level {lv.get('level')}: string effect '{effect}'")
-
-    return errors
-
-
-# ---------------------------------------------------------------------------
-# Main Orchestrator
-# ---------------------------------------------------------------------------
-
-async def extract_all() -> None:
-    """Run all extraction tiers in order until one succeeds."""
-    ensure_dirs()
-
+def scrape_all() -> dict:
+    """Scrape all upgrade data from the Netlify calculator."""
     try:
-        from playwright.async_api import async_playwright
+        from playwright.sync_api import sync_playwright
     except ImportError:
-        print("ERROR: Playwright not installed.")
-        print("Run: pip install -e '.[extract]' && playwright install chromium")
+        print("ERROR: Playwright not installed.", flush=True)
         sys.exit(1)
 
-    print(f"Starting extraction from {REFERENCE_URL}")
-    print(f"Raw artifacts will be saved to {RAW_DIR}")
-    print()
+    RAW_DIR.mkdir(parents=True, exist_ok=True)
+    all_upgrades: dict[str, dict] = {}
 
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
-        page = await browser.new_page()
+    with sync_playwright() as p:
+        browser = p.chromium.launch(
+            headless=True,
+            args=["--ignore-certificate-errors"],
+        )
+        context = browser.new_context(ignore_https_errors=True)
+        page = context.new_page()
+        page.set_default_timeout(15000)
 
-        raw_data = None
+        print(f"Navigating to {SITE_URL} ...", flush=True)
+        page.goto(SITE_URL, wait_until="domcontentloaded", timeout=30000)
+        page.wait_for_load_state("networkidle", timeout=30000)
+        time.sleep(2)
 
-        # Tier 1: Network Interception
+        # Accept agreement
         try:
-            raw_data = await extract_via_network(page)
-        except Exception as e:
-            print(f"  [Tier 1] Error: {e}")
+            checkbox = page.locator('input[type="checkbox"]').first
+            if checkbox.is_visible(timeout=3000):
+                checkbox.click()
+                time.sleep(0.5)
+                page.locator('button:has-text("Continue")').click()
+                time.sleep(1)
+                print("Accepted site agreement", flush=True)
+        except Exception:
+            pass
 
-        # Tier 2: JS Bundle Analysis
-        if raw_data is None:
+        # Click Data tab
+        page.locator('button:has-text("Data")').click()
+        time.sleep(1)
+        print("Clicked Data tab", flush=True)
+
+        # Try to click Upgrades sub-tab
+        try:
+            page.locator('button:has-text("Upgrades")').click(timeout=3000)
+            time.sleep(0.5)
+        except Exception:
+            pass
+
+        for category in CATEGORIES:
+            print(f"\n--- Category: {category} ---", flush=True)
+
+            page.locator(f'button:has-text("{category}")').click()
+            time.sleep(0.5)
+
+            # Get all dropdown options via JS
+            options = page.evaluate("""
+                () => {
+                    const sel = document.querySelector('select');
+                    if (!sel) return [];
+                    return Array.from(sel.options).map(o => ({
+                        value: o.value, text: o.text
+                    }));
+                }
+            """)
+
+            print(f"  Found {len(options)} upgrades: "
+                  f"{[o['text'] for o in options]}", flush=True)
+
+            for opt in options:
+                upgrade_name = opt["text"]
+                opt_value = opt["value"]
+
+                # Select upgrade
+                page.evaluate(f"""
+                    () => {{
+                        const sel = document.querySelector('select');
+                        sel.value = '{opt_value}';
+                        sel.dispatchEvent(new Event('change', {{bubbles: true}}));
+                    }}
+                """)
+                time.sleep(0.3)
+
+                # Scrape ALL pages by collecting visible data then clicking Next
+                all_rows = _scrape_all_pages_fast(page)
+
+                all_upgrades[f"{category}:{upgrade_name}"] = {
+                    "category": category.lower(),
+                    "name": upgrade_name,
+                    "rows": all_rows,
+                }
+                print(f"    {upgrade_name}: {len(all_rows)} levels", flush=True)
+
+        browser.close()
+
+    return all_upgrades
+
+
+def _scrape_all_pages_fast(page) -> list[dict]:
+    """Scrape all pages quickly by clicking through Next rapidly."""
+    all_rows: list[dict] = []
+    seen_levels: set[float] = set()
+
+    # Reset to first page
+    try:
+        prev = page.locator('button:has-text("Previous")')
+        for _ in range(200):
+            if not prev.is_visible(timeout=500) or not prev.is_enabled():
+                break
+            prev.click()
+            time.sleep(0.05)
+    except Exception:
+        pass
+
+    for _ in range(500):
+        rows = page.evaluate("""
+            () => {
+                const table = document.querySelector('table');
+                if (!table) return [];
+                const headers = [];
+                const hr = table.querySelector('thead tr');
+                if (hr) hr.querySelectorAll('th').forEach(
+                    th => headers.push(th.textContent.trim())
+                );
+                const rows = [];
+                table.querySelectorAll('tbody tr').forEach(tr => {
+                    const cells = tr.querySelectorAll('td');
+                    if (cells.length === 0) return;
+                    const row = {};
+                    cells.forEach((td, i) => {
+                        const text = td.textContent.trim();
+                        const cleaned = text.replace(/,/g, '');
+                        const num = parseFloat(cleaned);
+                        const key = headers[i] || 'col_' + i;
+                        row[key] = isNaN(num) ? text : num;
+                    });
+                    rows.push(row);
+                });
+                return rows;
+            }
+        """)
+
+        if not rows:
+            break
+
+        for row in rows:
+            level = row.get("Level", row.get("level"))
+            if level is None:
+                continue
             try:
-                raw_data = await extract_via_bundle(page)
-            except Exception as e:
-                print(f"  [Tier 2] Error: {e}")
+                level_f = float(level)
+            except (ValueError, TypeError):
+                continue
+            if level_f not in seen_levels:
+                seen_levels.add(level_f)
+                all_rows.append(row)
 
-        # Tier 3: DOM Scraping
-        if raw_data is None:
-            try:
-                raw_data = await extract_via_dom(page)
-            except Exception as e:
-                print(f"  [Tier 3] Error: {e}")
+        # Click Next
+        try:
+            nxt = page.locator('button:has-text("Next")')
+            if nxt.is_visible(timeout=300) and nxt.is_enabled():
+                nxt.click()
+                time.sleep(0.05)
+            else:
+                break
+        except Exception:
+            break
 
-        await browser.close()
+    all_rows.sort(key=lambda r: float(r.get("Level", r.get("level", 0))))
+    return all_rows
 
-    if raw_data is None:
-        print()
-        print("FAILED: No tier succeeded in extracting data.")
-        print("Options:")
-        print("  1. Check if the reference site is accessible")
-        print("  2. Run with headed browser: modify headless=False")
-        print("  3. Try manual data entry with scripts/manual_import.py")
-        sys.exit(1)
 
-    # Save raw extraction
-    raw_path = RAW_DIR / "extracted.json"
-    raw_path.write_text(json.dumps(raw_data, indent=2), encoding="utf-8")
-    print(f"\nRaw data saved to {raw_path}")
+def main() -> None:
+    print("Starting Netlify site scrape...", flush=True)
+    raw_data = scrape_all()
 
-    # Normalize
-    normalized = normalize_to_schema(raw_data)
-
-    # Validate
-    errors = validate_extracted(normalized)
-    if errors:
-        print(f"\nValidation found {len(errors)} issues:")
-        for e in errors:
-            print(f"  - {e}")
-        print("\nSaving anyway — manual review needed.")
-
-    # Save normalized output
-    UPGRADES_PATH.write_text(json.dumps(normalized, indent=2), encoding="utf-8")
-    print(f"\nNormalized data saved to {UPGRADES_PATH}")
-    print(f"Upgrades extracted: {len(normalized.get('upgrades', []))}")
+    raw_path = RAW_DIR / "netlify_scraped.json"
+    raw_path.write_text(json.dumps(raw_data, indent=2, default=str), encoding="utf-8")
+    print(f"\nRaw scraped data saved to {raw_path}", flush=True)
+    print(f"Total upgrades scraped: {len(raw_data)}", flush=True)
 
 
 if __name__ == "__main__":
-    asyncio.run(extract_all())
+    main()
