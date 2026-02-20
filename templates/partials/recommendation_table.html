@@ -1,0 +1,79 @@
+{% if top %}
+<section class="card best-pick">
+  <div class="best-pick-header">
+    <span class="rank-badge">#1</span>
+    <div>
+      <h2>{{ top.upgrade_name }}</h2>
+      <span class="category-tag category-{{ top.category }}">{{ top.category | capitalize }}</span>
+    </div>
+  </div>
+  <div class="best-pick-details">
+    <div class="detail-row">
+      <span class="detail-label">Level</span>
+      <span class="detail-value">{{ top.current_level }} &rarr; {{ top.next_level }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Cost</span>
+      <span class="detail-value">{{ top.coin_cost | commas }} coins
+        {% if top.affordable %}
+        <span class="badge badge-yes">Affordable</span>
+        {% else %}
+        <span class="badge badge-no">Need {{ (top.coin_cost - profile.available_coins) | commas }} more</span>
+        {% endif %}
+      </span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Benefit</span>
+      <span class="detail-value">{{ top.current_effect }} &rarr; {{ top.next_effect }} (+{{ top.marginal_benefit }})</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Score</span>
+      <span class="detail-value mono">{{ top.score | score_fmt }}</span>
+    </div>
+  </div>
+</section>
+{% else %}
+<section class="card empty-state">
+  <p>All upgrades are maxed out. Nothing to recommend.</p>
+</section>
+{% endif %}
+
+{% if alternatives %}
+<section class="card">
+  <h2>Alternatives</h2>
+  <div class="upgrade-table-wrap">
+    <table class="upgrade-table rec-table">
+      <thead>
+        <tr>
+          <th class="col-rank">#</th>
+          <th class="col-name">Upgrade</th>
+          <th class="col-cat">Category</th>
+          <th class="col-level">Level</th>
+          <th class="col-cost">Cost</th>
+          <th class="col-score">Score</th>
+          <th class="col-afford">Affordable?</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in alternatives %}
+        <tr class="{% if not r.affordable %}row-unaffordable{% endif %}">
+          <td class="col-rank">{{ loop.index + 1 }}</td>
+          <td class="col-name">{{ r.upgrade_name }}</td>
+          <td class="col-cat"><span class="category-tag category-{{ r.category }}">{{ r.category | capitalize }}</span></td>
+          <td class="col-level">{{ r.current_level }} &rarr; {{ r.next_level }}</td>
+          <td class="col-cost">{{ r.coin_cost | commas }}</td>
+          <td class="col-score mono">{{ r.score | score_fmt }}</td>
+          <td class="col-afford">
+            {% if r.affordable %}
+            <span class="badge badge-yes">Yes</span>
+            {% else %}
+            <span class="badge badge-no">No</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}

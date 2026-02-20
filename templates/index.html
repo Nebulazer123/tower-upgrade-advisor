@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Profiles — Tower Upgrade Advisor{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Tower Upgrade Advisor</h1>
+  <p class="subtitle">Find the best next permanent upgrade for your coins</p>
+</section>
+
+<section class="card">
+  <h2>Create New Profile</h2>
+  <form method="post" action="{{ url_for('profile_new') }}" class="inline-form">
+    <input type="text" name="name" placeholder="Profile name…" required maxlength="50" autofocus>
+    <button type="submit" class="btn btn-primary">Create</button>
+  </form>
+</section>
+
+{% if profiles %}
+<section class="card">
+  <h2>Your Profiles</h2>
+  <div class="profile-list">
+    {% for p in profiles %}
+    <div class="profile-item">
+      <div class="profile-info">
+        <a href="{{ url_for('dashboard', profile_id=p.id) }}" class="profile-name">{{ p.name }}</a>
+        <span class="profile-meta">
+          {{ p.available_coins | commas }} coins &middot;
+          updated {{ p.updated_at.strftime('%b %d, %Y') }}
+        </span>
+      </div>
+      <div class="profile-actions">
+        <a href="{{ url_for('dashboard', profile_id=p.id) }}" class="btn btn-sm">Open</a>
+        <form method="post" action="{{ url_for('profile_delete', profile_id=p.id) }}" class="inline"
+              onsubmit="return confirm('Delete profile &quot;{{ p.name }}&quot;?')">
+          <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% else %}
+<section class="card empty-state">
+  <p>No profiles yet. Create one above to get started.</p>
+</section>
+{% endif %}
+{% endblock %}

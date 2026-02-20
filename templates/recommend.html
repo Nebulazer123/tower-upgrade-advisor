@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Recommendations — {{ profile.name }}{% endblock %}
+
+{% block nav_right %}
+<div class="nav-actions">
+  <a href="{{ url_for('dashboard', profile_id=profile.id) }}" class="btn btn-sm">Back to Dashboard</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<header class="page-header">
+  <h1>Recommendations for {{ profile.name }}</h1>
+  <p class="subtitle">{{ profile.available_coins | commas }} coins available</p>
+</header>
+
+<section class="card weight-controls">
+  <h2>Category Weights</h2>
+  <form hx-post="{{ url_for('update_weights', profile_id=profile.id) }}"
+        hx-target="#recommendation-results"
+        hx-swap="innerHTML"
+        hx-trigger="change">
+    <div class="slider-group">
+      <label>
+        <span class="slider-label">Attack</span>
+        <input type="range" name="attack" min="0" max="2" step="0.1"
+               value="{{ profile.weights.attack }}" class="slider">
+        <span class="slider-value">{{ profile.weights.attack }}</span>
+      </label>
+      <label>
+        <span class="slider-label">Defense</span>
+        <input type="range" name="defense" min="0" max="2" step="0.1"
+               value="{{ profile.weights.defense }}" class="slider">
+        <span class="slider-value">{{ profile.weights.defense }}</span>
+      </label>
+      <label>
+        <span class="slider-label">Utility</span>
+        <input type="range" name="utility" min="0" max="2" step="0.1"
+               value="{{ profile.weights.utility }}" class="slider">
+        <span class="slider-value">{{ profile.weights.utility }}</span>
+      </label>
+    </div>
+  </form>
+</section>
+
+<div id="recommendation-results">
+  {% include "partials/recommendation_table.html" %}
+</div>
+
+<div class="page-actions">
+  <a href="{{ url_for('dashboard', profile_id=profile.id) }}" class="btn btn-sm">Back to Dashboard</a>
+  <a href="{{ url_for('index') }}" class="btn btn-sm">All Profiles</a>
+</div>
+
+<script>
+document.querySelectorAll('.slider').forEach(function(s) {
+  s.addEventListener('input', function() {
+    this.nextElementSibling.textContent = parseFloat(this.value).toFixed(1);
+  });
+});
+</script>
+{% endblock %}
