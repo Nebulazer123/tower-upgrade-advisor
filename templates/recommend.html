@@ -18,8 +18,11 @@
            hx-post="{{ url_for('update_coins_and_recommend', profile_id=profile.id) }}"
            hx-trigger="change, keyup[key=='Enter']"
            hx-target="#recommendation-results"
-           hx-swap="innerHTML">
-    <span id="coins-display" class="coins-value">{{ profile.available_coins | commas }}</span>
+           hx-swap="innerHTML"
+           hx-include="this"
+           hx-indicator="#rec-indicator">
+    <span id="coins-display-recommend" class="coins-value">{{ profile.available_coins | commas }}</span>
+    <span id="rec-indicator" class="htmx-indicator" aria-hidden="true"></span>
   </div>
 </header>
 
@@ -28,7 +31,8 @@
   <form hx-post="{{ url_for('update_weights', profile_id=profile.id) }}"
         hx-target="#recommendation-results"
         hx-swap="innerHTML"
-        hx-trigger="change">
+        hx-trigger="change"
+        hx-indicator="#rec-indicator">
     <div class="slider-group">
       <label>
         <span class="slider-label">Attack</span>

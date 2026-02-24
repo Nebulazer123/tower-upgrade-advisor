@@ -1,0 +1,12 @@
+{
+  "name": "tower-upgrade-advisor-scraper",
+  "version": "1.0.0",
+  "description": "Scraper for Tower Workshop Calculator data",
+  "scripts": {
+    "scrape": "node scripts/scrape_tower_calculator.js",
+    "scrape:v2": "node scripts/scrape_tower_calculator_v2.js"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0"
+  }
+}

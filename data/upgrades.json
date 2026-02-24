@@ -1,7 +1,7 @@
 {
   "version": "merged-v1",
   "game_version": "2025-09",
-  "source": "github.com/jacoelt/tower-calculator + tower-workshop-calculator.netlify.app",
+  "source": "github.com/jacoelt/tower-calculator + tower-workshop-calculator.netlify.app + utility upgrades from wiki (placeholder data)",
   "upgrades": [
     {
       "id": "damage",
@@ -11549,7 +11549,7 @@
     },
     {
       "id": "defense_absolute",
-      "name": "Defence Absolute",
+      "name": "Defense Absolute",
       "category": "defense",
       "effect_unit": "pts",
       "effect_type": "additive",
@@ -13950,6 +13950,4044 @@
           "coin_cost": 82020,
           "cumulative_effect": 38110.0,
           "effect_delta": 280.0
+        }
+      ]
+    },
+    {
+      "id": "cash_bonus",
+      "name": "Cash Bonus",
+      "category": "utility",
+      "effect_unit": "x",
+      "effect_type": "multiplicative",
+      "base_value": 1.0,
+      "max_level": 149,
+      "display_order": 14,
+      "levels": [
+        {
+          "level": 1,
+          "coin_cost": 30,
+          "cumulative_effect": 1.01,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 2,
+          "coin_cost": 32,
+          "cumulative_effect": 1.02,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 3,
+          "coin_cost": 34,
+          "cumulative_effect": 1.03,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 4,
+          "coin_cost": 37,
+          "cumulative_effect": 1.04,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 5,
+          "coin_cost": 40,
+          "cumulative_effect": 1.05,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 6,
+          "coin_cost": 44,
+          "cumulative_effect": 1.06,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 7,
+          "coin_cost": 47,
+          "cumulative_effect": 1.07,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 8,
+          "coin_cost": 51,
+          "cumulative_effect": 1.08,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 9,
+          "coin_cost": 55,
+          "cumulative_effect": 1.09,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 10,
+          "coin_cost": 59,
+          "cumulative_effect": 1.1,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 11,
+          "coin_cost": 64,
+          "cumulative_effect": 1.11,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 12,
+          "coin_cost": 69,
+          "cumulative_effect": 1.12,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 13,
+          "coin_cost": 75,
+          "cumulative_effect": 1.13,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 14,
+          "coin_cost": 81,
+          "cumulative_effect": 1.14,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 15,
+          "coin_cost": 88,
+          "cumulative_effect": 1.15,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 16,
+          "coin_cost": 95,
+          "cumulative_effect": 1.16,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 17,
+          "coin_cost": 102,
+          "cumulative_effect": 1.17,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 18,
+          "coin_cost": 111,
+          "cumulative_effect": 1.18,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 19,
+          "coin_cost": 119,
+          "cumulative_effect": 1.19,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 20,
+          "coin_cost": 129,
+          "cumulative_effect": 1.2,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 21,
+          "coin_cost": 139,
+          "cumulative_effect": 1.21,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 22,
+          "coin_cost": 151,
+          "cumulative_effect": 1.22,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 23,
+          "coin_cost": 163,
+          "cumulative_effect": 1.23,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 24,
+          "coin_cost": 176,
+          "cumulative_effect": 1.24,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 25,
+          "coin_cost": 190,
+          "cumulative_effect": 1.25,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 26,
+          "coin_cost": 205,
+          "cumulative_effect": 1.26,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 27,
+          "coin_cost": 221,
+          "cumulative_effect": 1.27,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 28,
+          "coin_cost": 239,
+          "cumulative_effect": 1.28,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 29,
+          "coin_cost": 258,
+          "cumulative_effect": 1.29,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 30,
+          "coin_cost": 279,
+          "cumulative_effect": 1.3,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 31,
+          "coin_cost": 301,
+          "cumulative_effect": 1.31,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 32,
+          "coin_cost": 326,
+          "cumulative_effect": 1.32,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 33,
+          "coin_cost": 352,
+          "cumulative_effect": 1.33,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 34,
+          "coin_cost": 380,
+          "cumulative_effect": 1.34,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 35,
+          "coin_cost": 410,
+          "cumulative_effect": 1.35,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 36,
+          "coin_cost": 443,
+          "cumulative_effect": 1.36,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 37,
+          "coin_cost": 479,
+          "cumulative_effect": 1.37,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 38,
+          "coin_cost": 517,
+          "cumulative_effect": 1.38,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 39,
+          "coin_cost": 558,
+          "cumulative_effect": 1.39,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 40,
+          "coin_cost": 603,
+          "cumulative_effect": 1.4,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 41,
+          "coin_cost": 651,
+          "cumulative_effect": 1.41,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 42,
+          "coin_cost": 703,
+          "cumulative_effect": 1.42,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 43,
+          "coin_cost": 760,
+          "cumulative_effect": 1.43,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 44,
+          "coin_cost": 820,
+          "cumulative_effect": 1.44,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 45,
+          "coin_cost": 886,
+          "cumulative_effect": 1.45,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 46,
+          "coin_cost": 957,
+          "cumulative_effect": 1.46,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 47,
+          "coin_cost": 1034,
+          "cumulative_effect": 1.47,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 48,
+          "coin_cost": 1116,
+          "cumulative_effect": 1.48,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 49,
+          "coin_cost": 1206,
+          "cumulative_effect": 1.49,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 50,
+          "coin_cost": 1302,
+          "cumulative_effect": 1.5,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 51,
+          "coin_cost": 1407,
+          "cumulative_effect": 1.51,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 52,
+          "coin_cost": 1519,
+          "cumulative_effect": 1.52,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 53,
+          "coin_cost": 1641,
+          "cumulative_effect": 1.53,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 54,
+          "coin_cost": 1772,
+          "cumulative_effect": 1.54,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 55,
+          "coin_cost": 1914,
+          "cumulative_effect": 1.55,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 56,
+          "coin_cost": 2067,
+          "cumulative_effect": 1.56,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 57,
+          "coin_cost": 2232,
+          "cumulative_effect": 1.57,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 58,
+          "coin_cost": 2411,
+          "cumulative_effect": 1.58,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 59,
+          "coin_cost": 2604,
+          "cumulative_effect": 1.59,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 60,
+          "coin_cost": 2812,
+          "cumulative_effect": 1.6,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 61,
+          "coin_cost": 3037,
+          "cumulative_effect": 1.61,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 62,
+          "coin_cost": 3280,
+          "cumulative_effect": 1.62,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 63,
+          "coin_cost": 3543,
+          "cumulative_effect": 1.63,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 64,
+          "coin_cost": 3826,
+          "cumulative_effect": 1.64,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 65,
+          "coin_cost": 4132,
+          "cumulative_effect": 1.65,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 66,
+          "coin_cost": 4463,
+          "cumulative_effect": 1.66,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 67,
+          "coin_cost": 4820,
+          "cumulative_effect": 1.67,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 68,
+          "coin_cost": 5206,
+          "cumulative_effect": 1.68,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 69,
+          "coin_cost": 5622,
+          "cumulative_effect": 1.69,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 70,
+          "coin_cost": 6072,
+          "cumulative_effect": 1.7,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 71,
+          "coin_cost": 6558,
+          "cumulative_effect": 1.71,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 72,
+          "coin_cost": 7082,
+          "cumulative_effect": 1.72,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 73,
+          "coin_cost": 7649,
+          "cumulative_effect": 1.73,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 74,
+          "coin_cost": 8261,
+          "cumulative_effect": 1.74,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 75,
+          "coin_cost": 8922,
+          "cumulative_effect": 1.75,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 76,
+          "coin_cost": 9636,
+          "cumulative_effect": 1.76,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 77,
+          "coin_cost": 10407,
+          "cumulative_effect": 1.77,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 78,
+          "coin_cost": 11239,
+          "cumulative_effect": 1.78,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 79,
+          "coin_cost": 12138,
+          "cumulative_effect": 1.79,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 80,
+          "coin_cost": 13109,
+          "cumulative_effect": 1.8,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 81,
+          "coin_cost": 14158,
+          "cumulative_effect": 1.81,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 82,
+          "coin_cost": 15291,
+          "cumulative_effect": 1.82,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 83,
+          "coin_cost": 16514,
+          "cumulative_effect": 1.83,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 84,
+          "coin_cost": 17835,
+          "cumulative_effect": 1.84,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 85,
+          "coin_cost": 19262,
+          "cumulative_effect": 1.85,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 86,
+          "coin_cost": 20803,
+          "cumulative_effect": 1.86,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 87,
+          "coin_cost": 22467,
+          "cumulative_effect": 1.87,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 88,
+          "coin_cost": 24265,
+          "cumulative_effect": 1.88,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 89,
+          "coin_cost": 26206,
+          "cumulative_effect": 1.89,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 90,
+          "coin_cost": 28303,
+          "cumulative_effect": 1.9,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 91,
+          "coin_cost": 30567,
+          "cumulative_effect": 1.91,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 92,
+          "coin_cost": 33012,
+          "cumulative_effect": 1.92,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 93,
+          "coin_cost": 35653,
+          "cumulative_effect": 1.93,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 94,
+          "coin_cost": 38506,
+          "cumulative_effect": 1.94,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 95,
+          "coin_cost": 41586,
+          "cumulative_effect": 1.95,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 96,
+          "coin_cost": 44913,
+          "cumulative_effect": 1.96,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 97,
+          "coin_cost": 48506,
+          "cumulative_effect": 1.97,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 98,
+          "coin_cost": 52387,
+          "cumulative_effect": 1.98,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 99,
+          "coin_cost": 56578,
+          "cumulative_effect": 1.99,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 100,
+          "coin_cost": 61104,
+          "cumulative_effect": 2.0,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 101,
+          "coin_cost": 65992,
+          "cumulative_effect": 2.01,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 102,
+          "coin_cost": 71272,
+          "cumulative_effect": 2.02,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 103,
+          "coin_cost": 76974,
+          "cumulative_effect": 2.03,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 104,
+          "coin_cost": 83131,
+          "cumulative_effect": 2.04,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 105,
+          "coin_cost": 89782,
+          "cumulative_effect": 2.05,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 106,
+          "coin_cost": 96965,
+          "cumulative_effect": 2.06,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 107,
+          "coin_cost": 104722,
+          "cumulative_effect": 2.07,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 108,
+          "coin_cost": 113100,
+          "cumulative_effect": 2.08,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 109,
+          "coin_cost": 122148,
+          "cumulative_effect": 2.09,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 110,
+          "coin_cost": 131919,
+          "cumulative_effect": 2.1,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 111,
+          "coin_cost": 142473,
+          "cumulative_effect": 2.11,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 112,
+          "coin_cost": 153871,
+          "cumulative_effect": 2.12,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 113,
+          "coin_cost": 166181,
+          "cumulative_effect": 2.13,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 114,
+          "coin_cost": 179475,
+          "cumulative_effect": 2.14,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 115,
+          "coin_cost": 193833,
+          "cumulative_effect": 2.15,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 116,
+          "coin_cost": 209340,
+          "cumulative_effect": 2.16,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 117,
+          "coin_cost": 226087,
+          "cumulative_effect": 2.17,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 118,
+          "coin_cost": 244174,
+          "cumulative_effect": 2.18,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 119,
+          "coin_cost": 263708,
+          "cumulative_effect": 2.19,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 120,
+          "coin_cost": 284805,
+          "cumulative_effect": 2.2,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 121,
+          "coin_cost": 307589,
+          "cumulative_effect": 2.21,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 122,
+          "coin_cost": 332196,
+          "cumulative_effect": 2.22,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 123,
+          "coin_cost": 358772,
+          "cumulative_effect": 2.23,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 124,
+          "coin_cost": 387474,
+          "cumulative_effect": 2.24,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 125,
+          "coin_cost": 418472,
+          "cumulative_effect": 2.25,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 126,
+          "coin_cost": 451950,
+          "cumulative_effect": 2.26,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 127,
+          "coin_cost": 488106,
+          "cumulative_effect": 2.27,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 128,
+          "coin_cost": 527154,
+          "cumulative_effect": 2.28,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 129,
+          "coin_cost": 569327,
+          "cumulative_effect": 2.29,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 130,
+          "coin_cost": 614873,
+          "cumulative_effect": 2.3,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 131,
+          "coin_cost": 664063,
+          "cumulative_effect": 2.31,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 132,
+          "coin_cost": 717188,
+          "cumulative_effect": 2.32,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 133,
+          "coin_cost": 774563,
+          "cumulative_effect": 2.33,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 134,
+          "coin_cost": 836528,
+          "cumulative_effect": 2.34,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 135,
+          "coin_cost": 903450,
+          "cumulative_effect": 2.35,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 136,
+          "coin_cost": 975726,
+          "cumulative_effect": 2.36,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 137,
+          "coin_cost": 1053784,
+          "cumulative_effect": 2.37,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 138,
+          "coin_cost": 1138087,
+          "cumulative_effect": 2.38,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 139,
+          "coin_cost": 1229134,
+          "cumulative_effect": 2.39,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 140,
+          "coin_cost": 1327465,
+          "cumulative_effect": 2.4,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 141,
+          "coin_cost": 1433662,
+          "cumulative_effect": 2.41,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 142,
+          "coin_cost": 1548355,
+          "cumulative_effect": 2.42,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 143,
+          "coin_cost": 1672224,
+          "cumulative_effect": 2.43,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 144,
+          "coin_cost": 1806002,
+          "cumulative_effect": 2.44,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 145,
+          "coin_cost": 1950482,
+          "cumulative_effect": 2.45,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 146,
+          "coin_cost": 2106521,
+          "cumulative_effect": 2.46,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 147,
+          "coin_cost": 2275042,
+          "cumulative_effect": 2.47,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 148,
+          "coin_cost": 2457046,
+          "cumulative_effect": 2.48,
+          "effect_delta": 0.01
+        },
+        {
+          "level": 149,
+          "coin_cost": 2653609,
+          "cumulative_effect": 2.49,
+          "effect_delta": 0.01
+        }
+      ]
+    },
+    {
+      "id": "cash_per_wave",
+      "name": "Cash / Wave",
+      "category": "utility",
+      "effect_unit": "$",
+      "effect_type": "additive",
+      "base_value": 0.0,
+      "max_level": 149,
+      "display_order": 15,
+      "levels": [
+        {
+          "level": 1,
+          "coin_cost": 30,
+          "cumulative_effect": 4.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 2,
+          "coin_cost": 32,
+          "cumulative_effect": 8.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 3,
+          "coin_cost": 34,
+          "cumulative_effect": 12.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 4,
+          "coin_cost": 37,
+          "cumulative_effect": 16.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 5,
+          "coin_cost": 40,
+          "cumulative_effect": 20.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 6,
+          "coin_cost": 44,
+          "cumulative_effect": 24.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 7,
+          "coin_cost": 47,
+          "cumulative_effect": 28.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 8,
+          "coin_cost": 51,
+          "cumulative_effect": 32.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 9,
+          "coin_cost": 55,
+          "cumulative_effect": 36.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 10,
+          "coin_cost": 59,
+          "cumulative_effect": 40.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 11,
+          "coin_cost": 64,
+          "cumulative_effect": 44.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 12,
+          "coin_cost": 69,
+          "cumulative_effect": 48.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 13,
+          "coin_cost": 75,
+          "cumulative_effect": 52.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 14,
+          "coin_cost": 81,
+          "cumulative_effect": 56.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 15,
+          "coin_cost": 88,
+          "cumulative_effect": 60.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 16,
+          "coin_cost": 95,
+          "cumulative_effect": 64.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 17,
+          "coin_cost": 102,
+          "cumulative_effect": 68.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 18,
+          "coin_cost": 111,
+          "cumulative_effect": 72.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 19,
+          "coin_cost": 119,
+          "cumulative_effect": 76.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 20,
+          "coin_cost": 129,
+          "cumulative_effect": 80.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 21,
+          "coin_cost": 139,
+          "cumulative_effect": 84.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 22,
+          "coin_cost": 151,
+          "cumulative_effect": 88.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 23,
+          "coin_cost": 163,
+          "cumulative_effect": 92.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 24,
+          "coin_cost": 176,
+          "cumulative_effect": 96.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 25,
+          "coin_cost": 190,
+          "cumulative_effect": 100.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 26,
+          "coin_cost": 205,
+          "cumulative_effect": 104.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 27,
+          "coin_cost": 221,
+          "cumulative_effect": 108.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 28,
+          "coin_cost": 239,
+          "cumulative_effect": 112.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 29,
+          "coin_cost": 258,
+          "cumulative_effect": 116.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 30,
+          "coin_cost": 279,
+          "cumulative_effect": 120.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 31,
+          "coin_cost": 301,
+          "cumulative_effect": 124.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 32,
+          "coin_cost": 326,
+          "cumulative_effect": 128.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 33,
+          "coin_cost": 352,
+          "cumulative_effect": 132.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 34,
+          "coin_cost": 380,
+          "cumulative_effect": 136.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 35,
+          "coin_cost": 410,
+          "cumulative_effect": 140.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 36,
+          "coin_cost": 443,
+          "cumulative_effect": 144.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 37,
+          "coin_cost": 479,
+          "cumulative_effect": 148.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 38,
+          "coin_cost": 517,
+          "cumulative_effect": 152.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 39,
+          "coin_cost": 558,
+          "cumulative_effect": 156.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 40,
+          "coin_cost": 603,
+          "cumulative_effect": 160.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 41,
+          "coin_cost": 651,
+          "cumulative_effect": 164.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 42,
+          "coin_cost": 703,
+          "cumulative_effect": 168.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 43,
+          "coin_cost": 760,
+          "cumulative_effect": 172.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 44,
+          "coin_cost": 820,
+          "cumulative_effect": 176.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 45,
+          "coin_cost": 886,
+          "cumulative_effect": 180.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 46,
+          "coin_cost": 957,
+          "cumulative_effect": 184.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 47,
+          "coin_cost": 1034,
+          "cumulative_effect": 188.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 48,
+          "coin_cost": 1116,
+          "cumulative_effect": 192.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 49,
+          "coin_cost": 1206,
+          "cumulative_effect": 196.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 50,
+          "coin_cost": 1302,
+          "cumulative_effect": 200.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 51,
+          "coin_cost": 1407,
+          "cumulative_effect": 204.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 52,
+          "coin_cost": 1519,
+          "cumulative_effect": 208.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 53,
+          "coin_cost": 1641,
+          "cumulative_effect": 212.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 54,
+          "coin_cost": 1772,
+          "cumulative_effect": 216.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 55,
+          "coin_cost": 1914,
+          "cumulative_effect": 220.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 56,
+          "coin_cost": 2067,
+          "cumulative_effect": 224.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 57,
+          "coin_cost": 2232,
+          "cumulative_effect": 228.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 58,
+          "coin_cost": 2411,
+          "cumulative_effect": 232.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 59,
+          "coin_cost": 2604,
+          "cumulative_effect": 236.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 60,
+          "coin_cost": 2812,
+          "cumulative_effect": 240.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 61,
+          "coin_cost": 3037,
+          "cumulative_effect": 244.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 62,
+          "coin_cost": 3280,
+          "cumulative_effect": 248.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 63,
+          "coin_cost": 3543,
+          "cumulative_effect": 252.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 64,
+          "coin_cost": 3826,
+          "cumulative_effect": 256.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 65,
+          "coin_cost": 4132,
+          "cumulative_effect": 260.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 66,
+          "coin_cost": 4463,
+          "cumulative_effect": 264.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 67,
+          "coin_cost": 4820,
+          "cumulative_effect": 268.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 68,
+          "coin_cost": 5206,
+          "cumulative_effect": 272.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 69,
+          "coin_cost": 5622,
+          "cumulative_effect": 276.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 70,
+          "coin_cost": 6072,
+          "cumulative_effect": 280.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 71,
+          "coin_cost": 6558,
+          "cumulative_effect": 284.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 72,
+          "coin_cost": 7082,
+          "cumulative_effect": 288.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 73,
+          "coin_cost": 7649,
+          "cumulative_effect": 292.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 74,
+          "coin_cost": 8261,
+          "cumulative_effect": 296.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 75,
+          "coin_cost": 8922,
+          "cumulative_effect": 300.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 76,
+          "coin_cost": 9636,
+          "cumulative_effect": 304.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 77,
+          "coin_cost": 10407,
+          "cumulative_effect": 308.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 78,
+          "coin_cost": 11239,
+          "cumulative_effect": 312.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 79,
+          "coin_cost": 12138,
+          "cumulative_effect": 316.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 80,
+          "coin_cost": 13109,
+          "cumulative_effect": 320.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 81,
+          "coin_cost": 14158,
+          "cumulative_effect": 324.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 82,
+          "coin_cost": 15291,
+          "cumulative_effect": 328.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 83,
+          "coin_cost": 16514,
+          "cumulative_effect": 332.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 84,
+          "coin_cost": 17835,
+          "cumulative_effect": 336.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 85,
+          "coin_cost": 19262,
+          "cumulative_effect": 340.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 86,
+          "coin_cost": 20803,
+          "cumulative_effect": 344.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 87,
+          "coin_cost": 22467,
+          "cumulative_effect": 348.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 88,
+          "coin_cost": 24265,
+          "cumulative_effect": 352.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 89,
+          "coin_cost": 26206,
+          "cumulative_effect": 356.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 90,
+          "coin_cost": 28303,
+          "cumulative_effect": 360.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 91,
+          "coin_cost": 30567,
+          "cumulative_effect": 364.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 92,
+          "coin_cost": 33012,
+          "cumulative_effect": 368.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 93,
+          "coin_cost": 35653,
+          "cumulative_effect": 372.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 94,
+          "coin_cost": 38506,
+          "cumulative_effect": 376.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 95,
+          "coin_cost": 41586,
+          "cumulative_effect": 380.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 96,
+          "coin_cost": 44913,
+          "cumulative_effect": 384.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 97,
+          "coin_cost": 48506,
+          "cumulative_effect": 388.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 98,
+          "coin_cost": 52387,
+          "cumulative_effect": 392.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 99,
+          "coin_cost": 56578,
+          "cumulative_effect": 396.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 100,
+          "coin_cost": 61104,
+          "cumulative_effect": 400.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 101,
+          "coin_cost": 65992,
+          "cumulative_effect": 404.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 102,
+          "coin_cost": 71272,
+          "cumulative_effect": 408.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 103,
+          "coin_cost": 76974,
+          "cumulative_effect": 412.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 104,
+          "coin_cost": 83131,
+          "cumulative_effect": 416.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 105,
+          "coin_cost": 89782,
+          "cumulative_effect": 420.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 106,
+          "coin_cost": 96965,
+          "cumulative_effect": 424.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 107,
+          "coin_cost": 104722,
+          "cumulative_effect": 428.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 108,
+          "coin_cost": 113100,
+          "cumulative_effect": 432.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 109,
+          "coin_cost": 122148,
+          "cumulative_effect": 436.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 110,
+          "coin_cost": 131919,
+          "cumulative_effect": 440.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 111,
+          "coin_cost": 142473,
+          "cumulative_effect": 444.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 112,
+          "coin_cost": 153871,
+          "cumulative_effect": 448.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 113,
+          "coin_cost": 166181,
+          "cumulative_effect": 452.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 114,
+          "coin_cost": 179475,
+          "cumulative_effect": 456.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 115,
+          "coin_cost": 193833,
+          "cumulative_effect": 460.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 116,
+          "coin_cost": 209340,
+          "cumulative_effect": 464.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 117,
+          "coin_cost": 226087,
+          "cumulative_effect": 468.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 118,
+          "coin_cost": 244174,
+          "cumulative_effect": 472.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 119,
+          "coin_cost": 263708,
+          "cumulative_effect": 476.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 120,
+          "coin_cost": 284805,
+          "cumulative_effect": 480.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 121,
+          "coin_cost": 307589,
+          "cumulative_effect": 484.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 122,
+          "coin_cost": 332196,
+          "cumulative_effect": 488.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 123,
+          "coin_cost": 358772,
+          "cumulative_effect": 492.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 124,
+          "coin_cost": 387474,
+          "cumulative_effect": 496.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 125,
+          "coin_cost": 418472,
+          "cumulative_effect": 500.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 126,
+          "coin_cost": 451950,
+          "cumulative_effect": 504.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 127,
+          "coin_cost": 488106,
+          "cumulative_effect": 508.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 128,
+          "coin_cost": 527154,
+          "cumulative_effect": 512.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 129,
+          "coin_cost": 569327,
+          "cumulative_effect": 516.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 130,
+          "coin_cost": 614873,
+          "cumulative_effect": 520.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 131,
+          "coin_cost": 664063,
+          "cumulative_effect": 524.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 132,
+          "coin_cost": 717188,
+          "cumulative_effect": 528.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 133,
+          "coin_cost": 774563,
+          "cumulative_effect": 532.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 134,
+          "coin_cost": 836528,
+          "cumulative_effect": 536.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 135,
+          "coin_cost": 903450,
+          "cumulative_effect": 540.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 136,
+          "coin_cost": 975726,
+          "cumulative_effect": 544.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 137,
+          "coin_cost": 1053784,
+          "cumulative_effect": 548.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 138,
+          "coin_cost": 1138087,
+          "cumulative_effect": 552.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 139,
+          "coin_cost": 1229134,
+          "cumulative_effect": 556.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 140,
+          "coin_cost": 1327465,
+          "cumulative_effect": 560.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 141,
+          "coin_cost": 1433662,
+          "cumulative_effect": 564.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 142,
+          "coin_cost": 1548355,
+          "cumulative_effect": 568.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 143,
+          "coin_cost": 1672224,
+          "cumulative_effect": 572.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 144,
+          "coin_cost": 1806002,
+          "cumulative_effect": 576.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 145,
+          "coin_cost": 1950482,
+          "cumulative_effect": 580.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 146,
+          "coin_cost": 2106521,
+          "cumulative_effect": 584.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 147,
+          "coin_cost": 2275042,
+          "cumulative_effect": 588.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 148,
+          "coin_cost": 2457046,
+          "cumulative_effect": 592.0,
+          "effect_delta": 4.0
+        },
+        {
+          "level": 149,
+          "coin_cost": 2653609,
+          "cumulative_effect": 596.0,
+          "effect_delta": 4.0
+        }
+      ]
+    },
+    {
+      "id": "coins_per_kill_bonus",
+      "name": "Coins / Kill Bonus",
+      "category": "utility",
+      "effect_unit": "%",
+      "effect_type": "additive",
+      "base_value": 0.0,
+      "max_level": 100,
+      "display_order": 16,
+      "levels": [
+        {
+          "level": 1,
+          "coin_cost": 50,
+          "cumulative_effect": 0.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 2,
+          "coin_cost": 54,
+          "cumulative_effect": 1.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 3,
+          "coin_cost": 59,
+          "cumulative_effect": 1.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 4,
+          "coin_cost": 64,
+          "cumulative_effect": 2.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 5,
+          "coin_cost": 70,
+          "cumulative_effect": 2.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 6,
+          "coin_cost": 76,
+          "cumulative_effect": 3.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 7,
+          "coin_cost": 83,
+          "cumulative_effect": 3.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 8,
+          "coin_cost": 91,
+          "cumulative_effect": 4.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 9,
+          "coin_cost": 99,
+          "cumulative_effect": 4.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 10,
+          "coin_cost": 108,
+          "cumulative_effect": 5.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 11,
+          "coin_cost": 118,
+          "cumulative_effect": 5.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 12,
+          "coin_cost": 129,
+          "cumulative_effect": 6.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 13,
+          "coin_cost": 140,
+          "cumulative_effect": 6.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 14,
+          "coin_cost": 153,
+          "cumulative_effect": 7.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 15,
+          "coin_cost": 167,
+          "cumulative_effect": 7.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 16,
+          "coin_cost": 182,
+          "cumulative_effect": 8.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 17,
+          "coin_cost": 198,
+          "cumulative_effect": 8.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 18,
+          "coin_cost": 216,
+          "cumulative_effect": 9.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 19,
+          "coin_cost": 235,
+          "cumulative_effect": 9.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 20,
+          "coin_cost": 257,
+          "cumulative_effect": 10.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 21,
+          "coin_cost": 280,
+          "cumulative_effect": 10.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 22,
+          "coin_cost": 305,
+          "cumulative_effect": 11.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 23,
+          "coin_cost": 332,
+          "cumulative_effect": 11.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 24,
+          "coin_cost": 362,
+          "cumulative_effect": 12.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 25,
+          "coin_cost": 395,
+          "cumulative_effect": 12.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 26,
+          "coin_cost": 431,
+          "cumulative_effect": 13.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 27,
+          "coin_cost": 469,
+          "cumulative_effect": 13.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 28,
+          "coin_cost": 512,
+          "cumulative_effect": 14.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 29,
+          "coin_cost": 558,
+          "cumulative_effect": 14.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 30,
+          "coin_cost": 608,
+          "cumulative_effect": 15.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 31,
+          "coin_cost": 663,
+          "cumulative_effect": 15.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 32,
+          "coin_cost": 723,
+          "cumulative_effect": 16.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 33,
+          "coin_cost": 788,
+          "cumulative_effect": 16.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 34,
+          "coin_cost": 859,
+          "cumulative_effect": 17.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 35,
+          "coin_cost": 936,
+          "cumulative_effect": 17.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 36,
+          "coin_cost": 1020,
+          "cumulative_effect": 18.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 37,
+          "coin_cost": 1112,
+          "cumulative_effect": 18.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 38,
+          "coin_cost": 1212,
+          "cumulative_effect": 19.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 39,
+          "coin_cost": 1321,
+          "cumulative_effect": 19.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 40,
+          "coin_cost": 1440,
+          "cumulative_effect": 20.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 41,
+          "coin_cost": 1570,
+          "cumulative_effect": 20.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 42,
+          "coin_cost": 1711,
+          "cumulative_effect": 21.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 43,
+          "coin_cost": 1865,
+          "cumulative_effect": 21.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 44,
+          "coin_cost": 2033,
+          "cumulative_effect": 22.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 45,
+          "coin_cost": 2216,
+          "cumulative_effect": 22.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 46,
+          "coin_cost": 2416,
+          "cumulative_effect": 23.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 47,
+          "coin_cost": 2633,
+          "cumulative_effect": 23.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 48,
+          "coin_cost": 2870,
+          "cumulative_effect": 24.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 49,
+          "coin_cost": 3129,
+          "cumulative_effect": 24.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 50,
+          "coin_cost": 3410,
+          "cumulative_effect": 25.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 51,
+          "coin_cost": 3717,
+          "cumulative_effect": 25.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 52,
+          "coin_cost": 4052,
+          "cumulative_effect": 26.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 53,
+          "coin_cost": 4417,
+          "cumulative_effect": 26.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 54,
+          "coin_cost": 4814,
+          "cumulative_effect": 27.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 55,
+          "coin_cost": 5248,
+          "cumulative_effect": 27.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 56,
+          "coin_cost": 5720,
+          "cumulative_effect": 28.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 57,
+          "coin_cost": 6235,
+          "cumulative_effect": 28.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 58,
+          "coin_cost": 6796,
+          "cumulative_effect": 29.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 59,
+          "coin_cost": 7408,
+          "cumulative_effect": 29.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 60,
+          "coin_cost": 8074,
+          "cumulative_effect": 30.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 61,
+          "coin_cost": 8801,
+          "cumulative_effect": 30.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 62,
+          "coin_cost": 9593,
+          "cumulative_effect": 31.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 63,
+          "coin_cost": 10457,
+          "cumulative_effect": 31.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 64,
+          "coin_cost": 11398,
+          "cumulative_effect": 32.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 65,
+          "coin_cost": 12424,
+          "cumulative_effect": 32.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 66,
+          "coin_cost": 13542,
+          "cumulative_effect": 33.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 67,
+          "coin_cost": 14761,
+          "cumulative_effect": 33.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 68,
+          "coin_cost": 16089,
+          "cumulative_effect": 34.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 69,
+          "coin_cost": 17537,
+          "cumulative_effect": 34.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 70,
+          "coin_cost": 19116,
+          "cumulative_effect": 35.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 71,
+          "coin_cost": 20836,
+          "cumulative_effect": 35.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 72,
+          "coin_cost": 22711,
+          "cumulative_effect": 36.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 73,
+          "coin_cost": 24755,
+          "cumulative_effect": 36.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 74,
+          "coin_cost": 26983,
+          "cumulative_effect": 37.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 75,
+          "coin_cost": 29412,
+          "cumulative_effect": 37.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 76,
+          "coin_cost": 32059,
+          "cumulative_effect": 38.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 77,
+          "coin_cost": 34944,
+          "cumulative_effect": 38.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 78,
+          "coin_cost": 38089,
+          "cumulative_effect": 39.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 79,
+          "coin_cost": 41518,
+          "cumulative_effect": 39.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 80,
+          "coin_cost": 45254,
+          "cumulative_effect": 40.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 81,
+          "coin_cost": 49327,
+          "cumulative_effect": 40.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 82,
+          "coin_cost": 53767,
+          "cumulative_effect": 41.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 83,
+          "coin_cost": 58606,
+          "cumulative_effect": 41.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 84,
+          "coin_cost": 63880,
+          "cumulative_effect": 42.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 85,
+          "coin_cost": 69629,
+          "cumulative_effect": 42.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 86,
+          "coin_cost": 75896,
+          "cumulative_effect": 43.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 87,
+          "coin_cost": 82727,
+          "cumulative_effect": 43.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 88,
+          "coin_cost": 90172,
+          "cumulative_effect": 44.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 89,
+          "coin_cost": 98288,
+          "cumulative_effect": 44.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 90,
+          "coin_cost": 107134,
+          "cumulative_effect": 45.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 91,
+          "coin_cost": 116776,
+          "cumulative_effect": 45.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 92,
+          "coin_cost": 127286,
+          "cumulative_effect": 46.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 93,
+          "coin_cost": 138741,
+          "cumulative_effect": 46.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 94,
+          "coin_cost": 151228,
+          "cumulative_effect": 47.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 95,
+          "coin_cost": 164839,
+          "cumulative_effect": 47.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 96,
+          "coin_cost": 179674,
+          "cumulative_effect": 48.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 97,
+          "coin_cost": 195845,
+          "cumulative_effect": 48.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 98,
+          "coin_cost": 213471,
+          "cumulative_effect": 49.0,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 99,
+          "coin_cost": 232684,
+          "cumulative_effect": 49.5,
+          "effect_delta": 0.5
+        },
+        {
+          "level": 100,
+          "coin_cost": 253625,
+          "cumulative_effect": 50.0,
+          "effect_delta": 0.5
+        }
+      ]
+    },
+    {
+      "id": "coins_per_wave",
+      "name": "Coins / Wave",
+      "category": "utility",
+      "effect_unit": "coins",
+      "effect_type": "additive",
+      "base_value": 0.0,
+      "max_level": 100,
+      "display_order": 17,
+      "levels": [
+        {
+          "level": 1,
+          "coin_cost": 40,
+          "cumulative_effect": 2.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 2,
+          "coin_cost": 43,
+          "cumulative_effect": 4.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 3,
+          "coin_cost": 47,
+          "cumulative_effect": 6.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 4,
+          "coin_cost": 51,
+          "cumulative_effect": 8.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 5,
+          "coin_cost": 56,
+          "cumulative_effect": 10.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 6,
+          "coin_cost": 61,
+          "cumulative_effect": 12.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 7,
+          "coin_cost": 67,
+          "cumulative_effect": 14.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 8,
+          "coin_cost": 73,
+          "cumulative_effect": 16.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 9,
+          "coin_cost": 79,
+          "cumulative_effect": 18.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 10,
+          "coin_cost": 86,
+          "cumulative_effect": 20.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 11,
+          "coin_cost": 94,
+          "cumulative_effect": 22.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 12,
+          "coin_cost": 103,
+          "cumulative_effect": 24.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 13,
+          "coin_cost": 112,
+          "cumulative_effect": 26.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 14,
+          "coin_cost": 122,
+          "cumulative_effect": 28.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 15,
+          "coin_cost": 133,
+          "cumulative_effect": 30.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 16,
+          "coin_cost": 145,
+          "cumulative_effect": 32.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 17,
+          "coin_cost": 158,
+          "cumulative_effect": 34.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 18,
+          "coin_cost": 173,
+          "cumulative_effect": 36.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 19,
+          "coin_cost": 188,
+          "cumulative_effect": 38.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 20,
+          "coin_cost": 205,
+          "cumulative_effect": 40.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 21,
+          "coin_cost": 224,
+          "cumulative_effect": 42.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 22,
+          "coin_cost": 244,
+          "cumulative_effect": 44.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 23,
+          "coin_cost": 266,
+          "cumulative_effect": 46.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 24,
+          "coin_cost": 290,
+          "cumulative_effect": 48.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 25,
+          "coin_cost": 316,
+          "cumulative_effect": 50.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 26,
+          "coin_cost": 344,
+          "cumulative_effect": 52.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 27,
+          "coin_cost": 375,
+          "cumulative_effect": 54.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 28,
+          "coin_cost": 409,
+          "cumulative_effect": 56.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 29,
+          "coin_cost": 446,
+          "cumulative_effect": 58.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 30,
+          "coin_cost": 486,
+          "cumulative_effect": 60.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 31,
+          "coin_cost": 530,
+          "cumulative_effect": 62.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 32,
+          "coin_cost": 578,
+          "cumulative_effect": 64.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 33,
+          "coin_cost": 630,
+          "cumulative_effect": 66.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 34,
+          "coin_cost": 687,
+          "cumulative_effect": 68.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 35,
+          "coin_cost": 749,
+          "cumulative_effect": 70.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 36,
+          "coin_cost": 816,
+          "cumulative_effect": 72.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 37,
+          "coin_cost": 890,
+          "cumulative_effect": 74.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 38,
+          "coin_cost": 970,
+          "cumulative_effect": 76.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 39,
+          "coin_cost": 1057,
+          "cumulative_effect": 78.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 40,
+          "coin_cost": 1152,
+          "cumulative_effect": 80.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 41,
+          "coin_cost": 1256,
+          "cumulative_effect": 82.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 42,
+          "coin_cost": 1369,
+          "cumulative_effect": 84.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 43,
+          "coin_cost": 1492,
+          "cumulative_effect": 86.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 44,
+          "coin_cost": 1627,
+          "cumulative_effect": 88.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 45,
+          "coin_cost": 1773,
+          "cumulative_effect": 90.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 46,
+          "coin_cost": 1933,
+          "cumulative_effect": 92.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 47,
+          "coin_cost": 2107,
+          "cumulative_effect": 94.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 48,
+          "coin_cost": 2296,
+          "cumulative_effect": 96.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 49,
+          "coin_cost": 2503,
+          "cumulative_effect": 98.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 50,
+          "coin_cost": 2728,
+          "cumulative_effect": 100.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 51,
+          "coin_cost": 2974,
+          "cumulative_effect": 102.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 52,
+          "coin_cost": 3241,
+          "cumulative_effect": 104.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 53,
+          "coin_cost": 3533,
+          "cumulative_effect": 106.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 54,
+          "coin_cost": 3851,
+          "cumulative_effect": 108.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 55,
+          "coin_cost": 4198,
+          "cumulative_effect": 110.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 56,
+          "coin_cost": 4576,
+          "cumulative_effect": 112.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 57,
+          "coin_cost": 4988,
+          "cumulative_effect": 114.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 58,
+          "coin_cost": 5437,
+          "cumulative_effect": 116.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 59,
+          "coin_cost": 5926,
+          "cumulative_effect": 118.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 60,
+          "coin_cost": 6459,
+          "cumulative_effect": 120.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 61,
+          "coin_cost": 7041,
+          "cumulative_effect": 122.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 62,
+          "coin_cost": 7674,
+          "cumulative_effect": 124.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 63,
+          "coin_cost": 8365,
+          "cumulative_effect": 126.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 64,
+          "coin_cost": 9118,
+          "cumulative_effect": 128.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 65,
+          "coin_cost": 9939,
+          "cumulative_effect": 130.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 66,
+          "coin_cost": 10833,
+          "cumulative_effect": 132.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 67,
+          "coin_cost": 11808,
+          "cumulative_effect": 134.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 68,
+          "coin_cost": 12871,
+          "cumulative_effect": 136.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 69,
+          "coin_cost": 14030,
+          "cumulative_effect": 138.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 70,
+          "coin_cost": 15292,
+          "cumulative_effect": 140.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 71,
+          "coin_cost": 16669,
+          "cumulative_effect": 142.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 72,
+          "coin_cost": 18169,
+          "cumulative_effect": 144.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 73,
+          "coin_cost": 19804,
+          "cumulative_effect": 146.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 74,
+          "coin_cost": 21587,
+          "cumulative_effect": 148.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 75,
+          "coin_cost": 23529,
+          "cumulative_effect": 150.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 76,
+          "coin_cost": 25647,
+          "cumulative_effect": 152.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 77,
+          "coin_cost": 27955,
+          "cumulative_effect": 154.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 78,
+          "coin_cost": 30471,
+          "cumulative_effect": 156.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 79,
+          "coin_cost": 33214,
+          "cumulative_effect": 158.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 80,
+          "coin_cost": 36203,
+          "cumulative_effect": 160.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 81,
+          "coin_cost": 39462,
+          "cumulative_effect": 162.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 82,
+          "coin_cost": 43013,
+          "cumulative_effect": 164.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 83,
+          "coin_cost": 46884,
+          "cumulative_effect": 166.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 84,
+          "coin_cost": 51104,
+          "cumulative_effect": 168.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 85,
+          "coin_cost": 55703,
+          "cumulative_effect": 170.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 86,
+          "coin_cost": 60717,
+          "cumulative_effect": 172.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 87,
+          "coin_cost": 66181,
+          "cumulative_effect": 174.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 88,
+          "coin_cost": 72138,
+          "cumulative_effect": 176.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 89,
+          "coin_cost": 78630,
+          "cumulative_effect": 178.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 90,
+          "coin_cost": 85707,
+          "cumulative_effect": 180.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 91,
+          "coin_cost": 93421,
+          "cumulative_effect": 182.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 92,
+          "coin_cost": 101828,
+          "cumulative_effect": 184.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 93,
+          "coin_cost": 110993,
+          "cumulative_effect": 186.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 94,
+          "coin_cost": 120982,
+          "cumulative_effect": 188.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 95,
+          "coin_cost": 131871,
+          "cumulative_effect": 190.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 96,
+          "coin_cost": 143739,
+          "cumulative_effect": 192.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 97,
+          "coin_cost": 156676,
+          "cumulative_effect": 194.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 98,
+          "coin_cost": 170777,
+          "cumulative_effect": 196.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 99,
+          "coin_cost": 186147,
+          "cumulative_effect": 198.0,
+          "effect_delta": 2.0
+        },
+        {
+          "level": 100,
+          "coin_cost": 202900,
+          "cumulative_effect": 200.0,
+          "effect_delta": 2.0
+        }
+      ]
+    },
+    {
+      "id": "interest_per_wave",
+      "name": "Interest / Wave",
+      "category": "utility",
+      "effect_unit": "%",
+      "effect_type": "additive",
+      "base_value": 0.0,
+      "max_level": 99,
+      "display_order": 18,
+      "levels": [
+        {
+          "level": 1,
+          "coin_cost": 125,
+          "cumulative_effect": 0.06,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 2,
+          "coin_cost": 140,
+          "cumulative_effect": 0.12,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 3,
+          "coin_cost": 156,
+          "cumulative_effect": 0.18,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 4,
+          "coin_cost": 175,
+          "cumulative_effect": 0.24,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 5,
+          "coin_cost": 196,
+          "cumulative_effect": 0.3,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 6,
+          "coin_cost": 220,
+          "cumulative_effect": 0.36,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 7,
+          "coin_cost": 246,
+          "cumulative_effect": 0.42,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 8,
+          "coin_cost": 276,
+          "cumulative_effect": 0.48,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 9,
+          "coin_cost": 309,
+          "cumulative_effect": 0.54,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 10,
+          "coin_cost": 346,
+          "cumulative_effect": 0.6,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 11,
+          "coin_cost": 388,
+          "cumulative_effect": 0.66,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 12,
+          "coin_cost": 434,
+          "cumulative_effect": 0.72,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 13,
+          "coin_cost": 486,
+          "cumulative_effect": 0.78,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 14,
+          "coin_cost": 545,
+          "cumulative_effect": 0.84,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 15,
+          "coin_cost": 610,
+          "cumulative_effect": 0.9,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 16,
+          "coin_cost": 684,
+          "cumulative_effect": 0.96,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 17,
+          "coin_cost": 766,
+          "cumulative_effect": 1.02,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 18,
+          "coin_cost": 858,
+          "cumulative_effect": 1.08,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 19,
+          "coin_cost": 961,
+          "cumulative_effect": 1.14,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 20,
+          "coin_cost": 1076,
+          "cumulative_effect": 1.2,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 21,
+          "coin_cost": 1205,
+          "cumulative_effect": 1.26,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 22,
+          "coin_cost": 1350,
+          "cumulative_effect": 1.32,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 23,
+          "coin_cost": 1512,
+          "cumulative_effect": 1.38,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 24,
+          "coin_cost": 1694,
+          "cumulative_effect": 1.44,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 25,
+          "coin_cost": 1897,
+          "cumulative_effect": 1.5,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 26,
+          "coin_cost": 2125,
+          "cumulative_effect": 1.56,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 27,
+          "coin_cost": 2380,
+          "cumulative_effect": 1.62,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 28,
+          "coin_cost": 2665,
+          "cumulative_effect": 1.68,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 29,
+          "coin_cost": 2985,
+          "cumulative_effect": 1.74,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 30,
+          "coin_cost": 3343,
+          "cumulative_effect": 1.8,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 31,
+          "coin_cost": 3744,
+          "cumulative_effect": 1.86,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 32,
+          "coin_cost": 4194,
+          "cumulative_effect": 1.92,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 33,
+          "coin_cost": 4697,
+          "cumulative_effect": 1.98,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 34,
+          "coin_cost": 5261,
+          "cumulative_effect": 2.04,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 35,
+          "coin_cost": 5892,
+          "cumulative_effect": 2.1,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 36,
+          "coin_cost": 6599,
+          "cumulative_effect": 2.16,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 37,
+          "coin_cost": 7391,
+          "cumulative_effect": 2.22,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 38,
+          "coin_cost": 8278,
+          "cumulative_effect": 2.28,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 39,
+          "coin_cost": 9272,
+          "cumulative_effect": 2.34,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 40,
+          "coin_cost": 10385,
+          "cumulative_effect": 2.4,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 41,
+          "coin_cost": 11631,
+          "cumulative_effect": 2.46,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 42,
+          "coin_cost": 13027,
+          "cumulative_effect": 2.52,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 43,
+          "coin_cost": 14590,
+          "cumulative_effect": 2.58,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 44,
+          "coin_cost": 16341,
+          "cumulative_effect": 2.64,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 45,
+          "coin_cost": 18302,
+          "cumulative_effect": 2.7,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 46,
+          "coin_cost": 20498,
+          "cumulative_effect": 2.76,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 47,
+          "coin_cost": 22958,
+          "cumulative_effect": 2.82,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 48,
+          "coin_cost": 25713,
+          "cumulative_effect": 2.88,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 49,
+          "coin_cost": 28798,
+          "cumulative_effect": 2.94,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 50,
+          "coin_cost": 32254,
+          "cumulative_effect": 3.0,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 51,
+          "coin_cost": 36125,
+          "cumulative_effect": 3.06,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 52,
+          "coin_cost": 40460,
+          "cumulative_effect": 3.12,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 53,
+          "coin_cost": 45315,
+          "cumulative_effect": 3.18,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 54,
+          "coin_cost": 50753,
+          "cumulative_effect": 3.24,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 55,
+          "coin_cost": 56843,
+          "cumulative_effect": 3.3,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 56,
+          "coin_cost": 63665,
+          "cumulative_effect": 3.36,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 57,
+          "coin_cost": 71304,
+          "cumulative_effect": 3.42,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 58,
+          "coin_cost": 79861,
+          "cumulative_effect": 3.48,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 59,
+          "coin_cost": 89444,
+          "cumulative_effect": 3.54,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 60,
+          "coin_cost": 100178,
+          "cumulative_effect": 3.6,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 61,
+          "coin_cost": 112199,
+          "cumulative_effect": 3.66,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 62,
+          "coin_cost": 125663,
+          "cumulative_effect": 3.72,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 63,
+          "coin_cost": 140743,
+          "cumulative_effect": 3.78,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 64,
+          "coin_cost": 157632,
+          "cumulative_effect": 3.84,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 65,
+          "coin_cost": 176548,
+          "cumulative_effect": 3.9,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 66,
+          "coin_cost": 197734,
+          "cumulative_effect": 3.96,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 67,
+          "coin_cost": 221462,
+          "cumulative_effect": 4.02,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 68,
+          "coin_cost": 248037,
+          "cumulative_effect": 4.08,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 69,
+          "coin_cost": 277802,
+          "cumulative_effect": 4.14,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 70,
+          "coin_cost": 311138,
+          "cumulative_effect": 4.2,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 71,
+          "coin_cost": 348474,
+          "cumulative_effect": 4.26,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 72,
+          "coin_cost": 390291,
+          "cumulative_effect": 4.32,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 73,
+          "coin_cost": 437127,
+          "cumulative_effect": 4.38,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 74,
+          "coin_cost": 489582,
+          "cumulative_effect": 4.44,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 75,
+          "coin_cost": 548332,
+          "cumulative_effect": 4.5,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 76,
+          "coin_cost": 614131,
+          "cumulative_effect": 4.56,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 77,
+          "coin_cost": 687827,
+          "cumulative_effect": 4.62,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 78,
+          "coin_cost": 770367,
+          "cumulative_effect": 4.68,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 79,
+          "coin_cost": 862811,
+          "cumulative_effect": 4.74,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 80,
+          "coin_cost": 966348,
+          "cumulative_effect": 4.8,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 81,
+          "coin_cost": 1082310,
+          "cumulative_effect": 4.86,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 82,
+          "coin_cost": 1212187,
+          "cumulative_effect": 4.92,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 83,
+          "coin_cost": 1357650,
+          "cumulative_effect": 4.98,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 84,
+          "coin_cost": 1520568,
+          "cumulative_effect": 5.04,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 85,
+          "coin_cost": 1703036,
+          "cumulative_effect": 5.1,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 86,
+          "coin_cost": 1907400,
+          "cumulative_effect": 5.16,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 87,
+          "coin_cost": 2136288,
+          "cumulative_effect": 5.22,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 88,
+          "coin_cost": 2392643,
+          "cumulative_effect": 5.28,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 89,
+          "coin_cost": 2679760,
+          "cumulative_effect": 5.34,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 90,
+          "coin_cost": 3001331,
+          "cumulative_effect": 5.4,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 91,
+          "coin_cost": 3361491,
+          "cumulative_effect": 5.46,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 92,
+          "coin_cost": 3764870,
+          "cumulative_effect": 5.52,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 93,
+          "coin_cost": 4216655,
+          "cumulative_effect": 5.58,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 94,
+          "coin_cost": 4722653,
+          "cumulative_effect": 5.64,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 95,
+          "coin_cost": 5289372,
+          "cumulative_effect": 5.7,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 96,
+          "coin_cost": 5924097,
+          "cumulative_effect": 5.76,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 97,
+          "coin_cost": 6634988,
+          "cumulative_effect": 5.82,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 98,
+          "coin_cost": 7431187,
+          "cumulative_effect": 5.88,
+          "effect_delta": 0.06
+        },
+        {
+          "level": 99,
+          "coin_cost": 8322929,
+          "cumulative_effect": 5.94,
+          "effect_delta": 0.06
+        }
+      ]
+    },
+    {
+      "id": "free_attack_upgrade",
+      "name": "Free Attack Upgrade",
+      "category": "utility",
+      "effect_unit": "count",
+      "effect_type": "additive",
+      "base_value": 0.0,
+      "max_level": 20,
+      "display_order": 19,
+      "levels": [
+        {
+          "level": 1,
+          "coin_cost": 5000,
+          "cumulative_effect": 1.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 2,
+          "coin_cost": 7500,
+          "cumulative_effect": 2.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 3,
+          "coin_cost": 11250,
+          "cumulative_effect": 3.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 4,
+          "coin_cost": 16875,
+          "cumulative_effect": 4.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 5,
+          "coin_cost": 25312,
+          "cumulative_effect": 5.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 6,
+          "coin_cost": 37968,
+          "cumulative_effect": 6.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 7,
+          "coin_cost": 56953,
+          "cumulative_effect": 7.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 8,
+          "coin_cost": 85429,
+          "cumulative_effect": 8.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 9,
+          "coin_cost": 128144,
+          "cumulative_effect": 9.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 10,
+          "coin_cost": 192216,
+          "cumulative_effect": 10.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 11,
+          "coin_cost": 288325,
+          "cumulative_effect": 11.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 12,
+          "coin_cost": 432487,
+          "cumulative_effect": 12.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 13,
+          "coin_cost": 648731,
+          "cumulative_effect": 13.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 14,
+          "coin_cost": 973097,
+          "cumulative_effect": 14.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 15,
+          "coin_cost": 1459646,
+          "cumulative_effect": 15.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 16,
+          "coin_cost": 2189469,
+          "cumulative_effect": 16.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 17,
+          "coin_cost": 3284204,
+          "cumulative_effect": 17.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 18,
+          "coin_cost": 4926306,
+          "cumulative_effect": 18.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 19,
+          "coin_cost": 7389459,
+          "cumulative_effect": 19.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 20,
+          "coin_cost": 11084189,
+          "cumulative_effect": 20.0,
+          "effect_delta": 1.0
+        }
+      ]
+    },
+    {
+      "id": "free_defense_upgrade",
+      "name": "Free Defense Upgrade",
+      "category": "utility",
+      "effect_unit": "count",
+      "effect_type": "additive",
+      "base_value": 0.0,
+      "max_level": 20,
+      "display_order": 20,
+      "levels": [
+        {
+          "level": 1,
+          "coin_cost": 5000,
+          "cumulative_effect": 1.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 2,
+          "coin_cost": 7500,
+          "cumulative_effect": 2.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 3,
+          "coin_cost": 11250,
+          "cumulative_effect": 3.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 4,
+          "coin_cost": 16875,
+          "cumulative_effect": 4.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 5,
+          "coin_cost": 25312,
+          "cumulative_effect": 5.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 6,
+          "coin_cost": 37968,
+          "cumulative_effect": 6.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 7,
+          "coin_cost": 56953,
+          "cumulative_effect": 7.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 8,
+          "coin_cost": 85429,
+          "cumulative_effect": 8.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 9,
+          "coin_cost": 128144,
+          "cumulative_effect": 9.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 10,
+          "coin_cost": 192216,
+          "cumulative_effect": 10.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 11,
+          "coin_cost": 288325,
+          "cumulative_effect": 11.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 12,
+          "coin_cost": 432487,
+          "cumulative_effect": 12.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 13,
+          "coin_cost": 648731,
+          "cumulative_effect": 13.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 14,
+          "coin_cost": 973097,
+          "cumulative_effect": 14.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 15,
+          "coin_cost": 1459646,
+          "cumulative_effect": 15.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 16,
+          "coin_cost": 2189469,
+          "cumulative_effect": 16.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 17,
+          "coin_cost": 3284204,
+          "cumulative_effect": 17.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 18,
+          "coin_cost": 4926306,
+          "cumulative_effect": 18.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 19,
+          "coin_cost": 7389459,
+          "cumulative_effect": 19.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 20,
+          "coin_cost": 11084189,
+          "cumulative_effect": 20.0,
+          "effect_delta": 1.0
+        }
+      ]
+    },
+    {
+      "id": "free_utility_upgrade",
+      "name": "Free Utility Upgrade",
+      "category": "utility",
+      "effect_unit": "count",
+      "effect_type": "additive",
+      "base_value": 0.0,
+      "max_level": 20,
+      "display_order": 21,
+      "levels": [
+        {
+          "level": 1,
+          "coin_cost": 5000,
+          "cumulative_effect": 1.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 2,
+          "coin_cost": 7500,
+          "cumulative_effect": 2.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 3,
+          "coin_cost": 11250,
+          "cumulative_effect": 3.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 4,
+          "coin_cost": 16875,
+          "cumulative_effect": 4.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 5,
+          "coin_cost": 25312,
+          "cumulative_effect": 5.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 6,
+          "coin_cost": 37968,
+          "cumulative_effect": 6.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 7,
+          "coin_cost": 56953,
+          "cumulative_effect": 7.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 8,
+          "coin_cost": 85429,
+          "cumulative_effect": 8.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 9,
+          "coin_cost": 128144,
+          "cumulative_effect": 9.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 10,
+          "coin_cost": 192216,
+          "cumulative_effect": 10.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 11,
+          "coin_cost": 288325,
+          "cumulative_effect": 11.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 12,
+          "coin_cost": 432487,
+          "cumulative_effect": 12.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 13,
+          "coin_cost": 648731,
+          "cumulative_effect": 13.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 14,
+          "coin_cost": 973097,
+          "cumulative_effect": 14.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 15,
+          "coin_cost": 1459646,
+          "cumulative_effect": 15.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 16,
+          "coin_cost": 2189469,
+          "cumulative_effect": 16.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 17,
+          "coin_cost": 3284204,
+          "cumulative_effect": 17.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 18,
+          "coin_cost": 4926306,
+          "cumulative_effect": 18.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 19,
+          "coin_cost": 7389459,
+          "cumulative_effect": 19.0,
+          "effect_delta": 1.0
+        },
+        {
+          "level": 20,
+          "coin_cost": 11084189,
+          "cumulative_effect": 20.0,
+          "effect_delta": 1.0
         }
       ]
     }

@@ -17,9 +17,12 @@
            value="{{ profile.available_coins }}"
            hx-post="{{ url_for('update_coins', profile_id=profile.id) }}"
            hx-trigger="change, keyup[key=='Enter']"
-           hx-target="#coins-display"
-           hx-swap="innerHTML">
-    <span id="coins-display" class="coins-value">{{ profile.available_coins | commas }}</span>
+           hx-target="#coins-display-dashboard"
+           hx-swap="innerHTML"
+           hx-include="this"
+           hx-indicator="#coins-indicator-dashboard">
+    <span id="coins-display-dashboard" class="coins-value">{{ profile.available_coins | commas }}</span>
+    <span id="coins-indicator-dashboard" class="htmx-indicator" aria-hidden="true"></span>
   </div>
 </header>
 

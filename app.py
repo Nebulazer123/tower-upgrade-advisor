@@ -54,9 +54,62 @@ def _score_filter(value: float) -> str:
 # ---------------------------------------------------------------------------
 
 
+PAGES_PER_LEVEL_TABLE = 50
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.get("/data")
+def data():
+    """Data tab: view all upgrade levels per category (reference, no profile)."""
+    categories = _get_categories()
+    selected_category = request.args.get("category", categories[0] if categories else "")
+    if selected_category not in categories:
+        selected_category = categories[0] if categories else ""
+
+    upgrades = sorted(
+        _upgrades.get_by_category(selected_category),
+        key=lambda u: u.display_order,
+    )
+    selected_upgrade_id = request.args.get("upgrade", "")
+    upgrade = None
+    for u in upgrades:
+        if u.id == selected_upgrade_id:
+            upgrade = u
+            break
+    if upgrade is None and upgrades:
+        upgrade = upgrades[0]
+        selected_upgrade_id = upgrade.id
+
+    levels_page: list = []
+    total_pages = 1
+    page = 1
+    if upgrade:
+        try:
+            page = max(1, int(request.args.get("page", 1)))
+        except (ValueError, TypeError):
+            page = 1
+        total_levels = len(upgrade.levels)
+        total_pages = max(1, (total_levels + PAGES_PER_LEVEL_TABLE - 1) // PAGES_PER_LEVEL_TABLE)
+        page = min(page, total_pages)
+        start = (page - 1) * PAGES_PER_LEVEL_TABLE
+        end = start + PAGES_PER_LEVEL_TABLE
+        levels_page = upgrade.levels[start:end]
+
+    return render_template(
+        "data.html",
+        categories=categories,
+        selected_category=selected_category,
+        upgrades=upgrades,
+        selected_upgrade_id=selected_upgrade_id,
+        upgrade=upgrade,
+        levels_page=levels_page,
+        page=page,
+        total_pages=total_pages,
+    )
 
 
 @app.get("/")

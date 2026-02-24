@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Data — Tower Upgrade Advisor{% endblock %}
+
+{% block content %}
+<header class="page-header">
+  <h1>Upgrade Data</h1>
+  <p class="subtitle">All levels and costs by category (reference)</p>
+</header>
+
+<section class="card">
+  <div class="data-controls">
+    <div class="category-tabs">
+      {% for cat in categories %}
+      <a href="{{ url_for('data', category=cat, upgrade=selected_upgrade_id if selected_category == cat else '') }}"
+         class="tab {% if selected_category == cat %}tab-active tab-{{ cat }}{% endif %}">
+        {{ cat | capitalize }}
+      </a>
+      {% endfor %}
+    </div>
+
+    {% if upgrades %}
+    <div class="upgrade-select-wrap">
+      <label for="upgrade-select">Upgrade:</label>
+      <select id="upgrade-select" class="upgrade-select">
+        {% for u in upgrades %}
+        <option value="{{ u.id }}" {% if u.id == selected_upgrade_id %}selected{% endif %}>{{ u.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if upgrade %}
+  <div class="data-meta">
+    <span class="data-meta-item">{{ upgrade.name }}</span>
+    <span class="data-meta-item">{{ upgrade.effect_unit }}</span>
+    <span class="data-meta-item">Base: {{ upgrade.base_value }}</span>
+    <span class="data-meta-item">Max level: {{ upgrade.max_level }}</span>
+  </div>
+
+  <div class="upgrade-table-wrap">
+    <table class="upgrade-table data-table">
+      <thead>
+        <tr>
+          <th class="col-level">Level</th>
+          <th class="col-cost">Coin Cost</th>
+          <th class="col-current-effect">Cumulative Effect</th>
+          <th class="col-delta">Effect Delta</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for lvl in levels_page %}
+        <tr>
+          <td>{{ lvl.level }}</td>
+          <td class="mono">{{ lvl.coin_cost | commas }}</td>
+          <td class="mono">{{ lvl.cumulative_effect | commas }}</td>
+          <td class="mono">{{ lvl.effect_delta | commas }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if total_pages > 1 %}
+  <nav class="pagination" aria-label="Level table pages">
+    {% if page > 1 %}
+    <a href="{{ url_for('data', category=selected_category, upgrade=selected_upgrade_id, page=page - 1) }}"
+       class="btn btn-sm">Prev</a>
+    {% endif %}
+    <span class="pagination-info">Page {{ page }} of {{ total_pages }}</span>
+    {% if page < total_pages %}
+    <a href="{{ url_for('data', category=selected_category, upgrade=selected_upgrade_id, page=page + 1) }}"
+       class="btn btn-sm">Next</a>
+    {% endif %}
+  </nav>
+  {% endif %}
+  {% else %}
+  <p class="empty-state-text">No upgrade data available.</p>
+  {% endif %}
+</section>
+
+<script>
+(function() {
+  var select = document.getElementById('upgrade-select');
+  if (!select) return;
+  var category = '{{ selected_category }}';
+  select.addEventListener('change', function() {
+    window.location.href = '{{ url_for("data", category="CAT", upgrade="UPG") }}'
+      .replace('CAT', category)
+      .replace('UPG', this.value);
+  });
+})();
+</script>
+{% endblock %}

@@ -16,14 +16,16 @@
           <form class="level-form" hx-post="{{ url_for('update_level_recommend', profile_id=profile.id) }}"
                 hx-target="#recommendation-results"
                 hx-swap="innerHTML"
-                hx-vals='{"upgrade_id": "{{ top.upgrade_id }}"}'>
+                hx-vals='{"upgrade_id": "{{ top.upgrade_id }}"}'
+                hx-indicator="#rec-indicator">
             <input type="hidden" name="level" value="{{ top.current_level - 1 }}">
             <button type="submit" class="btn btn-sm level-btn" {% if top.current_level <= 0 %}disabled{% endif %} aria-label="Decrease level">&minus;</button>
           </form>
           <form class="level-form" hx-post="{{ url_for('update_level_recommend', profile_id=profile.id) }}"
                 hx-target="#recommendation-results"
                 hx-swap="innerHTML"
-                hx-vals='{"upgrade_id": "{{ top.upgrade_id }}"}'>
+                hx-vals='{"upgrade_id": "{{ top.upgrade_id }}"}'
+                hx-indicator="#rec-indicator">
             <input type="hidden" name="level" value="{{ top.current_level + 1 }}">
             <button type="submit" class="btn btn-sm level-btn" aria-label="Increase level">+</button>
           </form>
@@ -52,7 +54,7 @@
 </section>
 {% else %}
 <section class="card empty-state">
-  <p>All upgrades are maxed out. Nothing to recommend.</p>
+  <p class="empty-state-text">All upgrades are maxed out. Nothing to recommend.</p>
 </section>
 {% endif %}
 
@@ -84,14 +86,16 @@
               <form class="level-form" hx-post="{{ url_for('update_level_recommend', profile_id=profile.id) }}"
                     hx-target="#recommendation-results"
                     hx-swap="innerHTML"
-                    hx-vals='{"upgrade_id": "{{ r.upgrade_id }}"}'>
+                    hx-vals='{"upgrade_id": "{{ r.upgrade_id }}"}'
+                    hx-indicator="#rec-indicator">
                 <input type="hidden" name="level" value="{{ r.current_level - 1 }}">
                 <button type="submit" class="btn btn-sm level-btn" {% if r.current_level <= 0 %}disabled{% endif %} aria-label="Decrease level">&minus;</button>
               </form>
               <form class="level-form" hx-post="{{ url_for('update_level_recommend', profile_id=profile.id) }}"
                     hx-target="#recommendation-results"
                     hx-swap="innerHTML"
-                    hx-vals='{"upgrade_id": "{{ r.upgrade_id }}"}'>
+                    hx-vals='{"upgrade_id": "{{ r.upgrade_id }}"}'
+                    hx-indicator="#rec-indicator">
                 <input type="hidden" name="level" value="{{ r.current_level + 1 }}">
                 <button type="submit" class="btn btn-sm level-btn" aria-label="Increase level">+</button>
               </form>

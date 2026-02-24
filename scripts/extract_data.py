@@ -73,7 +73,7 @@ EXTRACT_ALL_JS = """
 """
 
 
-def scrape_all() -> dict:
+def scrape_all(*, headless: bool = True, quick: bool = False) -> dict:
     """Scrape all upgrade data from the Netlify calculator."""
     try:
         from playwright.sync_api import sync_playwright
@@ -86,7 +86,7 @@ def scrape_all() -> dict:
 
     with sync_playwright() as p:
         browser = p.chromium.launch(
-            headless=True,
+            headless=headless,
             args=["--ignore-certificate-errors"],
         )
         context = browser.new_context(ignore_https_errors=True)
@@ -126,7 +126,7 @@ def scrape_all() -> dict:
             print(f"\n--- Category: {category} ---", flush=True)
 
             page.locator(f'button:has-text("{category}")').click()
-            time.sleep(0.5)
+            time.sleep(1.5)  # Wait for table to update
 
             # Get all dropdown options via JS
             options = page.evaluate("""
@@ -142,37 +142,70 @@ def scrape_all() -> dict:
             print(f"  Found {len(options)} upgrades: "
                   f"{[o['text'] for o in options]}", flush=True)
 
-            for opt in options:
+            opts_to_scrape = options[:2] if quick else options
+            for opt in opts_to_scrape:
                 upgrade_name = opt["text"]
                 opt_value = opt["value"]
 
-                # Select upgrade
-                page.evaluate(f"""
-                    () => {{
-                        const sel = document.querySelector('select');
-                        sel.value = '{opt_value}';
-                        sel.dispatchEvent(new Event('change', {{bubbles: true}}));
-                    }}
-                """)
-                time.sleep(0.3)
+                try:
+                    # Select upgrade
+                    page.evaluate(f"""
+                        () => {{
+                            const sel = document.querySelector('select');
+                            sel.value = '{opt_value}';
+                            sel.dispatchEvent(new Event('change', {{bubbles: true}}));
+                        }}
+                    """)
+                    time.sleep(1.0)  # Wait for table to load
 
-                # Scrape ALL pages by collecting visible data then clicking Next
-                all_rows = _scrape_all_pages_fast(page)
+                    # Scrape ALL pages by collecting visible data then clicking Next
+                    all_rows = _scrape_all_pages_fast(page, quick=quick)
 
-                all_upgrades[f"{category}:{upgrade_name}"] = {
-                    "category": category.lower(),
-                    "name": upgrade_name,
-                    "rows": all_rows,
-                }
-                print(f"    {upgrade_name}: {len(all_rows)} levels", flush=True)
+                    all_upgrades[f"{category}:{upgrade_name}"] = {
+                        "category": category.lower(),
+                        "name": upgrade_name,
+                        "rows": all_rows,
+                    }
+                    print(f"    {upgrade_name}: {len(all_rows)} levels", flush=True)
+                    if len(all_rows) == 0:
+                        print(f"      WARNING: 0 rows - possible extraction bug", flush=True)
+                except Exception as e:
+                    print(f"    ERROR {upgrade_name}: {e}", flush=True)
+                    raw_path = RAW_DIR / "netlify_scraped_partial.json"
+                    raw_path.write_text(
+                        json.dumps(all_upgrades, indent=2, default=str), encoding="utf-8"
+                    )
+                    print(f"    Partial data saved to {raw_path}", flush=True)
+                    raise
 
         browser.close()
 
     return all_upgrades
 
 
-def _scrape_all_pages_fast(page) -> list[dict]:
-    """Scrape all pages quickly by clicking through Next rapidly."""
+def _is_valid_row(row: dict) -> bool:
+    """Reject corrupted rows (e.g. from wrong DOM elements, virtual scroll placeholders)."""
+    level = row.get("Level", row.get("level"))
+    if level is None:
+        return False
+    try:
+        level_f = float(level)
+    except (ValueError, TypeError):
+        return False
+    if level_f < 0 or level_f > 100000:
+        return False
+    # Reject if Value looks like garbage (obfuscation/custom font output)
+    val = row.get("Value", row.get("value", ""))
+    if isinstance(val, str) and len(val) > 30:
+        # Likely garbage if mostly non-numeric and has many special chars
+        alnum = sum(1 for c in val if c.isalnum() or c in ".,%-+eEK")
+        if alnum < len(val) * 0.3:
+            return False
+    return True
+
+
+def _scrape_all_pages_fast(page, *, quick: bool = False) -> list[dict]:
+    """Scrape all pages. Use innerText (rendered text) not textContent to avoid font/obfuscation issues."""
     all_rows: list[dict] = []
     seen_levels: set[float] = set()
 
@@ -183,19 +216,19 @@ def _scrape_all_pages_fast(page) -> list[dict]:
             if not prev.is_visible(timeout=500) or not prev.is_enabled():
                 break
             prev.click()
-            time.sleep(0.05)
+            time.sleep(0.1)
     except Exception:
         pass
 
-    for _ in range(500):
+    for _ in range(3 if quick else 500):
         rows = page.evaluate("""
             () => {
                 const table = document.querySelector('table');
                 if (!table) return [];
                 const headers = [];
                 const hr = table.querySelector('thead tr');
-                if (hr) hr.querySelectorAll('th').forEach(
-                    th => headers.push(th.textContent.trim())
+                if (hr) hr.querySelectorAll('th').forEach(th =>
+                    headers.push((th.innerText || th.textContent || '').trim())
                 );
                 const rows = [];
                 table.querySelectorAll('tbody tr').forEach(tr => {
@@ -203,11 +236,11 @@ def _scrape_all_pages_fast(page) -> list[dict]:
                     if (cells.length === 0) return;
                     const row = {};
                     cells.forEach((td, i) => {
-                        const text = td.textContent.trim();
-                        const cleaned = text.replace(/,/g, '');
+                        const text = (td.innerText || td.textContent || '').trim();
+                        const cleaned = text.replace(/,/g, '').replace(/\\$/g, '').replace(/%/g, '');
                         const num = parseFloat(cleaned);
                         const key = headers[i] || 'col_' + i;
-                        row[key] = isNaN(num) ? text : num;
+                        row[key] = (cleaned !== '' && !isNaN(num) && isFinite(num)) ? num : text;
                     });
                     rows.push(row);
                 });
@@ -219,9 +252,9 @@ def _scrape_all_pages_fast(page) -> list[dict]:
             break
 
         for row in rows:
-            level = row.get("Level", row.get("level"))
-            if level is None:
+            if not _is_valid_row(row):
                 continue
+            level = row.get("Level", row.get("level"))
             try:
                 level_f = float(level)
             except (ValueError, TypeError):
@@ -233,9 +266,9 @@ def _scrape_all_pages_fast(page) -> list[dict]:
         # Click Next
         try:
             nxt = page.locator('button:has-text("Next")')
-            if nxt.is_visible(timeout=300) and nxt.is_enabled():
+            if nxt.is_visible(timeout=1000) and nxt.is_enabled():
                 nxt.click()
-                time.sleep(0.05)
+                time.sleep(0.2)
             else:
                 break
         except Exception:
@@ -246,13 +279,34 @@ def _scrape_all_pages_fast(page) -> list[dict]:
 
 
 def main() -> None:
+    import argparse
+    parser = argparse.ArgumentParser(description="Scrape Tower Workshop Calculator")
+    parser.add_argument("--no-headless", action="store_true",
+                        help="Show browser window for debugging")
+    parser.add_argument("--quick", action="store_true",
+                        help="Quick test: only first 2 upgrades per category, 3 pages each")
+    args = parser.parse_args()
+
     print("Starting Netlify site scrape...", flush=True)
-    raw_data = scrape_all()
+    if args.no_headless:
+        print("(Browser visible for debugging)", flush=True)
+    raw_data = scrape_all(headless=not args.no_headless, quick=args.quick)
 
     raw_path = RAW_DIR / "netlify_scraped.json"
     raw_path.write_text(json.dumps(raw_data, indent=2, default=str), encoding="utf-8")
     print(f"\nRaw scraped data saved to {raw_path}", flush=True)
+    by_cat = {}
+    for k, v in raw_data.items():
+        cat = v.get("category", "unknown")
+        by_cat[cat] = by_cat.get(cat, 0) + 1
     print(f"Total upgrades scraped: {len(raw_data)}", flush=True)
+    print(f"  By category: {by_cat}", flush=True)
+    for k, v in raw_data.items():
+        n = len(v.get("rows", []))
+        if n == 0:
+            print(f"  WARNING: {k} has 0 rows!", flush=True)
+        elif n < 100:
+            print(f"  WARNING: {k} has only {n} rows (expected 100+)", flush=True)
 
 
 if __name__ == "__main__":

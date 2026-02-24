@@ -6,6 +6,7 @@
 <section class="hero">
   <h1>Tower Upgrade Advisor</h1>
   <p class="subtitle">Find the best next permanent upgrade for your coins</p>
+  <span class="hero-accent"></span>
 </section>
 
 <section class="card">
@@ -26,6 +27,7 @@
         <a href="{{ url_for('dashboard', profile_id=p.id) }}" class="profile-name">{{ p.name }}</a>
         <span class="profile-meta">
           {{ p.available_coins | commas }} coins &middot;
+          created {{ p.created_at.strftime('%b %d') }} &middot;
           updated {{ p.updated_at.strftime('%b %d, %Y') }}
         </span>
       </div>
@@ -42,7 +44,7 @@
 </section>
 {% else %}
 <section class="card empty-state">
-  <p>No profiles yet. Create one above to get started.</p>
+  <p class="empty-state-text">No profiles yet. Create one above to get started.</p>
 </section>
 {% endif %}
 {% endblock %}

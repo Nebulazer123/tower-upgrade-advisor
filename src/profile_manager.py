@@ -178,11 +178,11 @@ class ProfileManager:
         return backup_path
 
     def _save(self, profile: Profile) -> None:
-        """Atomic write: write to .tmp then rename."""
+        """Atomic write: write to .tmp then replace. Works on Windows when target exists."""
         path = self._path_for(profile.id)
         tmp = path.with_suffix(".tmp")
         tmp.write_text(
             profile.model_dump_json(indent=2),
             encoding="utf-8",
         )
-        tmp.rename(path)
+        tmp.replace(path)  # Atomic on Unix; replaces existing file on Windows
