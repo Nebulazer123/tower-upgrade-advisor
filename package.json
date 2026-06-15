@@ -7,6 +7,7 @@
     "scrape:v2": "node scripts/scrape_tower_calculator_v2.js"
   },
   "dependencies": {
-    "playwright": "^1.40.0"
+    "htmx.org": "^2.0.10",
+    "playwright": "^1.60.0"
   }
 }

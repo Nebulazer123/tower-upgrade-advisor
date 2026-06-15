@@ -93,7 +93,7 @@ make check
 | 4 | 3-tier extraction (network → bundle → DOM) | Highest fidelity first, DOM as fallback |
 | 5 | pytest at 85% coverage | Meaningful without being wasteful |
 | 6 | One JSON file per profile | Simple atomic writes, CRUD via Flask |
-| 7 | Categories: offense, defense, economy, utility | Four values; `for_category()` falls back to 1.0 |
+| 7 | Categories: attack, defense, utility | Matches the public workshop selector; `for_category()` falls back to 1.0 |
 | 8 | Effect monotonicity = warning, cost monotonicity = hard error | Per game context doc §10 |
 | 9 | Profile tags are free-form strings | User's own vocabulary, no schema update needed |
 

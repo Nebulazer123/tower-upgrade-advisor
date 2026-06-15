@@ -1,0 +1,11 @@
+<svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Tower Upgrade Advisor logo</title>
+  <desc id="desc">A stylized tower with an upgrade arrow and teal highlight.</desc>
+  <rect width="160" height="160" rx="32" fill="#0a0c10"/>
+  <path d="M48 128h64V64L80 32 48 64v64Z" fill="#f8fafc"/>
+  <path d="M64 128V74h32v54H64Z" fill="#cbd5e1"/>
+  <path d="M61 68h38L80 49 61 68Z" fill="#2dd4bf"/>
+  <path d="M38 132h84" stroke="#e5e7eb" stroke-width="10" stroke-linecap="round"/>
+  <path d="M104 42h22v22" fill="none" stroke="#f59e0b" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M124 44 94 74" stroke="#f59e0b" stroke-width="10" stroke-linecap="round"/>
+</svg>

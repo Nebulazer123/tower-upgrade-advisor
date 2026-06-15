@@ -5,15 +5,63 @@
 {% block content %}
 <section class="hero">
   <h1>Tower Upgrade Advisor</h1>
-  <p class="subtitle">Find the best next permanent upgrade for your coins</p>
+  <p class="subtitle">Find the best next permanent workshop upgrade for your coins</p>
   <span class="hero-accent"></span>
+</section>
+
+<section class="insight-grid" aria-label="Project status">
+  <div class="insight-tile">
+    <span class="insight-label">Loaded data</span>
+    <strong>{{ data_coverage.loaded }}/{{ data_coverage.expected }}</strong>
+    <span class="insight-note">public workshop upgrades</span>
+  </div>
+  <div class="insight-tile">
+    <span class="insight-label">Scoring</span>
+    <strong>2 modes</strong>
+    <span class="insight-note">weighted plus reference DPS check</span>
+  </div>
+  <div class="insight-tile">
+    <span class="insight-label">References</span>
+    <strong>Public</strong>
+    <span class="insight-note">
+      <a href="{{ reference_links.workshop }}">workshop</a> and
+      <a href="{{ reference_links.lab }}">lab</a> calculators
+    </span>
+  </div>
+</section>
+
+{% if not data_coverage.complete %}
+<section class="notice notice-warn">
+  <strong>Data coverage is partial.</strong>
+  Recommendations are fully validated for the bundled {{ data_coverage.loaded }} upgrades, but
+  the public workshop reference exposes {{ data_coverage.expected }} upgrades. Run the coverage
+  verifier before treating this as a complete game dataset.
+</section>
+{% endif %}
+
+<section class="coverage-panel" aria-label="Reference coverage by category">
+  {% for category in data_coverage.categories.values() %}
+  <article class="coverage-card coverage-card-{{ category.category }}">
+    <div>
+      <span class="insight-label">{{ category.label }}</span>
+      <strong>{{ category.loaded }}/{{ category.expected }}</strong>
+    </div>
+    {% if category.missing_names %}
+    <p>{{ category.missing }} missing: {{ category.missing_names | join(", ") }}</p>
+    {% else %}
+    <p>Complete against the public workshop selector.</p>
+    {% endif %}
+  </article>
+  {% endfor %}
 </section>
 
 <section class="card">
   <h2>Create New Profile</h2>
   <form method="post" action="{{ url_for('profile_new') }}" class="inline-form">
-    <input type="text" name="name" placeholder="Profile name…" required maxlength="50" autofocus>
-    <button type="submit" class="btn btn-primary">Create</button>
+    <label class="sr-only" for="profile-name">Profile Name</label>
+    <input id="profile-name" type="text" name="name" placeholder="Profile name…" required
+           maxlength="50" autocomplete="off">
+    <button type="submit" class="btn btn-primary">Create Profile</button>
   </form>
 </section>
 
@@ -27,8 +75,15 @@
         <a href="{{ url_for('dashboard', profile_id=p.id) }}" class="profile-name">{{ p.name }}</a>
         <span class="profile-meta">
           {{ p.available_coins | commas }} coins &middot;
-          created {{ p.created_at.strftime('%b %d') }} &middot;
-          updated {{ p.updated_at.strftime('%b %d, %Y') }}
+          created
+          <time datetime="{{ p.created_at | iso_datetime }}" data-date-format="short">
+            {{ p.created_at.date().isoformat() }}
+          </time>
+          &middot;
+          updated
+          <time datetime="{{ p.updated_at | iso_datetime }}" data-date-format="long">
+            {{ p.updated_at.date().isoformat() }}
+          </time>
         </span>
       </div>
       <div class="profile-actions">
@@ -47,4 +102,17 @@
   <p class="empty-state-text">No profiles yet. Create one above to get started.</p>
 </section>
 {% endif %}
+
+<script>
+(function() {
+  document.querySelectorAll('time[data-date-format]').forEach(function(node) {
+    var date = new Date(node.getAttribute('datetime'));
+    if (Number.isNaN(date.getTime())) return;
+    var format = node.getAttribute('data-date-format') === 'short'
+      ? { month: 'short', day: 'numeric' }
+      : { month: 'short', day: 'numeric', year: 'numeric' };
+    node.textContent = new Intl.DateTimeFormat(undefined, format).format(date);
+  });
+})();
+</script>
 {% endblock %}

@@ -5,6 +5,9 @@
       <input type="number" min="0" max="{{ row.upgrade.max_level }}"
              value="{{ row.current_level }}" class="level-input"
              name="level"
+             aria-label="{{ row.upgrade.name }} level"
+             inputmode="numeric"
+             autocomplete="off"
              hx-post="{{ url_for('update_level', profile_id=profile.id) }}"
              hx-vals='{"upgrade_id": "{{ row.upgrade.id }}"}'
              hx-trigger="change, keyup[key=='Enter']"
@@ -19,6 +22,6 @@
     {% if row.next_cost is not none %}{{ row.next_cost | commas }}{% else %}&mdash;{% endif %}
   </td>
   <td class="col-delta">
-    {% if row.next_delta is not none %}+{{ row.next_delta }}{% else %}&mdash;{% endif %}
+    {% if row.next_delta is not none %}{% if row.next_delta > 0 %}+{% endif %}{{ row.next_delta }}{% else %}&mdash;{% endif %}
   </td>
 </tr>

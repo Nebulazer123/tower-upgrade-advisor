@@ -3,28 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0c10">
   <title>{% block title %}Tower Upgrade Advisor{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+  <script src="{{ url_for('static', filename='vendor/htmx.min.js') }}"></script>
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to Content</a>
   <nav class="top-nav">
     <div class="nav-left">
       <a href="{{ url_for('index') }}" class="nav-brand">Tower Upgrade Advisor</a>
       <a href="{{ url_for('data') }}" class="nav-link">Data</a>
+      <span class="coverage-pill" title="Loaded workshop upgrades compared with the public workshop reference">
+        {{ data_coverage.loaded }}/{{ data_coverage.expected }} loaded · {{ data_coverage.percent }}%
+      </span>
     </div>
     {% block nav_right %}{% endblock %}
   </nav>
 
-  <main class="container">
+  <main id="main-content" class="container" tabindex="-1">
     {% block content %}{% endblock %}
   </main>
 
   <footer class="site-footer">
-    <p>Tower Upgrade Advisor &middot; The Tower idle game</p>
+    <p>
+      Tower Upgrade Advisor &middot;
+      <a href="{{ reference_links.workshop }}">Public workshop calculator</a> &middot;
+      <a href="{{ reference_links.lab }}">Public lab calculator</a> &middot;
+      <span>reference checked {{ data_coverage.verified_at }}</span>
+    </p>
   </footer>
 </body>
 </html>

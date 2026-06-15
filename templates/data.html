@@ -8,21 +8,46 @@
   <p class="subtitle">All levels and costs by category (reference)</p>
 </header>
 
+{% if not data_coverage.complete %}
+<section class="notice notice-warn">
+  <strong>Coverage check:</strong>
+  bundled data contains {{ data_coverage.loaded }} of {{ data_coverage.expected }} public workshop
+  upgrades. The missing rows are not guessed; use the scraper/coverage workflow to refresh them.
+</section>
+{% endif %}
+
+<section class="coverage-panel compact" aria-label="Missing public workshop upgrades">
+  {% for category in data_coverage.categories.values() %}
+  <article class="coverage-card coverage-card-{{ category.category }}">
+    <div>
+      <span class="insight-label">{{ category.label }}</span>
+      <strong>{{ category.loaded }}/{{ category.expected }}</strong>
+    </div>
+    {% if category.missing_names %}
+    <p>{{ category.missing_names | join(", ") }}</p>
+    {% else %}
+    <p>No missing upgrades in this category.</p>
+    {% endif %}
+  </article>
+  {% endfor %}
+</section>
+
 <section class="card">
   <div class="data-controls">
-    <div class="category-tabs">
+    <nav class="category-tabs" aria-label="Upgrade categories">
       {% for cat in categories %}
       <a href="{{ url_for('data', category=cat, upgrade=selected_upgrade_id if selected_category == cat else '') }}"
-         class="tab {% if selected_category == cat %}tab-active tab-{{ cat }}{% endif %}">
+         class="tab {% if selected_category == cat %}tab-active tab-{{ cat }}{% endif %}"
+         {% if selected_category == cat %}aria-current="page"{% endif %}>
         {{ cat | capitalize }}
       </a>
       {% endfor %}
-    </div>
+    </nav>
 
     {% if upgrades %}
     <div class="upgrade-select-wrap">
       <label for="upgrade-select">Upgrade:</label>
-      <select id="upgrade-select" class="upgrade-select">
+      <select id="upgrade-select" name="upgrade" class="upgrade-select" autocomplete="off">
         {% for u in upgrades %}
         <option value="{{ u.id }}" {% if u.id == selected_upgrade_id %}selected{% endif %}>{{ u.name }}</option>
         {% endfor %}
@@ -86,9 +111,10 @@
   if (!select) return;
   var category = '{{ selected_category }}';
   select.addEventListener('change', function() {
-    window.location.href = '{{ url_for("data", category="CAT", upgrade="UPG") }}'
-      .replace('CAT', category)
-      .replace('UPG', this.value);
+    var url = new URL('{{ url_for("data") }}', window.location.origin);
+    url.searchParams.set('category', category);
+    url.searchParams.set('upgrade', this.value);
+    window.location.href = url.pathname + url.search;
   });
 })();
 </script>

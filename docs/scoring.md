@@ -3,8 +3,8 @@
 ## APPROVED MODIFICATION (Phase 1 Approval)
 
 No hardcoded category weights as default "truth." Two scoring modes:
-1. **Reference-mode**: Replicate the reference tool's logic (if discoverable)
-2. **Balanced-mode**: User-adjustable weights via 3 sliders (Economy/Offense/Defense)
+1. **Reference-mode**: Replicate the reference tool's logic where a public source is available.
+2. **Balanced-mode**: User-adjustable weights via 3 sliders (Attack/Defense/Utility)
 
 If reference logic is NOT discovered, the UI shows:
 - Best next upgrade **per category** (no cross-category comparison needed)
@@ -38,9 +38,9 @@ No cross-category weights needed. Returns one recommendation per category.
 ### Mode 2: Balanced Mode (User-Adjustable Sliders)
 
 Three sliders control relative priority:
-- **Economy** (0.0 - 2.0, default 1.0): Coins per Kill, Coins per Wave, Interest, etc.
-- **Offense** (0.0 - 2.0, default 1.0): Damage, Attack Speed, Critical Chance, etc.
+- **Attack** (0.0 - 2.0, default 1.0): Damage, Attack Speed, Critical Chance, etc.
 - **Defense** (0.0 - 2.0, default 1.0): Health, Health Regen, Defense %, etc.
+- **Utility** (0.0 - 2.0, default 1.0): Cash, coins, recovery packages, level skip, etc.
 
 Slider defaults are 1.0 (equal priority) and are **always visible** so the user knows what weights produced the recommendation.
 
@@ -48,12 +48,23 @@ Slider defaults are 1.0 (equal priority) and are **always visible** so the user 
 score(upgrade) = marginal_benefit(upgrade) / cost(upgrade) * slider_weight(category)
 ```
 
-### Mode 3: Reference Mode (If Discoverable)
+### Mode 3: Reference Mode
 
-If we can reverse-engineer the reference tool's scoring:
-- Implement as a separate `ScoringEngine`
-- Clearly labeled as "Reference tool logic"
-- Show side-by-side with balanced mode if desired
+Implemented as `ReferenceEngine`.
+
+- Attack upgrades are ranked by DPS increase per coin, ported from the public source at https://github.com/jacoelt/tower-calculator.
+- Defense and utility upgrades fall back to marginal benefit per coin because the public attack-DPS model does not provide equivalent cross-category simulation.
+- The recommendation page shows this as a "Reference Check" next to the weighted balanced controls.
+- Lab multipliers are loaded from `data/lab_research.json` and applied to the attack stats supported by the public source model.
+
+Reference assumptions from the public source:
+
+- DPS is calculated for an optimal number of valid targets.
+- Bounce Shot Range is assumed high enough for all bounces.
+- Multishot is assumed to fire the maximum number of shots.
+- Rapid Fire can only trigger from normal bullets.
+- Damage per meter is ignored by design.
+- Rapid Fire duration is fixed at 1 second.
 
 ### Core Formulas
 
@@ -64,6 +75,7 @@ For any upgrade:
 - `current_effect = upgrades[upgrade_id].levels[current_level].cumulative_effect` (or base value if level 0)
 - `next_effect = upgrades[upgrade_id].levels[next_level].cumulative_effect`
 - `marginal_benefit = next_effect - current_effect`
+- For lower-is-better upgrades (`shockwave_frequency`, `wall_rebuild`), `marginal_benefit = current_effect - next_effect`
 
 ### Base Values (Level 0)
 | Effect Type | Base Value |
@@ -90,7 +102,7 @@ Recommendation #1: {upgrade_name} (level {current} → {next})
   Effect:           {current_effect} → {next_effect} ({effect_unit})
   Marginal Benefit: {marginal_benefit}
   Mode:             {per_category | balanced | reference}
-  Weights:          Economy={e} Offense={o} Defense={d}  (shown only in balanced mode)
+  Weights:          Attack={a} Defense={d} Utility={u}  (shown only in balanced mode)
   Score:            {formula_used} = {score}
   Affordable:       {yes/no} (you have {available_coins:,} coins)
 ```

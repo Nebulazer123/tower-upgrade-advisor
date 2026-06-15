@@ -159,16 +159,12 @@ After extraction, check what category names the data actually uses.
 
 **Current code:**
 ```python
-category: Literal["offense", "defense", "economy", "utility"]
+category: Literal["attack", "defense", "utility"]
 ```
 
-**User says categories are:** attack, defense, utility
+**Extracted categories:** attack, defense, utility
 
-**Action:** Update the Literal in `src/models.py` to match extracted data. Also update:
-- `ScoringWeights` field names (if changing from offense→attack, economy→utility)
-- `docs/decisions.md` Decision 7
-- `tests/fixtures/test_upgrades.json` fixture data
-- All test assertions that reference category names
+**Action:** Keep the Literal, `ScoringWeights`, `docs/decisions.md`, fixtures, and tests aligned with the extracted category names.
 
 ---
 

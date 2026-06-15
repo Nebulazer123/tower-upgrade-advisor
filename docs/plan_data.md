@@ -135,10 +135,10 @@ However, I'll implement Playwright extraction as the first attempt per the brief
 - [ ] Costs are integers or float with at most 2 decimal places
 
 ### Monotonicity
-- [ ] `coin_cost` is strictly increasing per upgrade (level N+1 costs more than level N)
+- [ ] `coin_cost` is monotonically non-decreasing per upgrade. The public calculator display rounds large costs, so adjacent displayed costs can repeat.
 - [ ] `cumulative_cost` is strictly increasing
-- [ ] `effect_value` is non-decreasing per upgrade (with documented exceptions)
-- [ ] `cumulative_effect` is non-decreasing
+- [ ] `effect_value` changes are finite and match the visible public table
+- [ ] `cumulative_effect` is non-decreasing except for documented lower-is-better upgrades such as Shockwave Frequency and Wall Rebuild
 
 ### Cross-Upgrade Consistency
 - [ ] No duplicate upgrade IDs

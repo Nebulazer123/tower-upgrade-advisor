@@ -26,7 +26,10 @@ def verify() -> dict:
     try:
         from playwright.sync_api import sync_playwright
     except ImportError:
-        print("ERROR: Playwright not installed. pip install playwright && playwright install chromium")
+        print(
+            "ERROR: install extraction deps first: "
+            "pip install -e '.[extract]' && playwright install chromium"
+        )
         sys.exit(1)
 
     result = {"categories": {}, "summary": {}}
@@ -41,6 +44,7 @@ def verify() -> dict:
         page.goto(SITE_URL, wait_until="load", timeout=60000)
         page.wait_for_load_state("networkidle", timeout=30000)
         import time
+
         time.sleep(3)
 
         # Consent

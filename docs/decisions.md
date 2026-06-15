@@ -122,12 +122,12 @@ Replicate the reference tool's scoring logic as a separate ScoringEngine.
 
 ## Decision 7: Category Naming and Handling (from game_and_project_context.md review)
 
-**Decision:** Categories are `"offense" | "defense" | "economy" | "utility"` — four values, not three.
+**Decision:** Categories are `"attack" | "defense" | "utility"` to match the public workshop calculator and the bundled data.
 
 **Rationale:**
 - `docs/game_and_project_context.md` §10 explicitly lists utility as a separate dimension
-- Reference site CSS confirms `.attack`, `.defense`, `.utility` groupings (not `.economy`)
-- Category names will be locked down after real data extraction — Literal updated to include all known values
+- Reference site CSS confirms `.attack`, `.defense`, `.utility` groupings
+- The completed visible-table extraction loaded 17 attack, 18 defense, and 13 utility upgrades
 - `ScoringWeights.for_category()` falls back to `1.0` for unknown categories instead of raising, so a future game update cannot silently zero out new upgrade types
 
 ---

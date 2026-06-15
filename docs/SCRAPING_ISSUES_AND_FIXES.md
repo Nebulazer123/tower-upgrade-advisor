@@ -39,11 +39,12 @@ Values like `"O5I227)|7ZwHJ7.`U0nF0v~NZ~7DuKCB50gCB50g"` instead of numbers.
 
 **Likely cause**: The site uses a custom font or obfuscation so that `textContent` / `innerText` return encoded characters instead of the visible numbers. Playwright’s `page.evaluate()` sees the raw DOM text, not the rendered numbers.
 
-### C. `data/upgrades.json` — Incomplete
+### C. `data/upgrades.json` — Complete After Visible-Text Merge
 
-- **Current**: 21 upgrades (9 Attack, 4 Defense, 8 Utility)
+- **Current**: 48 upgrades (17 Attack, 18 Defense, 13 Utility)
 - **Site**: 48 upgrades (17 Attack, 18 Defense, 13 Utility)
-- **Missing**: 27 upgrades
+- **Missing**: 0 upgrades
+- **Caveat**: The merged costs/effects come from the public calculator's visible rendered table values. Large coin costs are display-rounded by the source, so adjacent displayed costs can be equal even when hidden exact costs differ.
 
 ---
 
@@ -52,6 +53,7 @@ Values like `"O5I227)|7ZwHJ7.`U0nF0v~NZ~7DuKCB50gCB50g"` instead of numbers.
 | Fix | File | Description |
 |-----|------|-------------|
 | Site verification script | `scripts/verify_site_structure.py` | Enumerates all categories and upgrades on the live site |
+| Visible table scraper | `scripts/scrape_public_workshop_visible.py` | Reads only visible leaf text and merges the missing public workshop upgrades |
 | innerText + table selector | `scripts/extract_data.py` | Prefer `innerText`, target table by "Level" header |
 | Row validation | `scripts/extract_data.py` | `_is_valid_row()` skips obvious garbage |
 | Partial save on error | `scripts/extract_data.py` | Saves `netlify_scraped_partial.json` if a run fails |
@@ -60,46 +62,53 @@ Values like `"O5I227)|7ZwHJ7.`U0nF0v~NZ~7DuKCB50gCB50g"` instead of numbers.
 
 ---
 
-## 4. Recommended Scraping Method: Node Script
+## 4. Recommended Scraping Method: Visible-Text Python Scraper
 
-The **Node/Playwright scraper** (`scripts/scrape_tower_calculator_v2.js`) has been shown to capture correct data (e.g. 100 rows per page with valid numbers).
+The maintained scraper is `scripts/scrape_public_workshop_visible.py`. It avoids the zero-font hidden characters by collecting only visible leaf spans from each cell, then normalizes the rendered public table rows into `data/upgrades.json`.
 
 ```bash
-npm install
-npx playwright install chromium
-npm run scrape:v2
+python -m venv .venv
+. .venv/bin/activate
+pip install -e ".[extract]"
+playwright install chromium
+python scripts/scrape_public_workshop_visible.py --merge
 ```
 
-- Uses Playwright locators, which work better with the site’s rendering
 - Handles consent and navigation
-- Paginates through all levels
-- Output: `scraped_tower_data.json`
-- Note: Full scrape can take several hours (48 upgrades × 5000+ levels each)
+- Paginates through each selected upgrade
+- Writes raw visible rows to `data/raw/public_workshop_visible.json`
+- Validates the merged result before writing `data/upgrades.json`
+- Preserves the existing app schema and category order
+
+The older Node/Playwright scrapers remain in the repo as experiments, but they are no longer the recommended source of truth for this app.
 
 ---
 
 ## 5. Quick Checks
 
 ```bash
-# Verify site structure (fast)
+# Verify public site structure and expected upgrade count
 python scripts/verify_site_structure.py
 
-# Quick Python scrape (2 upgrades per category, 3 pages each)
-python scripts/extract_data.py --quick
+# Verify bundled dataset coverage against the public workshop selector
+python scripts/verify_data_coverage.py --strict
 
-# Full Python scrape (all 48, may have corrupted values)
-python scripts/extract_data.py --no-headless
+# Rebuild the merged dataset from a previously saved visible scrape
+python scripts/scrape_public_workshop_visible.py --from-raw --merge
 ```
 
 ---
 
-## 6. If You Still See Missing Categories
+## 6. If You Still See Missing Categories Or Upgrades
 
-1. **In scraped output**  
+1. **Check public structure first**  
    Run `python scripts/verify_site_structure.py` and inspect `data/raw/site_structure_verified.json`. That confirms what the site exposes.
 
-2. **In the app dashboard**  
-   Categories come from `data/upgrades.json`. The app has all 3 categories (attack, defense, utility), but some upgrades are missing because that file has 21 of 48.
+2. **Check app coverage**  
+   Run `python scripts/verify_data_coverage.py --strict`. The app should report 48/48 loaded with no missing upgrades.
 
-3. **In `netlify_scraped.json`**  
-   If a run fails partway, partial results go to `netlify_scraped_partial.json`. Check both files.
+3. **Check the source data**  
+   Categories in the dashboard come from `data/upgrades.json`. If coverage regresses, rerun the visible scraper and inspect `data/raw/public_workshop_visible.json`.
+
+4. **Avoid raw DOM text scraping**  
+   Naive `textContent` / `innerText` extraction can still return hidden junk. Use the visible leaf-span scraper instead.

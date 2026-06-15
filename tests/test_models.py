@@ -88,10 +88,10 @@ class TestUpgradeDefinition:
                 levels=self._make_levels(3),
             )
 
-    def test_non_monotonic_cost_rejected(self) -> None:
+    def test_decreasing_cost_rejected(self) -> None:
         levels = self._make_levels(3)
         levels[2]["coin_cost"] = 50
-        with pytest.raises(ValidationError, match="monotonically increasing"):
+        with pytest.raises(ValidationError, match="non-decreasing"):
             UpgradeDefinition(
                 id="test",
                 name="Test",
@@ -103,6 +103,22 @@ class TestUpgradeDefinition:
                 display_order=1,
                 levels=levels,
             )
+
+    def test_equal_rounded_costs_allowed(self) -> None:
+        levels = self._make_levels(3)
+        levels[1]["coin_cost"] = levels[0]["coin_cost"]
+        upgrade = UpgradeDefinition(
+            id="test",
+            name="Test",
+            category="attack",
+            effect_unit="%",
+            effect_type="multiplicative",
+            base_value=1.0,
+            max_level=3,
+            display_order=1,
+            levels=levels,
+        )
+        assert upgrade.levels[1].coin_cost == upgrade.levels[0].coin_cost
 
     def test_invalid_category_rejected(self) -> None:
         with pytest.raises(ValidationError):

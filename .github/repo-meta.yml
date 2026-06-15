@@ -1,0 +1,19 @@
+description: >
+  Local-first Flask planner for The Tower workshop upgrades. Tracks profiles,
+  verifies 48/48 public workshop upgrades, and ranks the next best buy with
+  transparent attack, defense, and utility weights.
+homepage: "https://tower-upgrade-advisor.vercel.app"
+topics:
+  - python
+  - flask
+  - web
+  - gaming
+  - planner
+  - tower-defense
+  - idle-game
+  - data-validation
+  - pydantic
+  - htmx
+  - vercel
+  - open-source
+

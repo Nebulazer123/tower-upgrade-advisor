@@ -1,0 +1,30 @@
+<aside id="reference-check" class="card reference-card" aria-label="Reference verification"
+       {% if reference_oob %}hx-swap-oob="true"{% endif %}>
+  <div class="section-heading">
+    <div>
+      <h2>Reference Check</h2>
+      <p>Attack picks are checked with the DPS formula ported from the public source.</p>
+    </div>
+    <span class="mode-chip reference">DPS</span>
+  </div>
+  {% if reference_top %}
+  <div class="reference-pick">
+    <span class="detail-label">Reference top</span>
+    <strong>{{ reference_top.upgrade_name }}</strong>
+    <span class="category-tag category-{{ reference_top.category }}">{{ reference_top.category | capitalize }}</span>
+  </div>
+  <dl class="mini-metrics">
+    <div><dt>Level</dt><dd>{{ reference_top.current_level }} &rarr; {{ reference_top.next_level }}</dd></div>
+    <div><dt>Cost</dt><dd>{{ reference_top.coin_cost | commas }}</dd></div>
+    <div><dt>Score</dt><dd>{{ reference_top.score | score_fmt }}</dd></div>
+  </dl>
+  {% else %}
+  <p class="empty-state-text">No reference candidates remain.</p>
+  {% endif %}
+  <p class="source-note">
+    Source links:
+    <a href="{{ reference_links.workshop }}">workshop calculator</a>,
+    <a href="{{ reference_links.lab }}">lab calculator</a>,
+    <a href="{{ reference_links.dps_source }}">DPS source</a>.
+  </p>
+</aside>

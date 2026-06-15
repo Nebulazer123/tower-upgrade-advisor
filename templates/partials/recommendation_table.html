@@ -1,8 +1,27 @@
 {% if top %}
+<section class="insight-grid compact recommendation-summary" aria-label="Recommendation summary">
+  <div class="insight-tile">
+    <span class="insight-label">Ranked</span>
+    <strong>{{ recommendation_summary.ranked }}</strong>
+    <span class="insight-note">candidate upgrades</span>
+  </div>
+  <div class="insight-tile">
+    <span class="insight-label">Shown</span>
+    <strong>{{ recommendation_summary.shown }}</strong>
+    <span class="insight-note">top rows on screen</span>
+  </div>
+  <div class="insight-tile">
+    <span class="insight-label">Affordable</span>
+    <strong>{{ recommendation_summary.affordable }}</strong>
+    <span class="insight-note">with current coins</span>
+  </div>
+</section>
+
 <section class="card best-pick">
   <div class="best-pick-header">
     <span class="rank-badge">#1</span>
     <div>
+      <span class="detail-label">Weighted recommendation</span>
       <h2>{{ top.upgrade_name }}</h2>
       <span class="category-tag category-{{ top.category }}">{{ top.category | capitalize }}</span>
     </div>
@@ -47,7 +66,7 @@
       <span class="detail-value">{{ top.current_effect }} &rarr; {{ top.next_effect }} (+{{ top.marginal_benefit | round(2) }})</span>
     </div>
     <div class="detail-row">
-      <span class="detail-label">Score</span>
+      <span class="detail-label">Efficiency</span>
       <span class="detail-value mono">{{ top.score | score_fmt }}</span>
     </div>
   </div>
@@ -56,6 +75,11 @@
 <section class="card empty-state">
   <p class="empty-state-text">All upgrades are maxed out. Nothing to recommend.</p>
 </section>
+{% endif %}
+
+{% if reference_top is defined and is_htmx %}
+{% set reference_oob = true %}
+{% include "partials/reference_check.html" %}
 {% endif %}
 
 {% if alternatives %}
@@ -70,7 +94,7 @@
           <th class="col-cat">Category</th>
           <th class="col-level">Level</th>
           <th class="col-cost">Cost</th>
-          <th class="col-score">Score</th>
+          <th class="col-score">Efficiency</th>
           <th class="col-afford">Affordable?</th>
         </tr>
       </thead>

@@ -28,6 +28,8 @@ from src.models import (
     UpgradeDefinition,
 )
 
+LOWER_IS_BETTER_UPGRADE_IDS = {"shockwave_frequency", "wall_rebuild"}
+
 __all__ = [
     "ScoringEngine",
     "compute_marginal_score",
@@ -117,7 +119,10 @@ def compute_marginal_score(
     next_level_data = upgrade.levels[current_level]
     coin_cost: int = next_level_data.coin_cost
     next_effect: float = next_level_data.cumulative_effect
-    marginal_benefit: float = next_effect - current_effect
+    if upgrade.id in LOWER_IS_BETTER_UPGRADE_IDS:
+        marginal_benefit = current_effect - next_effect
+    else:
+        marginal_benefit = next_effect - current_effect
 
     # Guard against zero / negative cost (should not happen with validated data).
     if coin_cost <= 0:
@@ -281,7 +286,7 @@ class BalancedEngine:
 
     Weights are provided via a :class:`ScoringWeights` instance whose
     :meth:`~ScoringWeights.for_category` method maps each upgrade category
-    to the appropriate slider value (economy, offense, or defense).
+    to the appropriate slider value (attack, defense, or utility).
 
     Slider defaults are 1.0 (equal weight).  Upgrades at max level are
     excluded.
@@ -358,7 +363,7 @@ class BalancedEngine:
               Effect: 1.5 \u2192 1.6
               Marginal Benefit: 0.1
               Score: 0.1 / 1234 * 1.2 = 0.000097
-              Mode: balanced (Economy=1.0, Offense=1.2, Defense=0.8)
+              Mode: balanced (Attack=1.2, Defense=0.8, Utility=1.0)
         """
         w = self._weights
         weight: float = w.for_category(ranked.category)

@@ -114,20 +114,20 @@ Some might argue for other metrics:
 
 ### The Core Problem
 Upgrades affect different dimensions:
-- Attack Speed (attacks/sec) vs Damage (flat) vs Health (HP) vs Coins/Kill (economy)
+- Attack Speed (attacks/sec) vs Damage (flat) vs Health (HP) vs Coins/Kill (utility economy)
 - How to compare "+0.05 attacks/sec" vs "+10 damage" vs "+50 HP"?
 
 ### Approach A: Category-Separate Rankings
 Rank upgrades only within their category:
 - "Best attack upgrade: Damage (level 20→21, score 0.0045)"
 - "Best defense upgrade: Health (level 15→16, score 0.0032)"
-- "Best economy upgrade: Coins/Kill (level 10→11, score 0.0028)"
+- "Best utility upgrade: Coins/Kill (level 10→11, score 0.0028)"
 
 **Pros:** No normalization needed; each comparison is apples-to-apples
 **Cons:** Doesn't answer "which single upgrade is best?"
 
 ### Approach B: User-Configurable Category Weights
-Let users assign weights: Attack=1.0, Defense=0.8, Economy=1.2.
+Let users assign weights: Attack=1.0, Defense=0.8, Utility=1.2.
 `final_score = raw_score * category_weight`
 
 **Pros:** Respects player strategy; simple to implement

@@ -125,7 +125,7 @@ These assumptions were made by the team when the user did not specify preference
 
 35. **Whether the reference tool encodes additional logic** (category weights, special cases) — unknown.
 
-36. **Actual category names in the data** — the user says "attack, defense, utility" but the code currently uses "offense, defense, economy, utility". Must be reconciled after extraction.
+36. **Actual category names in the data** — resolved by extraction. The app uses the public workshop categories: attack, defense, utility.
 
 ---
 

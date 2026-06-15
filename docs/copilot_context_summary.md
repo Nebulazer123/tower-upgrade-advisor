@@ -86,8 +86,8 @@
 
 ## Session 4: Git Commit + Push
 
-- User confirmed categories are **attack, defense, utility** (not offense/defense/economy).
-  - Note: The code currently uses `Literal["offense", "defense", "economy", "utility"]`. This may need updating after real data extraction reveals the actual category names.
+- User confirmed categories are **attack, defense, utility**.
+  - Current code uses `Literal["attack", "defense", "utility"]` and matching scoring weights.
 - Staged 27 files, committed as `f2d1195` ("Phase 2: Foundation + Extraction Scaffolding + Validation Tests").
 - Pushed to `origin/main`.
 
@@ -95,22 +95,21 @@
 
 ## What Was NOT Built
 
-These items are explicitly deferred:
-- **Real data extraction** — `scripts/extract_data.py` exists but has never been run against the live site.
-- **Flask UI** — no routes, templates, or static files yet.
-- **`app.py`** — referenced in Makefile but does not exist yet.
-- **ReferenceEngine** — stub only; raises `NotImplementedError`.
-- **Manual import script** — `scripts/manual_import.py` referenced but not created.
-- **Data file** — `data/upgrades.json` does not exist (no real data extracted yet).
+These items were deferred in the original foundation commit, but are now implemented in the working tree:
+- **Real data extraction** — `scripts/scrape_public_workshop_visible.py` reads visible public table text.
+- **Flask UI** — routes, templates, and static files exist.
+- **`app.py`** — runs the local Flask app.
+- **ReferenceEngine** — implements attack DPS reference checks with fallback scoring.
+- **Data file** — `data/upgrades.json` covers 48/48 public workshop upgrades.
 
 ---
 
 ## Known Category Name Discrepancy
 
-The user explicitly stated the categories are **attack, defense, utility**. However, the Pydantic model currently defines:
+The user explicitly stated the categories are **attack, defense, utility**. The Pydantic model now defines:
 
 ```python
-category: Literal["offense", "defense", "economy", "utility"]
+category: Literal["attack", "defense", "utility"]
 ```
 
-This needs to be reconciled after real data extraction. The reference site may use different internal names than the display names. The extraction playbook should capture whatever names the reference site uses, and the Literal should be updated to match.
+This matches the public workshop selector and bundled dataset.

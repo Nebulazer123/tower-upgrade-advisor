@@ -96,13 +96,14 @@ class UpgradeDefinition(BaseModel):
                     f"at index {i}, got {lvl.level}"
                 )
 
-        # coin_cost must be monotonically increasing (hard rule: structural integrity)
+        # Public reference tables round large costs; equal adjacent displayed costs are valid.
+        # Decreases are still rejected as structural corruption.
         for i in range(1, len(levels)):
-            if levels[i].coin_cost <= levels[i - 1].coin_cost:
+            if levels[i].coin_cost < levels[i - 1].coin_cost:
                 raise ValueError(
-                    f"coin_cost must be monotonically increasing: "
+                    f"coin_cost must be monotonically non-decreasing: "
                     f"level {levels[i].level} cost ({levels[i].coin_cost}) "
-                    f"<= level {levels[i - 1].level} cost "
+                    f"< level {levels[i - 1].level} cost "
                     f"({levels[i - 1].coin_cost})"
                 )
 

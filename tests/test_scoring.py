@@ -6,7 +6,7 @@ from decimal import Decimal
 
 import pytest
 
-from src.models import Profile, ScoringWeights, UpgradeDatabase
+from src.models import Profile, ScoringWeights, UpgradeDatabase, UpgradeDefinition
 from src.scoring import (
     BalancedEngine,
     PerCategoryEngine,
@@ -50,6 +50,34 @@ class TestComputeMarginalScore:
         assert u is not None
         score, cost, cur, nxt, mb = compute_marginal_score(u, 99)
         assert score == 0.0
+
+    def test_lower_is_better_upgrade_scores_positive(self) -> None:
+        upgrade = UpgradeDefinition(
+            id="wall_rebuild",
+            name="Wall Rebuild",
+            category="defense",
+            effect_unit="s",
+            effect_type="additive",
+            base_value=1200.0,
+            max_level=1,
+            display_order=0,
+            levels=[
+                {
+                    "level": 1,
+                    "coin_cost": 100,
+                    "cumulative_effect": 1198.0,
+                    "effect_delta": -2.0,
+                }
+            ],
+        )
+
+        score, cost, cur, nxt, mb = compute_marginal_score(upgrade, 0)
+
+        assert cost == 100
+        assert cur == 1200.0
+        assert nxt == 1198.0
+        assert mb == 2.0
+        assert score == pytest.approx(0.02)
 
 
 class TestPerCategoryEngine:

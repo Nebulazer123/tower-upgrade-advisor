@@ -67,7 +67,7 @@
 | `display_order` | integer | Yes | Sort order within category |
 | `description` | string | Yes | Short description of the upgrade |
 | `effect_unit` | string | Yes | Unit of the effect (e.g., "attacks/sec", "HP", "coins/kill") |
-| `effect_type` | enum | Yes | One of: `multiplicative`, `additive`, `special` |
+| `effect_type` | enum | Yes | One of: `multiplicative`, `additive` |
 | `max_level` | integer | Yes | Maximum upgrade level |
 | `levels` | array[Level] | Yes | Per-level data |
 
@@ -86,7 +86,6 @@
 |------|---------|---------------------|-----------------|
 | `multiplicative` | Effect is a multiplier (e.g., 1.05 = +5%) | 1.0 | `next_cumulative - current_cumulative` |
 | `additive` | Effect is a flat addition (e.g., +10 damage) | 0 | `next_cumulative - current_cumulative` |
-| `special` | Non-standard effect (e.g., chance-based) | 0 | Manually weighted |
 
 ## Profile Schema (`data/profiles/<name>.json`)
 
@@ -106,8 +105,7 @@
   "category_weights": {
     "attack": 1.0,
     "defense": 1.0,
-    "utility": 1.0,
-    "special": 0.5
+    "utility": 1.0
   },
   "notes": "Focus on attack upgrades"
 }
@@ -136,9 +134,9 @@
 2. No gaps in level sequences (1, 2, 3, ... max_level)
 3. All `coin_cost` > 0
 4. All numeric fields are actual numbers (no strings)
-5. `coin_cost` is strictly monotonically increasing per upgrade
+5. `coin_cost` is monotonically non-decreasing per upgrade. Public display-rounded costs may repeat at high levels.
 6. `cumulative_cost` is strictly monotonically increasing
-7. `effect_value` is non-decreasing (with documented exceptions)
+7. `effect_value` / `cumulative_effect` changes are finite, with documented exceptions for lower-is-better or display-rounded stats
 8. No duplicate `id` values across all upgrades
 9. All `category_id` references match a defined category
 10. `display_order` is unique within each category

@@ -10,19 +10,24 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from src.models import UpgradeDatabase, UpgradeDefinition
+from src.models import LabResearchDatabase, UpgradeDatabase, UpgradeDefinition
 
 __all__ = [
     "load_upgrades",
+    "load_lab_research",
     "save_upgrades",
     "validate_upgrade_data",
     "ValidationResult",
     "DATA_DIR",
     "UPGRADES_PATH",
+    "LAB_RESEARCH_PATH",
 ]
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 UPGRADES_PATH = DATA_DIR / "upgrades.json"
+LAB_RESEARCH_PATH = DATA_DIR / "lab_research.json"
+LOWER_IS_BETTER_UPGRADE_IDS = {"shockwave_frequency", "wall_rebuild"}
+KNOWN_NON_MONOTONIC_EFFECT_UPGRADE_IDS = LOWER_IS_BETTER_UPGRADE_IDS | {"knockback_force"}
 
 
 class ValidationResult:
@@ -68,6 +73,18 @@ def load_upgrades(path: Path | None = None) -> UpgradeDatabase:
 
     raw = json.loads(p.read_text(encoding="utf-8"))
     return UpgradeDatabase.model_validate(raw)
+
+
+def load_lab_research(path: Path | None = None) -> LabResearchDatabase:
+    """Load lab research multipliers from JSON."""
+    p = path or LAB_RESEARCH_PATH
+    if not p.exists():
+        raise FileNotFoundError(f"Lab research data not found: {p}")
+
+    raw = json.loads(p.read_text(encoding="utf-8"))
+    if isinstance(raw, list):
+        raw = {"researches": raw}
+    return LabResearchDatabase.model_validate(raw)
 
 
 def save_upgrades(db: UpgradeDatabase, path: Path | None = None) -> None:
@@ -172,21 +189,24 @@ def _validate_upgrade(upgrade: UpgradeDefinition, result: ValidationResult) -> N
     # String leak check — this catches data like "1.2M" that was parsed as a string
     # (Pydantic would catch this at model validation, but we check raw data too)
 
-    # Monotonicity: costs must be strictly increasing
+    # Monotonicity: rounded public-display costs may repeat, but must not decrease.
     for i in range(1, len(upgrade.levels)):
         prev = upgrade.levels[i - 1]
         curr = upgrade.levels[i]
-        if curr.coin_cost <= prev.coin_cost:
+        if curr.coin_cost < prev.coin_cost:
             result.error(
-                f"{uid}: cost not increasing at level {curr.level} "
+                f"{uid}: cost decreased at level {curr.level} "
                 f"({prev.coin_cost} -> {curr.coin_cost})"
             )
 
-    # Monotonicity: cumulative_effect must be non-decreasing
+    # Monotonicity: most effects increase; some timing/display values legitimately decrease.
     for i in range(1, len(upgrade.levels)):
         prev = upgrade.levels[i - 1]
         curr = upgrade.levels[i]
-        if curr.cumulative_effect < prev.cumulative_effect:
+        if (
+            curr.cumulative_effect < prev.cumulative_effect
+            and uid not in KNOWN_NON_MONOTONIC_EFFECT_UPGRADE_IDS
+        ):
             result.warn(
                 f"{uid}: cumulative_effect decreased at level {curr.level} "
                 f"({prev.cumulative_effect} -> {curr.cumulative_effect})"

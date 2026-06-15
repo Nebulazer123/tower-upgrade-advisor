@@ -138,13 +138,13 @@ We can score "best next upgrade" using only the extracted workshop data if we de
 Many upgrades affect different dimensions that are not directly comparable without a model of the run:
 - Offense
 - Defense
-- Economy
+- Utility economy
 - Utility
 
 If we do not have a full simulation, any single combined score is inherently assumption-heavy.
 
 Therefore V1 must either:
-- Provide category-based recommendations (best economy, best offense, best defense), plus an optional weighted blended recommendation
+- Provide category-based recommendations (best utility, best attack, best defense), plus an optional weighted blended recommendation
 - Or replicate the reference tool’s ranking logic if it can be discovered and validated
 
 No hidden weights. If weights exist, they must be visible and adjustable.
@@ -206,7 +206,7 @@ We need a normalized file that drives everything.
 Suggested normalized row structure:
 - upgrade_id: stable string key
 - upgrade_name: display name
-- category: offense, defense, economy, utility, or whatever the reference tool uses
+- category: attack, defense, utility
 - level: integer
 - max_level: integer
 - coin_cost: integer or decimal

@@ -15,16 +15,38 @@
     <label for="coins-input">Available Coins:</label>
     <input type="number" id="coins-input" name="coins" min="0"
            value="{{ profile.available_coins }}"
+           inputmode="numeric"
+           autocomplete="off"
            hx-post="{{ url_for('update_coins', profile_id=profile.id) }}"
            hx-trigger="change, keyup[key=='Enter']"
            hx-target="#coins-display-dashboard"
            hx-swap="innerHTML"
            hx-include="this"
            hx-indicator="#coins-indicator-dashboard">
-    <span id="coins-display-dashboard" class="coins-value">{{ profile.available_coins | commas }}</span>
+    <span id="coins-display-dashboard" class="coins-value" aria-live="polite">
+      {{ profile.available_coins | commas }}
+    </span>
     <span id="coins-indicator-dashboard" class="htmx-indicator" aria-hidden="true"></span>
   </div>
 </header>
+
+<section class="insight-grid compact" aria-label="Profile summary">
+  <div class="insight-tile">
+    <span class="insight-label">Tracked</span>
+    <strong>{{ profile_summary.active }}</strong>
+    <span class="insight-note">upgrades above level 0</span>
+  </div>
+  <div class="insight-tile">
+    <span class="insight-label">Affordable next</span>
+    <strong>{{ profile_summary.affordable_next }}</strong>
+    <span class="insight-note">from bundled data</span>
+  </div>
+  <div class="insight-tile">
+    <span class="insight-label">Maxed</span>
+    <strong>{{ profile_summary.maxed }}/{{ profile_summary.total }}</strong>
+    <span class="insight-note">current profile progress</span>
+  </div>
+</section>
 
 {% for cat in categories %}
 <section class="card category-card">

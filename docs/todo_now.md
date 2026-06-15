@@ -38,10 +38,9 @@ This is the critical path. Without real data, nothing else works.
   - Category names don't match the Literal in `models.py`
 
 ### P1.4 — Update category Literal after extraction
-- The code currently has `Literal["offense", "defense", "economy", "utility"]`.
-- The user says categories are **attack, defense, utility**.
-- After extraction, update the Literal to match whatever the real data uses.
-- Update `ScoringWeights` field names to match if needed.
+- Done. The model now uses `Literal["attack", "defense", "utility"]`.
+- `ScoringWeights` now exposes matching `attack`, `defense`, and `utility` sliders.
+- `scripts/verify_data_coverage.py --strict` is the regression check for category coverage.
 
 ### P1.5 — Commit validated data
 - `data/upgrades.json` should be committed if it's reasonably small (<1MB).

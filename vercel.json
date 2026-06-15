@@ -1,0 +1,8 @@
+{
+  "experimentalServices": {
+    "tower-upgrade-advisor": {
+      "entrypoint": "app.py",
+      "routePrefix": "/"
+    }
+  }
+}

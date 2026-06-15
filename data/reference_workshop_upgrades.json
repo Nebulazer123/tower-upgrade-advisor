@@ -1,0 +1,78 @@
+{
+  "version": "2026-06-15",
+  "verified_at": "2026-06-15",
+  "source": {
+    "workshop_calculator": "https://tower-workshop-calculator.netlify.app/",
+    "lab_calculator": "https://tower-lab-calculator.netlify.app/",
+    "dps_source": "https://github.com/jacoelt/tower-calculator"
+  },
+  "notes": "Public workshop surface verified from the Netlify calculator Data > Upgrades selectors. Level curves are intentionally not duplicated here.",
+  "categories": [
+    {
+      "id": "attack",
+      "name": "Attack",
+      "upgrades": [
+        {"name": "Damage"},
+        {"name": "Attack Speed"},
+        {"name": "Critical Chance"},
+        {"name": "Critical Factor"},
+        {"name": "Range"},
+        {"name": "Damage / Meter"},
+        {"name": "Multishot Chance"},
+        {"name": "Multishot Targets"},
+        {"name": "Rapid Fire Chance"},
+        {"name": "Rapid Fire Duration"},
+        {"name": "Bounce Shot Chance"},
+        {"name": "Bounce Shot Targets"},
+        {"name": "Bounce Shot Range"},
+        {"name": "Super Crit Chance"},
+        {"name": "Super Crit Mult"},
+        {"name": "Rend Armor Chance"},
+        {"name": "Rend Armor Mult"}
+      ]
+    },
+    {
+      "id": "defense",
+      "name": "Defense",
+      "upgrades": [
+        {"name": "Health"},
+        {"name": "Health Regen"},
+        {"name": "Defense Percent", "aliases": ["Defense %"]},
+        {"name": "Defense Absolute"},
+        {"name": "Thorns"},
+        {"name": "Lifesteal"},
+        {"name": "Knockback Chance"},
+        {"name": "Knockback Force"},
+        {"name": "Orb Speed"},
+        {"name": "Orbs"},
+        {"name": "Shockwave Size"},
+        {"name": "Shockwave Frequency"},
+        {"name": "Land Mine Chance", "aliases": ["Landmine Chance"]},
+        {"name": "Land Mine Damage", "aliases": ["Landmine Damage"]},
+        {"name": "Land Mine Radius", "aliases": ["Landmine Radius"]},
+        {"name": "Death Defy"},
+        {"name": "Wall Health"},
+        {"name": "Wall Rebuild"}
+      ]
+    },
+    {
+      "id": "utility",
+      "name": "Utility",
+      "upgrades": [
+        {"name": "Cash Bonus"},
+        {"name": "Cash / Wave"},
+        {"name": "Coins / Kill Bonus", "aliases": ["Coin / Kill Bonus"]},
+        {"name": "Coins / Wave", "aliases": ["Coin / Wave"]},
+        {"name": "Free Attack Upgrade"},
+        {"name": "Free Defense Upgrade"},
+        {"name": "Free Utility Upgrade"},
+        {"name": "Interest / Wave"},
+        {"name": "Recovery Amount"},
+        {"name": "Max Recovery"},
+        {"name": "Package Chance"},
+        {"name": "Enemy Attack Level Skip"},
+        {"name": "Enemy Health Level Skip"}
+      ]
+    }
+  ]
+}
