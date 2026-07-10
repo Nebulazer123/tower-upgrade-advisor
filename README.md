@@ -9,6 +9,8 @@
 
   Local-first planner for choosing the next best permanent workshop upgrade in **The Tower**.
 
+ **iOS App Store: [The Tower - Idle Tower Defense](https://apps.apple.com/vc/app/the-tower-idle-tower-defense/id1575590830)**
+
   **Live app: [tower-upgrade-advisor.vercel.app][demo-url]**
 </div>
 
